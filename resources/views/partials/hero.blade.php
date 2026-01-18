@@ -1,5 +1,3 @@
-<!-- resources/views/components/hero.blade.php -->
-
 <section class="relative min-h-screen overflow-hidden">
     <!-- Background Image -->
     <img
@@ -12,7 +10,6 @@
     <!-- Dark Overlay -->
     <div class="absolute inset-0 bg-black/50"></div>
 
-    <!-- Περιεχόμενο (overlay πάνω στην εικόνα) -->
     <div
         class="absolute inset-0 flex items-center justify-center px-6 text-center lg:justify-end lg:px-20 lg:text-right"
     >
