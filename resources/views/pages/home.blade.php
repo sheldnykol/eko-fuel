@@ -44,4 +44,5 @@
             </div>
         </div>
     </section>
+    @include('partials.map')
 @endsection
