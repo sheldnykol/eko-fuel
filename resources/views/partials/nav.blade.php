@@ -1,19 +1,17 @@
-<!-- resources/views/nav.blade.php -->
-
-<header class="bg-[#e21838] py-4 px-5 shadow-sm">
+<header class="bg-[#e21838] py-3 px-4 shadow-sm">
     <div class="container mx-auto flex items-center justify-between">
-        <!-- Λογότυπο + ΕΚΟ – πάντα κεντραρισμένο -->
+       <!-- LOGO -->
         <div class="flex items-center justify-center flex-1">
             <img src="{{ asset('images/eko-logo.png') }}" 
                  alt="EKO Logo" 
                  class="h-20 w-auto mr-4">
             <h1 class="text-white font-semibold text-4xl drop-shadow-md" 
-                style="font-family: 'Inter', sans-serif;">
+                >
                 ΕΚΟ
             </h1>
         </div>
 
-        <!-- Hamburger Toggle (hidden checkbox + label) -->
+        <!-- Hamburger  -->
         <input type="checkbox" id="menu-toggle" class="hidden peer">
         <label for="menu-toggle" class="lg:hidden cursor-pointer z-50">
             <!-- Hamburger Icon -->
@@ -24,7 +22,7 @@
             </div>
         </label>
 
-        <!-- Links Menu -->
+        <!-- Links -->
         <nav class="hidden lg:flex items-center gap-8">
             <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">
                 Contact
@@ -34,7 +32,7 @@
             </a>
         </nav>
 
-        <!-- Mobile Menu (εμφανίζεται όταν πατάς hamburger) -->
+        <!-- Mobile Menu  -->
         <div class="lg:hidden hidden peer-checked:block bg-[#e21838] shadow-lg z-40 relative mt-4">
             <div class="flex flex-col items-center gap-6 py-6">
                 <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">

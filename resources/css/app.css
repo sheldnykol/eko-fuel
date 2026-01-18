@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 /* @import "bootstrap/dist/css/bootstrap.min.css"; */
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -10,4 +11,14 @@
   --font-sans:
     "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+    font-family:
+}
+
+@media (max-width: 360px) {
+  h1 { @apply text-3xl leading-tight; }
+  button { @apply px-6 py-3 text-base min-w-[140px]; }
+  .container { @apply px-4; }
 }
