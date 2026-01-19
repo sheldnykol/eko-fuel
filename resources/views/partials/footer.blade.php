@@ -49,13 +49,6 @@
                     <li><a href="#" class="transition-colors hover:text-[#e21838]">Cookies</a></li>
                 </ul>
             </div>
-
-            <!-- Στήλη 4: Κοινωνικά Δίκτυα & Copyright -->
-
-
-                <!-- Copyright & Επικοινωνία -->
-
-                
             </div>
         </div>
     </div>

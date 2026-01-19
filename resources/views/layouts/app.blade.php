@@ -17,5 +17,6 @@
             @yield('content')
         </main>
         @include('partials.footer')
+        <img src="{{ asset('images/station2.png') }}" />
     </body>
 </html>

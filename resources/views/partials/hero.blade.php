@@ -39,4 +39,5 @@
             </div>
         </div>
     </div>
+    <img src="{{ asset('images/station2.png') }}" />
 </section>

@@ -1,46 +1,33 @@
-<header class="bg-[#e21838] py-3 px-4 shadow-sm">
+<header class="bg-[#e21838] px-4 py-3 shadow-sm">
     <div class="container mx-auto flex items-center justify-between">
-       <!-- LOGO -->
-        <div class="flex items-center justify-center flex-1">
-            <img src="{{ asset('images/eko-logo.png') }}" 
-                 alt="EKO Logo" 
-                 class="h-20 w-auto mr-4">
-            <h1 class="text-white font-semibold text-4xl drop-shadow-md" 
-                >
-                ΕΚΟ
-            </h1>
+        <!-- LOGO -->
+        <div class="flex flex-1 items-center justify-center">
+            <img src="{{ asset('images/eko-logo.png') }}" alt="EKO Logo" class="mr-4 h-20 w-auto" />
+            <h1 class="text-4xl font-semibold text-white drop-shadow-md">ΕΚΟ</h1>
         </div>
 
         <!-- Hamburger  -->
-        <input type="checkbox" id="menu-toggle" class="hidden peer">
-        <label for="menu-toggle" class="lg:hidden cursor-pointer z-50">
+        <input type="checkbox" id="menu-toggle" class="peer hidden" />
+        <label for="menu-toggle" class="z-50 cursor-pointer lg:hidden">
             <!-- Hamburger Icon -->
             <div class="space-y-2">
-                <span class="block w-8 h-0.5 bg-white"></span>
-                <span class="block w-8 h-0.5 bg-white"></span>
-                <span class="block w-8 h-0.5 bg-white"></span>
+                <span class="block h-0.5 w-8 bg-white"></span>
+                <span class="block h-0.5 w-8 bg-white"></span>
+                <span class="block h-0.5 w-8 bg-white"></span>
             </div>
         </label>
 
         <!-- Links -->
-        <nav class="hidden lg:flex items-center gap-8">
-            <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">
-                Contact
-            </a>
-            <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">
-                Download
-            </a>
+        <nav class="hidden items-center gap-8 lg:flex">
+            <a href="#" class="text-xl font-medium text-white transition hover:text-gray-200">Contact</a>
+            <a href="#" class="text-xl font-medium text-white transition hover:text-gray-200">Download</a>
         </nav>
 
         <!-- Mobile Menu  -->
-        <div class="lg:hidden hidden peer-checked:block bg-[#e21838] shadow-lg z-40 relative mt-4">
+        <div class="relative z-40 mt-4 hidden bg-[#e21838] shadow-lg peer-checked:block lg:hidden">
             <div class="flex flex-col items-center gap-6 py-6">
-                <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">
-                    Contact
-                </a>
-                <a href="#" class="text-white font-medium text-xl hover:text-gray-200 transition">
-                    Download
-                </a>
+                <a href="#" class="text-xl font-medium text-white transition hover:text-gray-200">Contact</a>
+                <a href="#" class="text-xl font-medium text-white transition hover:text-gray-200">Download</a>
             </div>
         </div>
     </div>

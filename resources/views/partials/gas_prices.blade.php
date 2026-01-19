@@ -1,7 +1,3 @@
-@php
-    $prices = app(\App\Http\Controllers\FuelPricesController::class)->getPrices();
-@endphp
-
 <section class="bg-white py-8 md:py-12">
     <div class="container mx-auto px-4">
         <div class="mb-6 flex items-center justify-center gap-3">
@@ -11,6 +7,11 @@
                 alt="fuel_icon"
             />
             <h2 class="text-center text-2xl font-extrabold md:text-3xl lg:text-4xl">Τιμές Καυσίμων</h2>
+            <img
+                src="{{ asset('images/station1.png') }}"
+                alt="Πρατήριο 2"
+                class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105 md:h-64 lg:h-80"
+            />
         </div>
 
         <!-- Horizontal scroll for mobile /  grid in desktop -->
@@ -25,9 +26,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['amolyvdhi_100'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
 
                 <!-- fuel 2 -->
@@ -39,9 +38,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['amolyvdhi_95'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
 
                 <!-- fuel 3 -->
@@ -53,9 +50,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['diesel_economy'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
 
                 <!-- fuel 4 -->
@@ -67,9 +62,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['diesel_avio'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
 
                 <!-- fuel 5 -->
@@ -81,9 +74,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['auto_gas'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
 
                 <!- fuel 6 -->
@@ -95,9 +86,7 @@
                         loading="lazy"
                         class="h-20 w-full object-contain md:h-28 lg:h-32"
                     />
-                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">
-                        {{ $prices['petrelaio'] ?? 'N/A' }}
-                    </p>
+                    <p class="py-2 text-lg font-extrabold text-black md:text-2xl lg:text-4xl">1,78</p>
                 </div>
             </div>
         </div>
