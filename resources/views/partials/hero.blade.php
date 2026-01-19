@@ -22,7 +22,7 @@
             </h1>
 
             <!-- Κουμπιά -->
-            <div class="flex flex-col justify-center gap-4 sm:flex-row sm:gap-6 lg:justify-end">
+                        <div class="flex flex-col justify-center gap-4 sm:flex-row sm:gap-6 lg:justify-end">
                 <button
                     type="button"
                     class="min-w-[200px] rounded-md bg-[#3b548e] px-10 py-4 text-lg font-bold text-white shadow-lg transition-colors duration-300 hover:bg-[#2f4474]"
