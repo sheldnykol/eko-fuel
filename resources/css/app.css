@@ -21,7 +21,8 @@
   .container { @apply px-4; }
 }
 	 body {
-                font-family: Arial, sans-serif;
+                  font-family: "Roboto Condensed", sans-serif;
+  
         }
 
         #map {
