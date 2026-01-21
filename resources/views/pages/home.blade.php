@@ -4,5 +4,6 @@
 
 @section('content')
     @include('partials.hero')
-    @include('partials.gas_prices')
+    @include('partials.gus_stations')
+    @include('partials.map')
 @endsection
