@@ -9,36 +9,64 @@
                 />
                 <span class="hidden text-2xl font-black tracking-tighter text-[#e21838] md:block">EKO</span>
             </a>
-
-            <nav class="hidden items-center gap-8 md:flex">
-                <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
-                    Αρχική
-                </a>
-                <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
-                    Καύσιμα
-                </a>
-                <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
-                    Υπηρεσίες
-                </a>
-                <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
-                    Επικοινωνία
-                </a>
-            </nav>
+            @guest
+                <nav class="hidden items-center gap-8 md:flex">
+                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                        Αρχική
+                    </a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                        Καύσιμα
+                    </a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                        Υπηρεσίες
+                    </a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                        Επικοινωνία
+                    </a>
+                </nav>
+            @endguest
 
             <div class="hidden items-center gap-4 md:flex">
-                <a href="tel:210xxxxxxx" class="hidden text-sm font-bold text-slate-500 hover:text-slate-800 lg:block">
-                    <span class="mr-1">📞</span>
-                    2410283954
-                </a>
+                @guest
+                    <a
+                        href="tel:210xxxxxxx"
+                        class="hidden text-sm font-bold text-slate-500 hover:text-slate-800 lg:block"
+                    >
+                        <span class="mr-1">📞</span>
+                        2410283954
+                    </a>
+                    <a
+                        href="/login"
+                        class="rounded-full bg-[#e21838] px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-red-500/20 transition-all hover:-translate-y-0.5 hover:bg-[#c4142f] hover:shadow-lg"
+                    >
+                        Σύνδεση
+                    </a>
+                @endguest
 
-                <a
-                    href="#"
-                    class="rounded-full bg-[#e21838] px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-red-500/20 transition-all hover:-translate-y-0.5 hover:bg-[#c4142f] hover:shadow-lg"
-                >
-                    Σύνδεση
-                </a>
+                @auth
+                    <span class="flex items-center gap-1 text-sm font-bold text-emerald-600">
+                        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+                        ADMIN CONNECTED: {{ Auth::user()->name }}
+                    </span>
+                    <a
+                        href="{{ route('admin.dashboard') }}"
+                        class="text-sm font-bold text-slate-600 hover:text-[#e21838]"
+                    >
+                        Dashboard
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button
+                            type="submit"
+                            class="rounded-full bg-slate-800 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-black"
+                        >
+                            Αποσύνδεση
+                        </button>
+                    </form>
+                @endauth
             </div>
-
+            {{-- mobile --}}
             <div class="flex items-center md:hidden">
                 <input type="checkbox" id="menu-toggle" class="peer hidden" />
 
@@ -62,18 +90,36 @@
                     class="absolute inset-x-0 top-20 -z-10 origin-top scale-y-0 bg-white px-6 py-8 shadow-xl transition-transform duration-300 ease-in-out peer-checked:scale-y-100"
                 >
                     <div class="flex flex-col space-y-4 text-center">
-                        <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Αρχική</a>
-                        <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Καύσιμα</a>
-                        <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Υπηρεσίες</a>
-                        <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Επικοινωνία</a>
-                        <hr class="border-slate-100" />
-                        <a
-                            href="#"
-                            class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 py-3 text-lg font-bold text-[#e21838]"
-                        >
-                            <span>👤</span>
-                            Σύνδεση
-                        </a>
+                        @guest
+                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Αρχική</a>
+                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Καύσιμα</a>
+                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Υπηρεσίες</a>
+                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Επικοινωνία</a>
+                            <hr class="border-slate-100" />
+                            <a
+                                href="#"
+                                class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 py-3 text-lg font-bold text-[#e21838]"
+                            >
+                                <span>👤</span>
+                                Σύνδεση
+                            </a>
+                        @endguest
+
+                        @auth
+                            <div class="mb-2 font-bold text-emerald-600">Γεια σου, {{ Auth::user()->name }}</div>
+                            <a href="{{ route('admin.dashboard') }}" class="text-lg font-medium text-slate-800">
+                                Dashboard
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button
+                                    type="submit"
+                                    class="w-full rounded-xl bg-red-50 py-3 text-lg font-bold text-red-600"
+                                >
+                                    Αποσύνδεση
+                                </button>
+                            </form>
+                        @endauth
                     </div>
                 </div>
             </div>
