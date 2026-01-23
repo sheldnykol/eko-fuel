@@ -37,7 +37,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 //Middlewere : if user is not connected not allow access  
 
 Route::middleware(['auth'])->group(function () {
-  Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+  Route::get('/admin/admin', [AdminController::class, 'index'])->name('admin.admin');
+  Route::get('/admin/stats', [AdminController::class, 'stats'])->name('admin.stats');
   Route::post('/admin/dashboard/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
 });
     
