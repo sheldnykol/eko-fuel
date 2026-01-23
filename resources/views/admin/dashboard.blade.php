@@ -1,6 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('admin.admin')
+@section('admin_content')
     <div class="min-h-screen bg-slate-100 py-8">
         <div class="container mx-auto max-w-6xl px-4">
             <div
