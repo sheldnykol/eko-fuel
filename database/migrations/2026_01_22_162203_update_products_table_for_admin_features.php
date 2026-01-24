@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('products',function (Blueprint $table) {
             //connect with gus station
-            $table->foreignId('station_id')->after('id')->constrained()->onDelete('cascade');
+            $table->foreignId('station_id')->after('id');
 
             //add price
             $table->decimal('price', 8, 2)->after('category')->default(0);

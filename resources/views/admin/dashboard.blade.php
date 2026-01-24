@@ -26,6 +26,42 @@
                     Προβολή για:
                     <span class="font-black text-red-600">{{ date('d/m/Y', strtotime($selectedDate)) }}</span>
                 </div>
+                <a
+                    href="{{ route('admin.exportPDF', ['date' => $selectedDate]) }}"
+                    class="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
+                >
+                    <span>📥</span>
+                    Κατέβασμα PDF (Ημέρας)
+                </a>
+            </div>
+            <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div class="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="rounded-xl bg-emerald-50 p-3 text-2xl text-emerald-600">✅</div>
+                        <div>
+                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Ολοκληρωμένα</p>
+                            <p class="text-2xl font-black text-slate-900">{{ $stats['completed'] }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-2xl border-l-4 border-yellow-500 bg-white p-6 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="rounded-xl bg-yellow-50 p-3 text-2xl text-yellow-600">⏳</div>
+                        <div>
+                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Σε Αναμονή</p>
+                            <p class="text-2xl font-black text-slate-900">{{ $stats['pending'] }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-2xl border-l-4 border-red-500 bg-white p-6 shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="rounded-xl bg-red-50 p-3 text-2xl text-blue-600">❌</div>
+                        <div>
+                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Σύνολο Ημέρας</p>
+                            <p class="text-2xl font-black text-slate-900">{{ $stats['canceled'] }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div>
