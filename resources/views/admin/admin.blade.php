@@ -14,6 +14,19 @@
                         <img src="{{ asset('images/eko-logo.png') }}" class="mb-8 h-10" />
                     </a>
                     <nav class="space-y-4">
+                        <div class="mb-6 px-4">
+                            <form action="{{ route('admin.search') }}" method="GET">
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        name="query"
+                                        placeholder="Αναζήτηση"
+                                        class="w-full rounded-xl border-none bg-slate-800 py-2 pr-4 pl-10 text-sm text-white focus:ring-2 focus:ring-red-500"
+                                    />
+                                    <span class="absolute top-2.5 left-3 opacity-50">🔍</span>
+                                </div>
+                            </form>
+                        </div>
                         <a
                             href="{{ route('admin.dashboard') }}"
                             class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
@@ -25,6 +38,13 @@
                             class="{{ request()->routeIs('admin.stats') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
                         >
                             📊 Στατιστικά
+                        </a>
+                        <a
+                            href="{{ route('admin.products.index') }}"
+                            class="{{ request()->routeIs('admin.products.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 px-6 py-4 transition-all"
+                        >
+                            <span class="text-xl">📦</span>
+                            <span class="text-sm font-bold tracking-wider uppercase">Προϊόντα</span>
                         </a>
                         <hr class="my-4 border-slate-700" />
                         <form action="{{ route('logout') }}" method="POST">
