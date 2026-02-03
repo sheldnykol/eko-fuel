@@ -96,13 +96,52 @@
                             required
                             class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm"
                         >
-                            <option value="09:00">09:00</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
+                            {{--
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="12:00">12:00</option>
+                            --}}
                         </select>
                     </div>
-
+                    <div>
+                        <label class="mb-2 block text-sm font-bold text-slate-700">
+                            Τύπος Πλυσίματος (Βιολογικός Καθαρισμός (Τρ - Τε - Πε))
+                        </label>
+                        <select
+                            name="wash_type"
+                            required
+                            disabled
+                            id="wash_type_select"
+                            class="w-full rounded-xl border-2 border-slate-200 bg-slate-200 p-4 transition-all duration-300"
+                        >
+                            <option value="">Επιλέξετε πακέτο...</option>
+                            <option value="ΜΕΣΑ=ΕΞΩ">ΜΕΣΑ - ΕΞΩ</option>
+                            <option value="ΕΞΩ">ΜΟΝΟ ΕΞΩ</option>
+                            <option value="ΜΕΣΑ">ΜΟΝΟ ΜΕΣΑ</option>
+                            <optgroup
+                                label="Υπηρεσίες Βιολογικού Καθαρισμού (Τρ - Τε - Πε)"
+                                id="bio_group"
+                                style="display: none"
+                            >
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ">ΒΙΟΛΟΓΙΚΟΣ ΜΟΝΟ</option>
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ">ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ</option>
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ & ΕΞΩ">ΒΙΟΛΟΓΙΚΟΣ & ΕΞΩ</option>
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ">ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm font-bold text-slate-700">
+                            Σχόλια / Παρατηρήσεις (Προαιρετικά)
+                        </label>
+                        <textarea
+                            name="comments"
+                            rows="2"
+                            placeholder="π.χ. Ιδιαίτερη προσοχή στις ζάντες..."
+                            class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm"
+                        ></textarea>
+                    </div>
                     <button
                         type="submit"
                         class="w-full transform rounded-2xl bg-[#e21838] py-5 font-black text-white shadow-lg shadow-red-500/30 transition-all hover:-translate-y-1 hover:bg-[#c4142f]"
@@ -115,63 +154,131 @@
     </section>
 
     <script>
-        const dateInput = document.getElementById('date_input')
-        const timeSelect = document.getElementById('time_select')
-        const stationSelect = document.getElementById('station_select')
+                const dateInput = document.getElementById('date_input')
+                const timeSelect = document.getElementById('time_select')
+                const stationSelect = document.getElementById('station_select')
 
-        // 1. Κλείδωμα παρελθοντικών ημερομηνιών στο ημερολόγιο
-        const now = new Date()
-        const todayStr = now.toISOString().split('T')[0]
-        dateInput.setAttribute('min', todayStr)
-        if (!dateInput.value) dateInput.value = todayStr
+                // 1. Κλείδωμα παρελθοντικών ημερομηνιών
+                // Παίρνουμε την ημερομηνία τοπικά (Local Time) και όχι UTC
+                const now = new Date()
+                console.log(now)
+                const offset = now.getTimezoneOffset() * 60000
+                console.log(offset)
+                const todayStr = new Date(now - offset).toISOString().split('T')[0]
+                console.log(todayStr)
 
-        function fetchBookedTimes() {
-            const selectedDate = dateInput.value
-            const stationId = stationSelect.value
+                // Υπολογισμός της 13ης ημέρας από σήμερα (το όριο του πελάτη)
+                const maxDate = new Date(now)
+                console.log(maxDate)
+                maxDate.setDate(maxDate.getDate() + 13)
+                const maxDateStr = maxDate.toISOString().split('T')[0]
+                console.log(maxDate)
+                console.log(maxDateStr)
 
-            if (!selectedDate) return
+                dateInput.setAttribute('min', todayStr)
+                dateInput.setAttribute('max', maxDateStr)
 
-            // Επαναφορά όλων των επιλογών
-            Array.from(timeSelect.options).forEach(option => {
-                option.disabled = false
-                option.text = option.value
-                option.style.color = 'black'
-            })
+                // Αν η επιλεγμένη ημερομηνία είναι στο παρελθόν, πήγαινέ την στο σήμερα
+                if (!dateInput.value || dateInput.value < todayStr) {
+                    dateInput.value = todayStr
+                }
 
-            // Λήψη τρέχουσας ώρας (π.χ. "20:11")
-            const currentTime = new Date()
-            const currentHoursMinutes =
-                currentTime.getHours().toString().padStart(2, '0') +
-                ':' +
-                currentTime.getMinutes().toString().padStart(2, '0')
+                function fetchSlots() {
+                    const selectedDate = dateInput.value
+                    const stationId = stationSelect.value
+                    if (!selectedDate || !stationId) return
 
-            fetch(`/check-availability?appointment_date=${selectedDate}&station_id=${stationId}`)
-                .then(response => response.json())
-                .then(bookedTimes => {
-                    Array.from(timeSelect.options).forEach(option => {
-                        const optionValue = option.value // π.χ. "09:00"
+                    fetch(`/get-available-slots?date=${selectedDate}&station_id=${stationId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            timeSelect.innerHTML = ''
 
-                        // ΕΛΕΓΧΟΣ 1: Είναι η ημερομηνία ΣΗΜΕΡΑ και η ώρα έχει περάσει;
-                        if (selectedDate === todayStr && optionValue <= currentHoursMinutes) {
-                            option.disabled = true
-                            option.text = optionValue + ' - [ΠΑΡΗΛΘΕ]'
-                            option.style.color = '#94a3b8' // Γκρι χρώμα
-                        }
-                        // ΕΛΕΓΧΟΣ 2: Είναι η ώρα κρατημένη από άλλον;
-                        else if (bookedTimes.some(time => time.startsWith(optionValue))) {
-                            option.disabled = true
-                            option.text = optionValue + ' - [ΚΡΑΤΗΜΕΝΟ]'
-                            option.style.color = '#ef4444' // Κόκκινο χρώμα
-                        }
-                    })
-                })
-                .catch(error => console.error('Error:', error))
-        }
+                            const now = new Date()
+                            // Παίρνουμε την ώρα σε μορφή HH:mm (π.χ. 09:45)
+                            const currentHM =
+                                now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0')
+                            console.log(currentHM)
+                            console.log(data.all_slots)
+                            data.all_slots.forEach(slot => {
+                                const option = document.createElement('option')
+                                option.value = slot
 
-        // Τρέξε το αμέσως
-        fetchBookedTimes()
+                                // Προσοχή: το booked_slots μπορεί να έχει "09:00:00", εμείς ελέγχουμε το "09:00"
+                                const isBooked = data.booked_slots.some(booked => booked.startsWith(slot))
 
-        dateInput.addEventListener('change', fetchBookedTimes)
-        stationSelect.addEventListener('change', fetchBookedTimes)
+                                // ΕΔΩ ΕΙΝΑΙ Ο ΕΛΕΓΧΟΣ:
+                                const isToday = selectedDate === todayStr
+                                const isPast = isToday && slot < currentHM
+
+                                if (isBooked) {
+                                    option.disabled = true
+                                    option.text = `${slot} - [ΚΡΑΤΗΜΕΝΟ]`
+                                    option.style.color = 'red'
+                                } else if (isPast) {
+                                    option.disabled = true
+                                    option.text = `${slot} - [ΠΑΡΗΛΘΕ]`
+                                    option.style.color = 'gray'
+                                } else {
+                                    option.text = slot
+                                    option.style.color = 'black'
+                                }
+
+                                timeSelect.appendChild(option)
+                            })
+                        })
+                }
+
+                function updateWashOptions() {
+                    const selectedDateValue = dateInput.value
+                    console.log(selectedDateValue)
+                    const washSelect = document.getElementById('wash_type_select')
+                    const bioGroup = document.getElementById('bio_group')
+
+                    if (!selectedDateValue) {
+                        washSelect.disabled = true
+                        {{--
+                            washSelect.style.backgroundColor = '#e2e8f0' // slate-200
+                            washSelect.style.cursor = 'not-allowed'
+                            washSelect.style.opacity = '0.6'
+                        --}}
+                        washSelect.classList.add('opacity-50', 'cursor-not-allowed')
+                        return
+                    }
+                    //
+                    washSelect.disabled = false
+
+                    {{--
+                        washSelect.style.backgroundColor = '#f8fafc'; // slate-50 (όπως τα άλλα inputs)
+                        
+                        washSelect.style.cursor = 'pointer';
+                        washSelect.style.opacity = '1';
+                        washSelect.options[0].text = "Επιλέξτε πακέτο...";
+                    --}}
+                    washSelect.classList.remove('opacity-50', 'cursor-not-allowed')
+
+                    const dateObj = new Date(selectedDateValue)
+                    console.log(dateObj)
+                    const dayOfWeek = dateObj.getDay()
+                    console.log(dayOfWeek)
+
+                    if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
+                        bioGroup.style.display = 'block'
+                    } else {
+                        bioGroup.style.display = 'none'
+                    }
+                    if (washSelect.value.includes('ΒΙΟΛΟΓΙΚΟΣ')) {
+                        washSelect.value = "";
+                    }
+
+                }
+
+                // Event Listeners
+                dateInput.addEventListener('change', updateWashOptions)
+                if (dateInput.value) updateWashOptions()
+                dateInput.addEventListener('change', fetchSlots)
+                stationSelect.addEventListener('change', fetchSlots)
+
+                // Αρχική κλήση
+                fetchSlots()
     </script>
 @endsection

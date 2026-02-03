@@ -40,6 +40,12 @@
                             📊 Στατιστικά
                         </a>
                         <a
+                            href="{{ route('admin.schedules.index') }}"
+                            class="{{ request()->routeIs('admin.schedules.*') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
+                        >
+                            🕒 Διαχείριση Ωρών Πλυντηρίου
+                        </a>
+                        <a
                             href="{{ route('admin.products.index') }}"
                             class="{{ request()->routeIs('admin.products.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 px-6 py-4 transition-all"
                         >

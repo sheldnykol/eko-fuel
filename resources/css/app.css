@@ -20,12 +20,13 @@
   button { @apply px-6 py-3 text-base min-w-[140px]; }
   .container { @apply px-4; }
 }
-	 body {
-                  font-family: "Roboto Condensed", sans-serif;
-  
-        }
-
-        #map {
-            height: 400px;
-            width: 100%;
-        }
+body {
+ font-family: "Roboto Condensed", sans-serif;
+  }
+#map{
+  height: 400px;
+  width: 100%;
+}
+html {
+    scroll-behavior: smooth;
+}
