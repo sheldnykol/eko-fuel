@@ -36,8 +36,8 @@
 
             <div class="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
                 <a
-                    href="#"
-                    class="group relative flex w-full min-w-[200px] items-center justify-center overflow-hidden rounded-xl bg-[#e21838] px-8 py-5 text-lg font-black text-white transition-all hover:bg-[#c4142f] hover:shadow-[0_0_30px_-5px_rgba(226,24,56,0.5)] sm:w-auto"
+                    href="#gus_stations"
+                    class="group relative flex w-full min-w-[200px] items-center justify-center overflow-hidden scroll-smooth rounded-xl bg-[#e21838] px-8 py-5 text-lg font-black text-white transition-all hover:bg-[#c4142f] hover:shadow-[0_0_30px_-5px_rgba(226,24,56,0.5)] sm:w-auto"
                 >
                     <span class="relative z-10">ΒΡΕΣ ΠΡΑΤΗΡΙΟ</span>
                     <div

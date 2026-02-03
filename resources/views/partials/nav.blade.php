@@ -11,16 +11,22 @@
             </a>
             @guest
                 <nav class="hidden items-center gap-8 md:flex">
-                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                    <a href="/" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
                         Αρχική
                     </a>
                     <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
                         Καύσιμα
                     </a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                    <a
+                        href="/services"
+                        class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]"
+                    >
                         Υπηρεσίες
                     </a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
+                    <a
+                        href="{{ route('stations.show') }}"
+                        class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]"
+                    >
                         Επικοινωνία
                     </a>
                 </nav>
@@ -91,10 +97,17 @@
                 >
                     <div class="flex flex-col space-y-4 text-center">
                         @guest
-                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Αρχική</a>
+                            <a href="/" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Αρχική</a>
                             <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Καύσιμα</a>
-                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Υπηρεσίες</a>
-                            <a href="#" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">Επικοινωνία</a>
+                            <a href="/services" class="text-lg font-medium text-slate-800 hover:text-[#e21838]">
+                                Υπηρεσίες
+                            </a>
+                            <a
+                                href="{{ route('stations.show') }}"
+                                class="text-lg font-medium text-slate-800 hover:text-[#e21838]"
+                            >
+                                Επικοινωνία
+                            </a>
                             <hr class="border-slate-100" />
                             <a
                                 href="#"

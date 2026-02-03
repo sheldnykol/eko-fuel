@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Appointment;
+use App\Models\Station;
 use App\Http\Controllers\Controller;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -161,25 +163,52 @@ class AdminController extends Controller
     return view('admin.products.edit', compact('product', 'stations'));
 }
 
-public function updateProduct(Request $request, $id)
-{
-    $product = Product::findOrFail($id);
-    
-    $data = $request->validate([
-        'name' => 'required',
-        'station_id' => 'required',
-        'price' => 'required|numeric',
-        'product_type' => 'required',
-        'category' => 'nullable',
-        'image' => 'nullable|image|max:2048'
-    ]);
+    public function updateProduct(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        
+        $data = $request->validate([
+            'name' => 'required',
+            'station_id' => 'required',
+            'price' => 'required|numeric',
+            'product_type' => 'required',
+            'category' => 'nullable',
+            'image' => 'nullable|image|max:2048'
+        ]);
 
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('products', 'public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
+
+        return redirect()->route('admin.products.index')->with('success', 'Ενημερώθηκε επιτυχώς!');
+    }
+    public function manageSchedules() {
+        $stations = Station::all();
+        // Ορίζουμε το ελάχιστο όριο: σήμερα + 14 ημέρες
+        $minDate = now()->addDays(14)->format('Y-m-d');
+        
+        return view('admin.schedules.index', compact('stations', 'minDate'));
     }
 
-    $product->update($data);
+    public function storeSchedule(Request $request) {
+        $minDate = now()->addDays(14)->format('Y-m-d');
 
-    return redirect()->route('admin.products.index')->with('success', 'Ενημερώθηκε επιτυχώς!');
-}
+        $validated = $request->validate([
+            'station_id' => 'required|exists:stations,id',
+            'date' => "required|date|after_or_equal:$minDate",
+            'available_slots' => 'required|array',
+        ], [
+            'date.after_or_equal' => 'Μπορείτε να αλλάξετε το πρόγραμμα μόνο για ημερομηνίες μετά τις ' . $minDate,
+        ]);
+
+        // Χρησιμοποιούμε updateOrCreate για να μην έχουμε διπλότυπα στην ίδια ημερομηνία
+        Schedule::updateOrCreate(
+            ['station_id' => $validated['station_id'], 'date' => $validated['date']],
+            ['available_slots' => $validated['available_slots']]
+        );
+
+        return back()->with('success', 'Το πρόγραμμα ενημερώθηκε επιτυχώς!');
+    }
 }

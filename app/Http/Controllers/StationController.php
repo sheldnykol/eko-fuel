@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 
 class StationController extends Controller
@@ -31,5 +32,14 @@ class StationController extends Controller
             'allStations' => $allStations,
             'id' => $id
         ]);
+    }
+    public function showStations()
+    {
+            $allStations = config('stations');
+            
+            Log::info("station", $allStations);
+            $names = array_column($allStations, 'name');
+            Log::info("Station Names", $names);
+         return view('pages.contact', compact('allStations'));
     }
 }
