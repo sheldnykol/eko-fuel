@@ -30,34 +30,90 @@
                     href="{{ route('admin.exportPDF', ['date' => $selectedDate]) }}"
                     class="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
                 >
-                    <span>📥</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                        />
+                    </svg>
                     Κατέβασμα PDF (Ημέρας)
                 </a>
             </div>
             <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
                 <div class="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm">
                     <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-emerald-50 p-3 text-2xl text-emerald-600">✅</div>
+                        <div class="rounded-xl bg-emerald-50 p-3 text-emerald-600">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="h-6 w-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </div>
                         <div>
                             <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Ολοκληρωμένα</p>
                             <p class="text-2xl font-black text-slate-900">{{ $stats['completed'] }}</p>
                         </div>
                     </div>
                 </div>
+
                 <div class="rounded-2xl border-l-4 border-yellow-500 bg-white p-6 shadow-sm">
                     <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-yellow-50 p-3 text-2xl text-yellow-600">⏳</div>
+                        <div class="rounded-xl bg-yellow-50 p-3 text-yellow-600">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="h-6 w-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                        </div>
                         <div>
                             <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Σε Αναμονή</p>
                             <p class="text-2xl font-black text-slate-900">{{ $stats['pending'] }}</p>
                         </div>
                     </div>
                 </div>
+
                 <div class="rounded-2xl border-l-4 border-red-500 bg-white p-6 shadow-sm">
                     <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-red-50 p-3 text-2xl text-blue-600">❌</div>
+                        <div class="rounded-xl bg-red-50 p-3 text-red-600">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="h-6 w-6"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
                         <div>
-                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Σύνολο Ημέρας</p>
+                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Ακυρωμένα</p>
                             <p class="text-2xl font-black text-slate-900">{{ $stats['canceled'] }}</p>
                         </div>
                     </div>
