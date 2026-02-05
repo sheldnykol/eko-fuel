@@ -16,7 +16,14 @@ Route::get('/contact', [StationController::class, 'showStations'])->name('statio
 Route::get('/services', function () {
   return view('pages.services');
 });
-
+////Terms
+Route::get('/terms', function (){
+  return view('pages.terms');
+});
+////Privacy
+Route::get('/privacy', function (){
+  return view('pages.privacy');
+});
 
 ////Gus station based id 
 Route::get('/station/{id}', [StationController::class, 'show'])->name('station.show');

@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- Δυναμικός Τίτλος: Βάζουμε το "Online Κράτηση" και "Πλυντήριο" μπροστά --}}
+@section('title', 'Online Κράτηση Ραντεβού | Πλυντήριο Αυτοκινήτων EKO | ΛΑΡΙΣΑ ')
+
+{{-- Meta Description: Εδώ "πουλάμε" την ευκολία (χωρίς εγγραφή) και τις υπηρεσίες (βιολογικός) --}}
+@section('meta_description', 'Κλείστε το ραντεβού σας για πλύσιμο αυτοκινήτου στην EKO εύκολα και γρήγορα χωρίς εγγραφή. Πλύσιμο μέσα-έξω και Βιολογικός Καθαρισμός. Επιλέξτε πρατήριο και ώρα.')
+
 @section('content')
     <section class="min-h-screen bg-slate-50 py-12">
         <div class="container mx-auto max-w-lg px-4">
@@ -154,131 +160,131 @@
     </section>
 
     <script>
-                const dateInput = document.getElementById('date_input')
-                const timeSelect = document.getElementById('time_select')
-                const stationSelect = document.getElementById('station_select')
+                                const dateInput = document.getElementById('date_input')
+                                const timeSelect = document.getElementById('time_select')
+                                const stationSelect = document.getElementById('station_select')
 
-                // 1. Κλείδωμα παρελθοντικών ημερομηνιών
-                // Παίρνουμε την ημερομηνία τοπικά (Local Time) και όχι UTC
-                const now = new Date()
-                console.log(now)
-                const offset = now.getTimezoneOffset() * 60000
-                console.log(offset)
-                const todayStr = new Date(now - offset).toISOString().split('T')[0]
-                console.log(todayStr)
+                                // 1. Κλείδωμα παρελθοντικών ημερομηνιών
+                                // Παίρνουμε την ημερομηνία τοπικά (Local Time) και όχι UTC
+                                const now = new Date()
+                                console.log(now)
+                                const offset = now.getTimezoneOffset() * 60000
+                                console.log(offset)
+                                const todayStr = new Date(now - offset).toISOString().split('T')[0]
+                                console.log(todayStr)
 
-                // Υπολογισμός της 13ης ημέρας από σήμερα (το όριο του πελάτη)
-                const maxDate = new Date(now)
-                console.log(maxDate)
-                maxDate.setDate(maxDate.getDate() + 13)
-                const maxDateStr = maxDate.toISOString().split('T')[0]
-                console.log(maxDate)
-                console.log(maxDateStr)
+                                // Υπολογισμός της 13ης ημέρας από σήμερα (το όριο του πελάτη)
+                                const maxDate = new Date(now)
+                                console.log(maxDate)
+                                maxDate.setDate(maxDate.getDate() + 13)
+                                const maxDateStr = maxDate.toISOString().split('T')[0]
+                                console.log(maxDate)
+                                console.log(maxDateStr)
 
-                dateInput.setAttribute('min', todayStr)
-                dateInput.setAttribute('max', maxDateStr)
+                                dateInput.setAttribute('min', todayStr)
+                                dateInput.setAttribute('max', maxDateStr)
 
-                // Αν η επιλεγμένη ημερομηνία είναι στο παρελθόν, πήγαινέ την στο σήμερα
-                if (!dateInput.value || dateInput.value < todayStr) {
-                    dateInput.value = todayStr
-                }
-
-                function fetchSlots() {
-                    const selectedDate = dateInput.value
-                    const stationId = stationSelect.value
-                    if (!selectedDate || !stationId) return
-
-                    fetch(`/get-available-slots?date=${selectedDate}&station_id=${stationId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            timeSelect.innerHTML = ''
-
-                            const now = new Date()
-                            // Παίρνουμε την ώρα σε μορφή HH:mm (π.χ. 09:45)
-                            const currentHM =
-                                now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0')
-                            console.log(currentHM)
-                            console.log(data.all_slots)
-                            data.all_slots.forEach(slot => {
-                                const option = document.createElement('option')
-                                option.value = slot
-
-                                // Προσοχή: το booked_slots μπορεί να έχει "09:00:00", εμείς ελέγχουμε το "09:00"
-                                const isBooked = data.booked_slots.some(booked => booked.startsWith(slot))
-
-                                // ΕΔΩ ΕΙΝΑΙ Ο ΕΛΕΓΧΟΣ:
-                                const isToday = selectedDate === todayStr
-                                const isPast = isToday && slot < currentHM
-
-                                if (isBooked) {
-                                    option.disabled = true
-                                    option.text = `${slot} - [ΚΡΑΤΗΜΕΝΟ]`
-                                    option.style.color = 'red'
-                                } else if (isPast) {
-                                    option.disabled = true
-                                    option.text = `${slot} - [ΠΑΡΗΛΘΕ]`
-                                    option.style.color = 'gray'
-                                } else {
-                                    option.text = slot
-                                    option.style.color = 'black'
+                                // Αν η επιλεγμένη ημερομηνία είναι στο παρελθόν, πήγαινέ την στο σήμερα
+                                if (!dateInput.value || dateInput.value < todayStr) {
+                                    dateInput.value = todayStr
                                 }
 
-                                timeSelect.appendChild(option)
-                            })
-                        })
-                }
+                                function fetchSlots() {
+                                    const selectedDate = dateInput.value
+                                    const stationId = stationSelect.value
+                                    if (!selectedDate || !stationId) return
 
-                function updateWashOptions() {
-                    const selectedDateValue = dateInput.value
-                    console.log(selectedDateValue)
-                    const washSelect = document.getElementById('wash_type_select')
-                    const bioGroup = document.getElementById('bio_group')
+                                    fetch(`/get-available-slots?date=${selectedDate}&station_id=${stationId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            timeSelect.innerHTML = ''
 
-                    if (!selectedDateValue) {
-                        washSelect.disabled = true
-                        {{--
-                            washSelect.style.backgroundColor = '#e2e8f0' // slate-200
-                            washSelect.style.cursor = 'not-allowed'
-                            washSelect.style.opacity = '0.6'
-                        --}}
-                        washSelect.classList.add('opacity-50', 'cursor-not-allowed')
-                        return
-                    }
-                    //
-                    washSelect.disabled = false
+                                            const now = new Date()
+                                            // Παίρνουμε την ώρα σε μορφή HH:mm (π.χ. 09:45)
+                                            const currentHM =
+                                                now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0')
+                                            console.log(currentHM)
+                                            console.log(data.all_slots)
+                                            data.all_slots.forEach(slot => {
+                                                const option = document.createElement('option')
+                                                option.value = slot
 
-                    {{--
-                        washSelect.style.backgroundColor = '#f8fafc'; // slate-50 (όπως τα άλλα inputs)
-                        
-                        washSelect.style.cursor = 'pointer';
-                        washSelect.style.opacity = '1';
-                        washSelect.options[0].text = "Επιλέξτε πακέτο...";
-                    --}}
-                    washSelect.classList.remove('opacity-50', 'cursor-not-allowed')
+                                                // Προσοχή: το booked_slots μπορεί να έχει "09:00:00", εμείς ελέγχουμε το "09:00"
+                                                const isBooked = data.booked_slots.some(booked => booked.startsWith(slot))
 
-                    const dateObj = new Date(selectedDateValue)
-                    console.log(dateObj)
-                    const dayOfWeek = dateObj.getDay()
-                    console.log(dayOfWeek)
+                                                // ΕΔΩ ΕΙΝΑΙ Ο ΕΛΕΓΧΟΣ:
+                                                const isToday = selectedDate === todayStr
+                                                const isPast = isToday && slot < currentHM
 
-                    if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
-                        bioGroup.style.display = 'block'
-                    } else {
-                        bioGroup.style.display = 'none'
-                    }
-                    if (washSelect.value.includes('ΒΙΟΛΟΓΙΚΟΣ')) {
-                        washSelect.value = "";
-                    }
+                                                if (isBooked) {
+                                                    option.disabled = true
+                                                    option.text = `${slot} - [ΚΡΑΤΗΜΕΝΟ]`
+                                                    option.style.color = 'red'
+                                                } else if (isPast) {
+                                                    option.disabled = true
+                                                    option.text = `${slot} - [ΠΑΡΗΛΘΕ]`
+                                                    option.style.color = 'gray'
+                                                } else {
+                                                    option.text = slot
+                                                    option.style.color = 'black'
+                                                }
 
-                }
+                                                timeSelect.appendChild(option)
+                                            })
+                                        })
+                                }
 
-                // Event Listeners
-                dateInput.addEventListener('change', updateWashOptions)
-                if (dateInput.value) updateWashOptions()
-                dateInput.addEventListener('change', fetchSlots)
-                stationSelect.addEventListener('change', fetchSlots)
+                                function updateWashOptions() {
+                                    const selectedDateValue = dateInput.value
+                                    console.log(selectedDateValue)
+                                    const washSelect = document.getElementById('wash_type_select')
+                                    const bioGroup = document.getElementById('bio_group')
 
-                // Αρχική κλήση
-                fetchSlots()
+                                    if (!selectedDateValue) {
+                                        washSelect.disabled = true
+                                        {{--
+                                            washSelect.style.backgroundColor = '#e2e8f0' // slate-200
+                                            washSelect.style.cursor = 'not-allowed'
+                                            washSelect.style.opacity = '0.6'
+                                        --}}
+                                        washSelect.classList.add('opacity-50', 'cursor-not-allowed')
+                                        return
+                                    }
+                                    //
+                                    washSelect.disabled = false
+
+                                    {{--
+                                        washSelect.style.backgroundColor = '#f8fafc'; // slate-50 (όπως τα άλλα inputs)
+                                        
+                                        washSelect.style.cursor = 'pointer';
+                                        washSelect.style.opacity = '1';
+                                        washSelect.options[0].text = "Επιλέξτε πακέτο...";
+                                    --}}
+                                    washSelect.classList.remove('opacity-50', 'cursor-not-allowed')
+
+                                    const dateObj = new Date(selectedDateValue)
+                                    console.log(dateObj)
+                                    const dayOfWeek = dateObj.getDay()
+                                    console.log(dayOfWeek)
+
+                                    if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
+                                        bioGroup.style.display = 'block'
+                                    } else {
+                                        bioGroup.style.display = 'none'
+                                    }
+                                    if (washSelect.value.includes('ΒΙΟΛΟΓΙΚΟΣ')) {
+                                        washSelect.value = "";
+                                    }
+
+                                }
+
+                                // Event Listeners
+                                dateInput.addEventListener('change', updateWashOptions)
+                                if (dateInput.value) updateWashOptions()
+                                dateInput.addEventListener('change', fetchSlots)
+                                stationSelect.addEventListener('change', fetchSlots)
+
+                                // Αρχική κλήση
+                                fetchSlots()
     </script>
 @endsection
