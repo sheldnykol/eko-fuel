@@ -15,6 +15,7 @@ class Appointment extends Model
         'appointment_time',
         'status',
         'booking_pin',
+        'extras',
         'wash_type',
         'comments'
     ];
