@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -22,11 +23,23 @@ class BookingController extends Controller
             'appointment_time' => 'required',
             'wash_type' => 'required|string',
             'comments' => 'nullable|string|max:250',
+            'extras' => 'nullable|array',
         ], [
             // Προαιρετικά: Μηνύματα στα ελληνικά
             'customer_phone.digits' => 'Το τηλέφωνο πρέπει να είναι ακριβώς 10 ψηφία.',
             'appointment_date.after_or_equal' => 'Η ημερομηνία δεν μπορεί να είναι στο παρελθόν.',
         ]);
+        // 2. Διαχείριση των Extras
+        // Μετατρέπουμε το array σε ένα κείμενο χωρισμένο με κόμματα για την βάση
+        $extrasString = null;
+        if ($request->has('extras')) {
+            // Ενώνουμε τα στοιχεία του array σε ένα string
+            $extrasString = implode(', ', $request->extras); 
+            $validated['extras'] = $extrasString; // Προσοχή στο ; στο τέλος
+        } else {
+            // Αν δεν επέλεξε τίποτα, βάζουμε '0' ή null
+            $validated['extras'] = 'Χωρίς Extras'; 
+        }
         if($request->filled('comments')) {
             $validated['comments'] = mb_strtoupper($request->comments, 'UTF-8');
         }
@@ -40,20 +53,31 @@ class BookingController extends Controller
         }
 
         //Pin creation 
-        $pin = strtoupper(Str::random(6));
+        //$pin = strtoupper(Str::random(6));
         //CAPS
         $validated['customer_name'] = mb_strtoupper($request->customer_name, 'UTF-8');
         $validated['license_plate'] = mb_strtoupper(str_replace(' ', '', $request->license_plate), 'UTF-8');
         
         //Add pin to array
-        $validated['booking_pin'] = $pin;
+        //$validated['booking_pin'] = $pin;
 
         // Αν η ώρα έρχεται ως "10:00", την κάνουμε "10:00:00" για τη MySQL
         if (strlen($validated['appointment_time']) == 5) {
         $validated['appointment_time'] .= ':00';
     }
         //Save to DB 
-        Appointment::create($validated);
+        $appointment = Appointment::create($validated);
+        Log::info("Date received: " . $appointment);
+
+        // $this->sendSms(
+        //     $appointment->customer_phone,
+        //     $pin,
+        //     $appointment->appointment_date,
+        //     $appointment->appointment_time
+        // );
+        // ----------------------------
+
+        
         //Νο ability to book prev hours-dates
         $currentTime = date('H:i');
         $today = date('Y-m-d');
@@ -63,9 +87,11 @@ class BookingController extends Controller
         }
 
         //Success Alert
-        return back()->with('success','Η κράτησή σας ολοκληρώθηκε με επιτυχία!')
-        ->with('pin', $pin);
-    }
+        return back()->with('success', 'Η κράτησή σας ολοκληρώθηκε με επιτυχία!')
+            ->with('appointment_date', $appointment->appointment_date)
+            ->with('appointment_time', $appointment->appointment_time)
+            ->with('customer_name', $appointment->customer_name);
+        }
 
     public function checkAvailability(Request $request)
         { 
@@ -131,6 +157,54 @@ class BookingController extends Controller
                 'booked_slots' => $bookedTimes
             ]);
         }
+
+    private function sendSms($phone, $date, $time)
+    {
+        // 1. Το κλειδί που μόλις πήρες
+        $apiKey = 'o93aee50b792818'; 
+
+        // 2. Καθαρισμός τηλεφώνου
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (strlen($phone) == 10) {
+            $phone = '30' . $phone;
+        }
+
+        // 3. Καθαρισμός ώρας (από 10:00:00 σε 10:00)
+        $formattedTime = date('H:i', strtotime($time));
+        // Μετατροπή ημερομηνίας σε πιο φιλική μορφή (π.χ. 18/02)
+        $formattedDate = date('d/m', strtotime($date));
+
+        // 4. Το μήνυμα (Greeklish για σιγουριά και οικονομία χαρακτήρων)
+        $message = "EKO: Krathsh gia $formattedDate stis $formattedTime.";
+
+        try {
+            $response = Http::get("https://easysms.gr/api/sms/send", [
+                'key'    => $apiKey,
+                'to'     => $phone,
+                'text'   => $message,
+                'from'   => 'EKO', // Δοκίμασε "EKO" ή το κινητό σου αν δεν έχεις εγκεκριμένο όνομα
+                'type'   => 'json'
+            ]);
+
+            Log::info("EasySMS Response: " . $response->body());
+
+            // Αν το status είναι error και το error είναι 40 (Invalid Sender), ξαναπροσπαθεί με το κινητό σου
+            $result = $response->json();
+            if (isset($result['status']) && $result['status'] == 'error' && $result['error'] == '40') {
+                Log::warning("Sender ID rejected. Retrying with phone number as sender.");
+                Http::get("https://easysms.gr/api/sms/send", [
+                    'key'  => $apiKey,
+                    'to'   => $phone,
+                    'text' => $message,
+                    'from' => '306948720413', // Βάζουμε το κινητό σου ως αποστολέα για να περάσει σίγουρα
+                    'type' => 'json'
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error("EasySMS Exception: " . $e->getMessage());
+        }
+    }
 }
 
 
