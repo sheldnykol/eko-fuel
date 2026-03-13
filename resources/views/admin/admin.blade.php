@@ -20,6 +20,25 @@
                         >
                             📅 Ραντεβού
                         </a>
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            ⛽ Παραγγελίες Πετρελαίου Κίνησης
+                        </a>    
+                        <a
+                            href="{{ route('admin.stats') }}"
+                            class="{{ request()->routeIs('admin.stats') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
+                        >
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            🔥Παραγγελίες Υγραερίου
+                        </a> 
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            🏠🔥 Παραγγελίες Πετρελαίου Θέρμανσης
+                        </a>      
                         <a
                             href="{{ route('admin.stats') }}"
                             class="{{ request()->routeIs('admin.stats') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"

@@ -6,4 +6,5 @@
     @include('partials.hero')
     @include('partials.gus_stations')
     @include('partials.map')
+    @include('partials.fuel_order')
 @endsection
