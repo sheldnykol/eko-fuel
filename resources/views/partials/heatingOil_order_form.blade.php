@@ -17,7 +17,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('heatingOil-orders.index') }}" method="POST" class="p-8 space-y-5">
+                <form action="{{ route('heating-οil-orders.store') }}" method="POST" class="p-8 space-y-5">
                     @csrf
                     
                     {{-- Κρυφό πεδίο για τον τύπο --}}
@@ -25,7 +25,7 @@
 
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Ονοματεπώνυμο / Επωνυμία</label>
-                        <input type="text" name="customer_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_name') }}" 
+                        <input type="text" name="customer_heatingOil_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_heatingOil_name') }}" 
                             class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" 
                             placeholder="π.χ. ΔΗΜΗΤΡΙΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ" required>
                     </div>
@@ -33,14 +33,14 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Ποσότητα (Λίτρα)</label>
-                            <input type="number" name="quantity" step="50" min="1" value="{{ old('quantity') }}" 
+                            <input type="number" name="heatingOil_quantity" step="50" min="0" value="{{ old('heatingOil_quantity') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" 
                                 placeholder="π.χ. 1000" required>
                         </div>
 
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">ΑΦΜ</label>
-                            <input type="tel" name="customer_afm" value="{{ old('customer_afm') }}" 
+                            <input type="tel" name="customer_heatingOil_afm" value="{{ old('customer_heatingOil_afm') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" 
                                 placeholder="9 ψηφία" required>
                         </div>
@@ -49,19 +49,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Πόλη / Περιοχή</label>
-                            <input type="text" name="city" oninput="this.value = this.value.toUpperCase()" value="{{ old('city') }}" 
+                            <input type="text" name="customer_heatingOil_city" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_heatingOil_city') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" 
                                 placeholder="π.χ. Λάρισα" required>
                         </div>
                         <div class="flex gap-2">
                             <div class="grow">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Διεύθυνση</label>
-                                <input type="text" name="address" oninput="this.value = this.value.toUpperCase()" value="{{ old('address') }}" 
+                                <input type="text" name="customer_heatingOil_address" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_heatingOil_address') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" required>
                             </div>
                             <div class="w-20">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Αρ.</label>
-                                <input type="text" name="address_number" value="{{ old('address_number') }}" 
+                                <input type="text" name="customer_heatingOil_number_of_address" value="{{ old('customer_heatingOil_number_of_address') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" required>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
 
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Τηλέφωνο Επικοινωνίας</label>
-                        <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" 
+                        <input type="tel" name="customer_heatingOil_phone" value="{{ old('customer_heatingOil_phone') }}" 
                             class="w-full border-slate-200 rounded-xl shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3" 
                             placeholder="69XXXXXXXX" required>
                     </div>

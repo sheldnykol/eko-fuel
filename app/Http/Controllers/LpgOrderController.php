@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\FuelOrder;
+use App\Models\LpgOrder;
 use App\Models\Station;
 use Illuminate\Support\Facades\Log; // Απαραίτητο για το Log
 
@@ -13,9 +13,9 @@ class LpgOrderController extends Controller
      /**
      * Εμφάνιση της λίστας παραγγελιών (για τον Admin)
      */
-    public function index()
+    public function store()
     {
-        $orders = FuelOrder::latest()->get();
+        $orders = LpgOrder::latest()->get();
         return view('admin.customer_lpg_orders', compact('lpg_orders'));
     }
 
@@ -24,6 +24,8 @@ class LpgOrderController extends Controller
      */
     public function order(Request $request) 
     {
+
+        \App\Models\LpgOrder::create($request->all());
         // 1. LOG: Καταγραφή των δεδομένων που έρχονται από τη φόρμα
         Log::info('Νέα εισερχόμενη παραγγελία καυσίμου:', $request->all());
 
@@ -34,6 +36,7 @@ class LpgOrderController extends Controller
             'customer_lpg_city' => 'required|string|max:255',
             'customer_lpg_address' => 'required|string|max:255',
             'customer_lpg_number_of_address' => 'required|integer|digits_between:1,4',
+            'lpg_type' => 'required',
             'lpg_quantity' => 'required|integer|min:1',
         ], [
             // Custom μηνύματα σφάλματος
@@ -49,7 +52,7 @@ class LpgOrderController extends Controller
         $validated['customer_lpg_address'] = mb_strtoupper($request->customer_lpg_address, 'UTF-8');
 
         try {
-            FuelOrder::create($validated);
+            LpgOrder::create($validated);
             Log::info('Η παραγγελία αποθηκεύτηκε επιτυχώς στη βάση.');
         } catch (\Exception $e) {
             Log::error('Σφάλμα κατά την αποθήκευση της παραγγελίας: ' . $e->getMessage());

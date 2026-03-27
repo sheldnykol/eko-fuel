@@ -33,12 +33,12 @@
                     </div>
                 @endif
 
-                <form action="{{ route('fuel-orders.index') }}" method="POST" class="p-8 space-y-5">
+                <form action="{{ route('fuel-orders.store') }}" method="POST" class="p-8 space-y-5">
                     @csrf
                     
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Ονοματεπώνυμο / Επωνυμία</label>
-                        <input type="text" name="customer_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_name') }}" 
+                        <input type="text" name="customer_fuel_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_fuel_name') }}" 
                             class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" 
                             placeholder="π.χ. ΚΩΝΣΤΑΝΤΙΝΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ" required>
                     </div>
@@ -54,14 +54,14 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Ποσότητα (Λίτρα)</label>
-                            <input type="number" name="quantity" step="100" min="0" value="{{ old('quantity') }}" 
+                            <input type="number" name="fuel_quantity" step="100" min="0" value="{{ old('fuel_quantity') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" 
                                 placeholder="π.χ. 500" required>
                         </div>
 
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">ΑΦΜ</label>
-                            <input type="tel" name="customer_afm" value="{{ old('customer_afm') }}" 
+                            <input type="tel" name="customer_fuel_afm" value="{{ old('customer_fuel_afm') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" 
                                 placeholder="9 ψηφία" required>
                         </div>
@@ -70,19 +70,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Πόλη / Περιοχή</label>
-                            <input type="text" name="city" oninput="this.value = this.value.toUpperCase()" value="{{ old('city') }}" 
+                            <input type="text" name="customer_fuel_city" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_fuel_city') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" 
                                 placeholder="π.χ. Λάρισα" required>
                         </div>
                         <div class="flex gap-2">
                             <div class="grow">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Διεύθυνση</label>
-                                <input type="text" name="address" oninput="this.value = this.value.toUpperCase()" value="{{ old('address') }}" 
+                                <input type="text" name="customer_fuel_address" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_fuel_address') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" required>
                             </div>
                             <div class="w-20">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Αρ.</label>
-                                <input type="text" name="address_number" value="{{ old('address_number') }}" 
+                                <input type="text" name="customer_fuel_number_of_address" value="{{ old('customer_fuel_number_of_address') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" required>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
 
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Τηλέφωνο Επικοινωνίας</label>
-                        <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" 
+                        <input type="tel" name="customer_fuel_phone" value="{{ old('customer_fuel_phone') }}" 
                             class="w-full border-slate-200 rounded-xl shadow-sm focus:border-red-500 focus:ring-red-500 p-3" 
                             placeholder="69XXXXXXXX" required>
                     </div>

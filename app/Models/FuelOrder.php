@@ -8,7 +8,6 @@ class FuelOrder extends Model
 {
     //customer info from migration
     protected $fillable = [
-        'station_id',
         'customer_fuel_name',
         'customer_fuel_phone',
         'customer_fuel_afm',

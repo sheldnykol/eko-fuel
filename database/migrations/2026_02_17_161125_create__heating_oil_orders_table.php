@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_heating_oil_orders', function (Blueprint $table) {
+        Schema::create('heating_oil_orders', function (Blueprint $table) {
             $table->id();
             //Customer info 
             $table->string('customer_heatingOil_name');
@@ -20,8 +20,12 @@ return new class extends Migration
             $table->string('customer_heatingOil_city');
             $table->string('customer_heatingOil_address');
             $table->integer('customer_heatingOil_number_of_address');
-            
 
+             //Ποσότητα Πετρελαίου Θέρμανσης
+            $table->integer('heatingOil_quantity');
+            
+            $table->integer('status')->default(1);
+            //creates created_at and updated_at
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_heating_oil_orders');
+        Schema::dropIfExists('heating_oil_orders');
     }
 };

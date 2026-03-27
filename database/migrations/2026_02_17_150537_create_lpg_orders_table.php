@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('customer_lpg_phone');
             $table->string('customer_lpg_afm');
             $table->string('customer_lpg_city');
+            $table->string('lpg_type');
             $table->string('customer_lpg_address');
             $table->integer('customer_lpg_number_of_address');
             

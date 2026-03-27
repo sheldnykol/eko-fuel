@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer_fuel_order', function (Blueprint $table) {
+        Schema::create('fuel_orders', function (Blueprint $table) {
             $table->id();
-            //Connect apointment with gas station (1 or 2)
-            $table->integer('station_id');
+
 
             //customer info
             $table->string('customer_fuel_name');
@@ -26,8 +25,6 @@ return new class extends Migration
 
             //Τύποσ Καυσίμου
            $table->enum('fuel_type', [
-            'unleaded_95',
-            'unleaded_100',
             'diesel_economy',
             'diesel_avio'
 ]);
@@ -50,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer_fuel_order');
+        Schema::dropIfExists('fuel_orders');
     }
 };

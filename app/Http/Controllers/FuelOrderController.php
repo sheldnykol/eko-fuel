@@ -12,10 +12,10 @@ class FuelOrderController extends Controller
     /**
      * Εμφάνιση της λίστας παραγγελιών (για τον Admin)
      */
-    public function index()
+    public function store()
     {
-        $orders = FuelOrder::latest()->get();
-        return view('admin.customer_fuel_order', compact('orders'));
+        $fuel_orders = FuelOrder::latest()->get();
+        return view('admin.fuel_order', compact('fuel_orders'));
     }
 
     /**
@@ -28,14 +28,13 @@ class FuelOrderController extends Controller
 
         // 2. Validation
         $validated = $request->validate([
-            'station_id' => 'required|exists:stations,id',
             'customer_fuel_name' => 'required|string|max:255',
             'customer_fuel_phone' => 'required|digits:10',
             'customer_fuel_afm' => 'required|digits:9',
             'customer_fuel_city' => 'required|string|max:255',
             'customer_fuel_address' => 'required|string|max:255',
             'customer_fuel_number_of_address' => 'required|integer|digits_between:1,4',
-            'fuel_type' => 'required|in:unleaded_95,unleaded_100,diesel_economy,diesel_avio',
+            'fuel_type' => 'required|in:diesel_economy,diesel_avio',
             'fuel_quantity' => 'required|integer|min:1',
         ], [
             // Custom μηνύματα σφάλματος

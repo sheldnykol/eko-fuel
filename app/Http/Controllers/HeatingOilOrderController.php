@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\HeatingOilOrder;
+use App\Models\Station;
+use Illuminate\Support\Facades\Log;
 class HeatingOilOrderController extends Controller
 {
          /**
      * Εμφάνιση της λίστας παραγγελιών (για τον Admin)
      */
-    public function index()
+    public function store()
     {
-        $orders = FuelOrder::latest()->get();
+        $orders = HeatingOilOrder::latest()->get();
         return view('admin.customer_heatingOil_orders', compact('heatingOil_orders'));
     }
 
@@ -20,6 +22,10 @@ class HeatingOilOrderController extends Controller
      */
     public function order(Request $request) 
     {
+        
+
+
+
         // 1. LOG: Καταγραφή των δεδομένων που έρχονται από τη φόρμα
         Log::info('Νέα εισερχόμενη παραγγελία καυσίμου:', $request->all());
 
@@ -45,7 +51,7 @@ class HeatingOilOrderController extends Controller
         $validated['customer_heatingOil_address'] = mb_strtoupper($request->customer_heatingOil_address, 'UTF-8');
 
         try {
-            FuelOrder::create($validated);
+            HeatingOilOrder::create($validated);
             Log::info('Η παραγγελία αποθηκεύτηκε επιτυχώς στη βάση.');
         } catch (\Exception $e) {
             Log::error('Σφάλμα κατά την αποθήκευση της παραγγελίας: ' . $e->getMessage());

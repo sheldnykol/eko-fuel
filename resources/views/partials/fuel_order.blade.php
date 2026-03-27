@@ -26,7 +26,7 @@
                 <span class="absolute top-4 right-4 bg-blue-100 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">LPG</span>
             </a>
 
-            <a href="{{ route('heatingOil-orders.create') }}" class="group relative block w-full max-w-sm p-10 bg-white border border-slate-200 rounded-3xl shadow-sm hover:shadow-2xl hover:border-orange-500 transition-all duration-300 text-center">
+            <a href="{{ route('heating-οil-orders.create') }}" class="group relative block w-full max-w-sm p-10 bg-white border border-slate-200 rounded-3xl shadow-sm hover:shadow-2xl hover:border-orange-500 transition-all duration-300 text-center">
                 <div class="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-2xl bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
