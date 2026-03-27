@@ -12,8 +12,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
-            // Προσθέτουμε το status (0=Εκκρεμεί, 1=Ολοκληρώθηκε, 2=Ακυρώθηκε)
-            //$table->integer('status')->default(1);
+            //Προσθέτουμε το status (1=Εκκρεμεί, 2=Ολοκληρώθηκε, 3=Ακυρώθηκε)
+            // $table->integer('status')->default(1);
             // $table->string('booking_pin')->after('status');
             $table->string('booking_pin')->nullable()->after('license_plate');
         });

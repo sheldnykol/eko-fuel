@@ -23,18 +23,18 @@
             <div>
                 <h4 class="mb-6 text-lg font-semibold tracking-wider uppercase">Γρήγοροι Σύνδεσμοι</h4>
                 <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="" class="transition-colors hover:text-[#e21838]">Αρχική</a></li>
+                    <li><a href="/" class="transition-colors hover:text-[#e21838]">Αρχική</a></li>
                     <li>
                         <a href="" class="transition-colors hover:text-[#e21838]">Τιμές Καυσίμων</a>
                     </li>
                     <li>
-                        <a href="" class="transition-colors hover:text-[#e21838]">Προϊόντα</a>
+                        <a href="/station/1/products" class="transition-colors hover:text-[#e21838]">Προϊόντα</a>
                     </li>
                     <li>
-                        <a href="" class="transition-colors hover:text-[#e21838]">Βρες Πρατήριο</a>
+                        <a href="/#gus_stations" class="transition-colors hover:text-[#e21838]">Βρες Πρατήριο</a>
                     </li>
                     <li>
-                        <a href="" class="transition-colors hover:text-[#e21838]">Πλυντήρια</a>
+                        <a href="/booking" class="transition-colors hover:text-[#e21838]">Πλυντήρια</a>
                     </li>
                 </ul>
             </div>
@@ -43,10 +43,9 @@
             <div>
                 <h4 class="mb-6 text-lg font-semibold tracking-wider uppercase">Υπηρεσίες</h4>
                 <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="#" class="transition-colors hover:text-[#e21838]">Επικοινωνία</a></li>
-                    <li><a href="#" class="transition-colors hover:text-[#e21838]">Όροι Χρήσης</a></li>
-                    <li><a href="#" class="transition-colors hover:text-[#e21838]">Πολιτική Απορρήτου</a></li>
-                    <li><a href="#" class="transition-colors hover:text-[#e21838]">Cookies</a></li>
+                    <li><a href="/contact" class="transition-colors hover:text-[#e21838]">Επικοινωνία</a></li>
+                    <li><a href="/terms" class="transition-colors hover:text-[#e21838]">Όροι Χρήσης</a></li>
+                    <li><a href="/privacy" class="transition-colors hover:text-[#e21838]">Πολιτική Απορρήτου</a></li>
                 </ul>
             </div>
 

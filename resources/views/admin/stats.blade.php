@@ -6,7 +6,24 @@
             <h1 class="text-3xl font-black text-slate-900">📊 Στατιστικά & Αναφορές</h1>
             <p class="font-medium text-slate-600">Συνολική εικόνα πλυντηρίου για το έτος {{ date('Y') }}</p>
         </div>
-
+        <form action="{{ route('admin.stats') }}" method="GET" id="yearFilterForm" class="flex items-center gap-3">
+            <label for="year" class="text-sm font-bold text-slate-700">Επιλογή Έτους:</label>
+            <select
+                name="year"
+                onchange="this.form.submit()"
+                class="rounded-xl border-slate-200 bg-white p-2 px-4 font-bold text-slate-700 shadow-sm focus:border-red-500 focus:ring-red-500"
+            >
+                @forEach($availableYears as $year)
+                <option value="{{ $year }}" {{ $selectedYear == $year ? 'selected' : '' }}>
+                    {{ $year }}
+                </option>
+                @endforeach
+                @if ($availableYears->isEmpty())
+                    <option value="{{ date('Y') }}">{{ date('Y') }}</option>
+                @endif
+            </select>
+        </form>
+        <br />
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm lg:col-span-2">
                 <h3 class="mb-6 text-xl font-bold text-slate-800">Κίνηση Ραντεβού ανά Μήνα</h3>

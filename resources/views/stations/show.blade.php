@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="group flex flex-col items-start justify-between rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200 transition-all hover:-translate-y-1 hover:shadow-lg">
+                        {{-- <div class="group flex flex-col items-start justify-between rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200 transition-all hover:-translate-y-1 hover:shadow-lg">
                             <div>
                                 <div class="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-slate-50 text-slate-600 ring-1 ring-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-7 w-7">
@@ -97,6 +97,19 @@
                                 <p class="text-sm leading-relaxed text-slate-500">
                                     Υψηλής ποιότητας εξυπηρέτηση από το εξειδικευμένο προσωπικό μας.
                                 </p>
+                            </div>
+                        </div> --}}
+                        <div class="container mx-auto px-4 pb-20">
+                            <div class="relative overflow-hidden rounded-[3rem] bg-slate-900 p-12 text-center text-white shadow-2xl">
+                                <div class="absolute inset-0 opacity-20" style="background-image: url('{{ asset('images/pattern.png') }}');"></div>
+                                <div class="relative z-10">
+                                    <h2 class="mb-4 text-3xl font-black md:text-4xl uppercase italic tracking-tighter">Χρειάζεστε κάτι για το αυτοκίνητο;</h2>
+                                    <p class="mb-8 text-slate-400">Δείτε τη διαθεσιμότητα σε λιπαντικά, αξεσουάρ και προϊόντα περιποίησης στο κατάστημά μας.</p>
+                                    <a href="{{ route('station.products', ['id' => request()->route('id')]) }}" 
+                                    class="inline-flex items-center justify-center gap-3 rounded-2xl bg-white px-10 py-4 text-lg font-black text-slate-900 transition-all hover:bg-red-600 hover:text-white hover:scale-105 shadow-xl shadow-white/5">
+                                        <span>🛒 ΕΠΙΣΚΕΨΗ ΣΤΟ ΚΑΤΑΣΤΗΜΑ</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     @endif

@@ -14,6 +14,9 @@ class Appointment extends Model
         'appointment_date',
         'appointment_time',
         'status',
-        'booking_pin'
+        'booking_pin',
+        'extras',
+        'wash_type',
+        'comments'
     ];
 }

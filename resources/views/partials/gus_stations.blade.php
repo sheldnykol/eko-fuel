@@ -1,4 +1,4 @@
-<section class="bg-slate-50 py-16 md:py-24">
+<section id="gus_stations" class="bg-slate-50 py-16 md:py-24">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16 flex flex-col items-center justify-center text-center">
             <div class="shadow-grey-200 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-black shadow-lg">
@@ -31,10 +31,10 @@
 
                     <div class="absolute top-6 right-6">
                         <span
-                            class="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-emerald-600 backdrop-blur-sm"
+                            id="status-badge"
+                            class="rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-bold text-emerald-600 uppercase"
                         >
-                            <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-                            ΑΝΟΙΧΤΟ
+                            Ανοιχτά τώρα
                         </span>
                     </div>
                 </div>
@@ -98,10 +98,10 @@
 
                     <div class="absolute top-6 right-6">
                         <span
-                            class="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-emerald-600 backdrop-blur-sm"
+                            id="status-badge"
+                            class="rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-bold text-emerald-600 uppercase"
                         >
-                            <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-                            ΑΝΟΙΧΤΟ
+                            Ανοιχτά τώρα
                         </span>
                     </div>
                 </div>
@@ -150,3 +150,35 @@
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkStatus = () => {
+            const now = new Date()
+            const hour = now.getHours()
+
+            // Ορισμός ωραρίου: 06:00 έως 23:00 (δηλαδή μέχρι τις 22:59)
+            const isOpen = hour >= 6 && hour < 23
+
+            // Βρίσκουμε όλα τα badges στη σελίδα
+            const badges = document.querySelectorAll('.status-badge')
+
+            badges.forEach(badge => {
+                if (isOpen) {
+                    badge.innerText = 'Ανοιχτά τώρα'
+                    badge.classList.remove('bg-red-100', 'text-red-600')
+                    badge.classList.add('bg-emerald-100', 'text-emerald-600')
+                } else {
+                    badge.innerText = 'Κλειστά'
+                    badge.classList.remove('bg-emerald-100', 'text-emerald-600')
+                    badge.classList.add('bg-red-100', 'text-red-600')
+                }
+            })
+        }
+
+        // Εκτέλεση ελέγχου αμέσως
+        checkStatus()
+
+        // Προαιρετικό: Έλεγχος κάθε 1 λεπτό μήπως αλλάξει η ώρα ενώ ο χρήστης είναι στη σελίδα
+        setInterval(checkStatus, 60000)
+    })
+</script>

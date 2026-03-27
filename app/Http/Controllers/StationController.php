@@ -4,46 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\Product;
 
 class StationController extends Controller
 {
     public function show($id){
-        $stations = [
-            1 => [
-                'name' =>'ΕΚΟ ΒΟΛΟΥ 12, ΛΑΡΙΣΑ',
-                'image' => 'eko_station_1.jpg',
-                'address' => 'ΒΟΛΟΥ 12, ΛΑΡΙΣΑ',
-                'prices' => [
-                    'amolyvdhi_100' => '1.98 €',
-                    'amolyvdhi_95' => '1.78 €',
-                    'diesel_economy' => '1.78 €',
-                    'diesel_avio' => '1.98 €',
-                    'auto_gas' => '1.23 €',
-                    'petrelaio' => '1.56 €',
-                ],
-                'services' => ['Πλυντήριο Αυτοκινήτων', 'Προϊόντα Καταστήματος'],
-            ],
-            2 => [                
-                'name' =>'ΕΚΟ 1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
-                'image' => 'eko2.jpg',
-                'address' => '1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
-                'prices' => [
-                    'amolyvdhi_100' => '1.98 €',
-                    'amolyvdhi_95' => '1.78 €',
-                    'diesel_economy' => '1.78 €',
-                    'diesel_avio' => '1.98 €',
-                    'auto_gas' => '1.23 €',
-                    'petrelaio' => '1.56 €',
-                ],
-                'services' => ['Προϊόντα Καταστήματος'],
-            ],
-            
-        ];
+        $stations = config('stations');
 
         $station = $stations[$id] ?? null;
         if(!$station) {
             abort(404);
         }
         return view('stations.show', compact("station"));
+    }
+    public function showProducts($id)
+    {
+        // Και εδώ διαβάζει από το ίδιο αρχείο
+        $allStations = config('stations');
+        $station = $allStations[$id] ?? abort(404);
+
+        $products = Product::where('station_id', $id)->get();
+
+        return view('pages.products', [
+            'products' => $products,
+            'station' => $station,
+            'allStations' => $allStations,
+            'id' => $id
+        ]);
+    }
+    public function showStations()
+    {
+            $allStations = config('stations');
+            
+            Log::info("station", $allStations);
+            $names = array_column($allStations, 'name');
+            Log::info("Station Names", $names);
+         return view('pages.contact', compact('allStations'));
     }
 }

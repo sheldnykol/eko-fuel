@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('appointment_date');
             $table->date('appointment_time');
 
-            // Προσθέτουμε το status (0=Εκκρεμεί, 1=Ολοκληρώθηκε, 2=Ακυρώθηκε)
+            // Προσθέτουμε το status (1=Εκκρεμεί, 2=Ολοκληρώθηκε, 3=Ακυρώθηκε)
             $table->integer('status')->default(1);
 
             
