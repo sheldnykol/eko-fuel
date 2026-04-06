@@ -33,29 +33,47 @@
                                     ></path>
                                 </svg>
                             </div>
-                            <span
-                                class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
-                            >
-                                <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
-                                </svg>
-                                20'- 45' Λεπτά
-                            </span>
+                            <div class="flex flex-col items-end gap-2">
+                                <span
+                                    class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
+                                >
+                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        ></path>
+                                    </svg>
+                                    20'- 45' Λεπτά
+                                </span>
+                                <span class="rounded-xl bg-slate-900 px-4 py-1.5 text-lg font-black text-white">
+                                    15€
+                                </span>
+                            </div>
                         </div>
+
                         <div class="mb-1 flex items-center gap-1.5">
                             <span class="h-1.5 w-1.5 rounded-full bg-[#e21838]"></span>
                             <p class="text-[10px] font-bold text-[#e21838] uppercase">Δευτέρα εώς Παρασκευή</p>
                         </div>
+
                         <h4 class="mb-3 text-2xl font-black text-slate-900">Πλύσιμο Μέσα - Έξω</h4>
-                        <p class="mb-8 leading-relaxed text-slate-500">
+                        <p class="mb-6 leading-relaxed text-slate-500">
                             Ολοκληρωμένος καθαρισμός με ενεργό αφρό, στέγνωμα στο χέρι και περιποίηση εσωτερικού με
                             ειδικά γαλακτώματα.
                         </p>
+
+                        <div class="flex gap-4 border-t border-slate-50 pt-4">
+                            <div class="text-sm">
+                                <span class="text-slate-400">Μέσα:</span>
+                                <span class="font-bold text-slate-700">8€</span>
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-slate-400">Έξω:</span>
+                                <span class="font-bold text-slate-700">7€</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div
@@ -74,24 +92,31 @@
                                     ></path>
                                 </svg>
                             </div>
-                            <span
-                                class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
-                            >
-                                <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
-                                </svg>
-                                3-4 Ώρες - 1 Ημέρα
-                            </span>
+                            <div class="flex flex-col items-end gap-2">
+                                <span
+                                    class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
+                                >
+                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        ></path>
+                                    </svg>
+                                    3-4 Ώρες - 1 Ημέρα
+                                </span>
+                                <span class="rounded-xl bg-slate-900 px-4 py-1.5 text-lg font-black text-white">
+                                    από 50€
+                                </span>
+                            </div>
                         </div>
+
                         <div class="mb-1 flex items-center gap-1.5">
                             <span class="h-1.5 w-1.5 rounded-full bg-[#e21838]"></span>
                             <p class="text-[10px] font-bold text-[#e21838] uppercase">Τρίτη - Τετάρτη - Πέμπτη</p>
                         </div>
+
                         <h4 class="mb-3 text-2xl font-black text-slate-900">Βιολογικός Καθαρισμός</h4>
                         <p class="mb-8 leading-relaxed text-slate-500">
                             Βαθύς καθαρισμός με μηχανήματα extraction σε καθίσματα, μοκέτες και ουρανό. Απομάκρυνση

@@ -163,12 +163,12 @@
                             class="w-full cursor-not-allowed rounded-xl border-2 border-slate-200 bg-slate-200 p-4 opacity-50 transition-all"
                         >
                             <option value="">Επιλέξετε πακέτο...</option>
-                            <option value="ΜΕΣΑ-ΕΞΩ">ΜΕΣΑ - ΕΞΩ</option>
-                            <option value="ΕΞΩ">ΜΟΝΟ ΕΞΩ</option>
-                            <option value="ΜΕΣΑ">ΜΟΝΟ ΜΕΣΑ</option>
+                            <option value="ΜΕΣΑ-ΕΞΩ">ΜΕΣΑ - ΕΞΩ (~15€)</option>
+                            <option value="ΕΞΩ">ΜΟΝΟ ΕΞΩ (~7€)</option>
+                            <option value="ΜΕΣΑ">ΜΟΝΟ ΜΕΣΑ (~10€)</option>
                             <optgroup label="Υπηρεσίες Βιολογικού (Τρ - Τε - Πε)" id="bio_group" style="display: none">
-                                <option value="ΒΙΟΛΟΓΙΚΟΣ">ΒΙΟΛΟΓΙΚΟΣ ΜΟΝΟ</option>
-                                <option value="ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ">ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ</option>
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ">ΒΙΟΛΟΓΙΚΟΣ ΜΟΝΟ (~60€)</option>
+                                <option value="ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ">ΒΙΟΛΟΓΙΚΟΣ & ΜΕΣΑ-ΕΞΩ (~70€)</option>
                             </optgroup>
                         </select>
                     </div>
@@ -181,6 +181,11 @@
                             placeholder="Σχόλια (Προαιρετικά)"
                             class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm"
                         ></textarea>
+                    </div>
+                    <div class="px-6 pb-2 text-center">
+                        <p class="text-[10px] text-slate-400 italic">
+                            * Οι τιμές είναι ενδεικτικές και ενδέχεται να μεταβληθούν ανάλογα με το μέγεθος/κατάσταση του οχήματος.
+                        </p>
                     </div>
 
                     {{-- Κουμπί Που Ανοίγει το Modal --}}
@@ -207,7 +212,6 @@
                 <div class="border-b border-slate-100 p-6 text-center">
                     <h3 class="text-2xl font-black text-slate-800">Θέλετε κάτι έξτρα; 🚗</h3>
                     <p class="text-sm text-slate-500">Επιλέξτε επιπλέον υπηρεσίες για το όχημά σας</p>
-                    {{-- Κουμπί κλεισίματος X --}}
                     <button
                         onclick="closeModal()"
                         class="absolute top-6 right-6 rounded-full bg-slate-100 p-2 text-slate-400 hover:bg-slate-200"
@@ -232,9 +236,9 @@
                 {{-- Modal Body - Grid Υπηρεσιών --}}
                 <div class="max-h-[60vh] overflow-y-auto p-6">
                     <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-                        {{-- 1. Ξεθάμπωμα Φαναριών --}}
+                        {{-- 1. Ξεθάμπωμα Φαναριών (ΑΠΛΟ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Ξεθάμπωμα Φαναριών')"
                         >
                             <div
@@ -245,13 +249,14 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Ξεθάμπωμα Φαναριών</h4>
                         </div>
 
-                        {{-- 2. Έλεγχος Ελαστικών (ΔΩΡΕΑΝ) --}}
+                        {{-- 2. Έλεγχος Ελαστικών (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Ελαστικών')"
                         >
+                            {{-- Το ταμπελάκι είναι σταθερό δεξιά --}}
                             <span
-                                class="absolute top-2 right-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-700"
+                                class="pointer-events-none absolute top-2 right-2 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700"
                             >
                                 ΔΩΡΕΑΝ
                             </span>
@@ -263,9 +268,9 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Ελαστικών</h4>
                         </div>
 
-                        {{-- 3. Αλλαγή Λαδιών --}}
+                        {{-- 3. Αλλαγή Λαδιών (ΑΠΛΟ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Αλλαγή Λαδιών')"
                         >
                             <div
@@ -276,13 +281,13 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Αλλαγή Λαδιών</h4>
                         </div>
 
-                        {{-- 4. Έλεγχος Λαδιών (ΔΩΡΕΑΝ) --}}
+                        {{-- 4. Έλεγχος Λαδιών (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Λαδιών')"
                         >
                             <span
-                                class="absolute top-2 right-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-700"
+                                class="pointer-events-none absolute top-2 right-2 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700"
                             >
                                 ΔΩΡΕΑΝ
                             </span>
@@ -294,9 +299,9 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Λαδιών</h4>
                         </div>
 
-                        {{-- 5. Απολύμανση Καμπίνας --}}
+                        {{-- 5. Απολύμανση Καμπίνας (ΑΠΛΟ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Απολύμανση Καμπίνας')"
                         >
                             <div
@@ -307,13 +312,13 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Απολύμανση Καμπίνας</h4>
                         </div>
 
-                        {{-- 6. Έλεγχος Ψυγείου (ΔΩΡΕΑΝ) --}}
+                        {{-- 6. Έλεγχος Ψυγείου (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Ψυγείου')"
                         >
                             <span
-                                class="absolute top-2 right-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-700"
+                                class="pointer-events-none absolute top-2 right-2 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700"
                             >
                                 ΔΩΡΕΑΝ
                             </span>
@@ -325,9 +330,9 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Ψυγείου</h4>
                         </div>
 
-                        {{-- 7. Αλλαγή Υαλοκαθαριστήρων --}}
+                        {{-- 7. Αλλαγή Υαλοκαθαριστήρων (ΑΠΛΟ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Αλλαγή Υαλοκαθαριστήρων')"
                         >
                             <div
@@ -338,9 +343,9 @@
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Αλλαγή Υαλοκαθαριστήρων</h4>
                         </div>
 
-                        {{-- 8. Αντιψυκτικό / Παραφλού --}}
+                        {{-- 8. Αντιψυκτικό / Παραφλού (ΑΠΛΟ) --}}
                         <div
-                            class="service-card cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
+                            class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Προσθήκη Αντιψυκτικού')"
                         >
                             <div
@@ -353,14 +358,13 @@
                     </div>
                 </div>
 
-                {{-- Modal Footer - Actions --}}
+                {{-- Modal Footer --}}
                 <div
                     class="flex flex-col gap-3 rounded-b-[2rem] bg-slate-50 p-6 md:flex-row md:items-center md:justify-between"
                 >
                     <button onclick="submitFinalForm()" class="text-sm font-bold text-slate-500 hover:text-slate-800">
                         Όχι ευχαριστώ, μόνο κράτηση
                     </button>
-
                     <button
                         onclick="submitFinalForm()"
                         class="flex-1 rounded-xl bg-[#e21838] px-6 py-4 font-black text-white shadow-lg shadow-red-500/30 transition-all hover:bg-[#c4142f]"
@@ -389,7 +393,7 @@
         // Λίστα με τις επιλεγμένες extra υπηρεσίες
         let selectedServices = []
 
-        // --- Logic: Modal Open/Validation ---
+        // Modal
         openModalBtn.addEventListener('click', function () {
             // Έλεγχος εγκυρότητας της φόρμας πριν ανοίξει το modal
             if (bookingForm.checkValidity()) {
@@ -407,36 +411,30 @@
 
         // --- Logic: Toggle Services ---
         function toggleService(element, serviceName) {
-            // Το στοιχείο card πρέπει να έχει relative για να φαίνεται σωστά το badge
-            element.classList.add('relative')
-
             if (selectedServices.includes(serviceName)) {
-                // Αφαίρεση
+                // --- ΑΦΑΙΡΕΣΗ ---
                 selectedServices = selectedServices.filter(s => s !== serviceName)
+
+                // Επαναφορά χρωμάτων
                 element.classList.remove('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-500')
                 element.classList.add('border-slate-100')
 
-                // Αφαίρεση τικ αν υπάρχει
+                // Αφαίρεση του τικ
                 const check = element.querySelector('.check-mark')
                 if (check) check.remove()
             } else {
-                // Προσθήκη
+                // --- ΠΡΟΣΘΗΚΗ ---
                 selectedServices.push(serviceName)
+
+                // Προσθήκη χρωμάτων (Κόκκινο πλαίσιο)
                 element.classList.remove('border-slate-100')
                 element.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-500')
 
-                // Visual Tick
+                // Προσθήκη Τικ (ΠΑΝΤΑ ΑΡΙΣΤΕΡΑ για να μην πέφτει πάνω στο "Δωρεάν")
                 const check = document.createElement('div')
                 check.className =
-                    'check-mark absolute top-2 right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs'
+                    'check-mark absolute top-2 left-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-sm'
                 check.innerHTML = '✓'
-                // Αν υπάρχει ήδη badge (ΔΩΡΕΑΝ), βάλτο λίγο πιο αριστερά ή από πάνω;
-                // Εδώ απλά το βάζουμε top-2 right-2, αν έχει badge "ΔΩΡΕΑΝ" (που είναι right-2), θα πέσει από πάνω.
-                // Διόρθωση θέσης αν έχει badge:
-                if (element.querySelector('span')) {
-                    check.style.right = 'auto'
-                    check.style.left = '8px'
-                }
                 element.appendChild(check)
             }
 

@@ -13,7 +13,7 @@
     @include('partials.hero')
 
     <h1 class="sr-only">EKO Fuel - Κορυφαίο Πλυντήριο Αυτοκινήτων και Πρατήρια Καυσίμων</h1>
-
+    @include('partials.fuel_order')
     @include('partials.gus_stations')
     @include('partials.map')
     @include('partials.fuel_order')

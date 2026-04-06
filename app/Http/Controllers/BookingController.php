@@ -69,13 +69,12 @@ class BookingController extends Controller
         $appointment = Appointment::create($validated);
         Log::info("Date received: " . $appointment);
 
-        // $this->sendSms(
-        //     $appointment->customer_phone,
-        //     $pin,
-        //     $appointment->appointment_date,
-        //     $appointment->appointment_time
-        // );
-        // ----------------------------
+        $this->sendSms(
+            $appointment->customer_phone,
+            $appointment->appointment_date,
+            $appointment->appointment_time
+        );
+       
 
         
         //Νο ability to book prev hours-dates
@@ -175,14 +174,14 @@ class BookingController extends Controller
         $formattedDate = date('d/m', strtotime($date));
 
         // 4. Το μήνυμα (Greeklish για σιγουριά και οικονομία χαρακτήρων)
-        $message = "EKO: Krathsh gia $formattedDate stis $formattedTime.";
+        $message = "EKO DRAMI (Odos Volou): To rantevou gia plysimo egkri8ike gia $formattedDate stis $formattedTime.";
 
         try {
             $response = Http::get("https://easysms.gr/api/sms/send", [
                 'key'    => $apiKey,
                 'to'     => $phone,
                 'text'   => $message,
-                'from'   => 'EKO', // Δοκίμασε "EKO" ή το κινητό σου αν δεν έχεις εγκεκριμένο όνομα
+                'from'   => 'EKO ΛΑΡΙΣΑ | ΑΦΟΙ ΔΡΑΜΗ ', // Δοκίμασε "EKO" ή το κινητό σου αν δεν έχεις εγκεκριμένο όνομα
                 'type'   => 'json'
             ]);
 

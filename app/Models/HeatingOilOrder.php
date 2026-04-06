@@ -8,13 +8,13 @@ class HeatingOilOrder extends Model
 {
     //Customer info from migration 
     protected $fillable =[    
-        'customer_heatingOil_name',
-        'customer_heatingOil_phone',
-        'customer_heatingOil_afm',
-        'customer_heatingOil_city',
-        'customer_heatingOil_address',
-        'customer_heatingOil_number_of_address',
-        'heatingOil_quantity',
+        'heatOil_name',
+        'heatOil_phone',
+        'heatOil_afm',
+        'heatOil_city',
+        'heatOil_address',
+        'heatOil_number_address',
+        'heatOil_quantity',
         'status'
     ];
 }

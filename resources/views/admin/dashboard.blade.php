@@ -47,6 +47,106 @@
                     Κατέβασμα PDF (Ημέρας)
                 </a>
             </div>
+            <div class="mb-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-black tracking-tight text-slate-800 uppercase">
+                            {{ $calendarDate->translatedFormat('F Y') }}
+                        </h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a
+                            href="{{ route('admin.dashboard', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}"
+                            class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+                        </a>
+
+                        <a
+                            href="{{ route('admin.dashboard', ['date' => date('Y-m-d')]) }}"
+                            class="px-3 text-xs font-bold text-slate-400 uppercase hover:text-red-600"
+                        >
+                            Σήμερα
+                        </a>
+
+                        <a
+                            href="{{ route('admin.dashboard', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}"
+                            class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-2 grid grid-cols-7 gap-2">
+                    @foreach (['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ'] as $dayName)
+                        <div class="text-center text-xs font-bold text-slate-300 uppercase">{{ $dayName }}</div>
+                    @endforeach
+                </div>
+
+                <div class="grid grid-cols-7 gap-2">
+                    @for ($i = 0; $i < $emptyDaysAtStart; $i++)
+                        <div class="h-20 rounded-xl border border-dashed border-slate-100 bg-slate-50/50"></div>
+                    @endfor
+
+                    @foreach ($calendarDays as $date => $count)
+                        @php
+                            $isToday = $date == date('Y-m-d');
+                            $isSelected = $date == $selectedDate;
+                        @endphp
+
+                        <a
+                            href="{{ route('admin.dashboard', ['date' => $date, 'month' => $calendarDate->month, 'year' => $calendarDate->year]) }}"
+                            class="{{ $isSelected ? 'border-red-500 bg-red-50 ring-2 ring-red-200' : 'border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md' }} relative flex h-20 flex-col items-center justify-center rounded-xl border transition-all"
+                        >
+                            <span class="{{ $isSelected ? 'text-red-600' : 'text-slate-500' }} text-xs font-bold">
+                                {{ date('j', strtotime($date)) }}
+                            </span>
+
+                            @if ($count > 0)
+                                <span
+                                    class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-[10px] font-black text-white"
+                                >
+                                    {{ $count }}
+                                </span>
+                            @else
+                                <span class="mt-1 text-[10px] text-slate-300">-</span>
+                            @endif
+
+                            @if ($isToday)
+                                <div class="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-red-500"></div>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+            </div>
             <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
                 <div class="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm">
                     <div class="flex items-center gap-4">
@@ -153,7 +253,10 @@
                                     Πινακίδα
                                 </th>
                                 <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    PIN
+                                    Πλύσιμο
+                                </th>
+                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
+                                    Έξτρα
                                 </th>
                                 <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
                                     Κατάσταση
@@ -163,9 +266,14 @@
                                 >
                                     Ενέργειες
                                 </th>
+                                <th
+                                    class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-400 uppercase"
+                                >
+                                    Γρήγορη Σημείωση
+                                </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-300">
                             @forelse ($appointments as $app)
                                 <tr class="transition-colors hover:bg-slate-50">
                                     <td class="px-6 py-4">
@@ -186,9 +294,20 @@
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         <span
+                                            class="rounded border border-red-300 bg-red-50 px-2 py-1 font-mono font-black text-red-600 uppercase"
+                                        >
+                                            {{ $app->wash_type }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
                                             class="rounded border border-red-100 bg-red-50 px-2 py-1 font-mono font-black text-red-600 uppercase"
                                         >
-                                            {{ $app->booking_pin }}
+                                            @if ($app->extras)
+                                                {{ $app->extras }}
+                                            @else
+                                                -
+                                            @endif
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
@@ -236,6 +355,28 @@
                                             </select>
                                         </form>
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <button
+                                            onclick="openCommentModal({{ $app->id }}, '{{ $app->license_plate }}')"
+                                            class="rounded-lg p-2 text-slate-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
+                                            title="Σημειώσεις & Διαχείριση"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                class="h-5 w-5"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -248,6 +389,83 @@
                     </table>
                 </div>
             </div>
+            <div
+                id="commentModal"
+                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+            >
+                <div class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
+                        <h3 class="font-bold text-slate-800">
+                            Σημειώσεις:
+                            <span id="modalPlate" class="text-red-600"></span>
+                        </h3>
+                        <button onclick="closeCommentModal()" class="text-slate-400 hover:text-slate-600">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form id="commentForm" method="POST" class="p-6">
+                        @csrf
+                        <div class="mb-4">
+                            <label class="mb-2 block text-sm font-medium text-slate-700">Νέα Σημείωση</label>
+                            <textarea
+                                name="body"
+                                rows="4"
+                                class="w-full rounded-l border-slate-200 text-sm focus:border-red-500 focus:ring-red-500"
+                                placeholder=" Γράψτε κάτι για αυτό το ραντεβού..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onclick="closeCommentModal()"
+                                class="rounded-xl px-4 py-2 text-sm font-bold text-slate-500 transition-all hover:bg-slate-100"
+                            >
+                                Ακύρωση
+                            </button>
+                            <button
+                                type="submit"
+                                class="rounded-xl bg-red-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-red-500/30 transition-all hover:bg-red-700"
+                            >
+                                Αποθήκευση
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
+
+<script>
+    function openCommentModal(id, plate) {
+        const modal = document.getElementById('commentModal')
+        const form = document.getElementById('commentForm')
+        const plateSpan = document.getElementById('modalPlate')
+
+        // Ενημερώνουμε το Action του Form δυναμικά
+        form.action = `/admin/appointments/${id}/comments`
+        plateSpan.innerText = plate
+
+        modal.classList.remove('hidden')
+    }
+
+    function closeCommentModal() {
+        document.getElementById('commentModal').classList.add('hidden')
+    }
+</script>
