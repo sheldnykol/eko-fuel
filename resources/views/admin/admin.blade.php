@@ -65,6 +65,26 @@
                             </svg>
                             Ραντεβού
                         </a>
+                        <a
+                            href="{{ route('admin.comments.index') }}"
+                            class="{{ request()->routeIs('admin.comments.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M7.5 8.25h9m-9 3h9m-9 3h3m-6.75 4.125l-.375 3.75 3.75-.375 1.5-1.5H21a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0021 4.5H3.375A2.25 2.25 0 001.125 6.75v10.5a2.25 2.25 0 002.25 2.25h1.5l1.5 1.5z"
+                                />
+                            </svg>
+                            Σημειώσεις (Chat)
+                        </a>
 
                         <a
                             href="{{ route('admin.stats') }}"

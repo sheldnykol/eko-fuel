@@ -1,4 +1,5 @@
-<section class="bg-slate-50 pb-16 md:pb-24">
+<section class="bg-slate-50 py-16 md:py-24">
+    {{-- Schema.org - Χρησιμοποιούμε διπλό @@ για να μην το εκλάβει το Blade ως directive --}}
     <script type="application/ld+json">
         {
             "@@context": "https://schema.org",
@@ -31,7 +32,7 @@
                 <img class="h-10 w-10 object-contain" src="{{ asset('images/map.png') }}" alt="Εικονίδιο Χάρτη EKO" />
             </div>
             <h2 class="text-3xl font-black tracking-tight text-slate-900 md:text-5xl">Χάρτης Πρατηρίων EKO</h2>
-            <p class="mt-4 text-lg text-slate-500">Εντοπίστε μας στη Λάρισα και λάβετε οδηγίες πλοήγησης</p>
+            <p class="mt-4 text-lg text-slate-500">Εντοπίστε μας στη Θεσσαλία και λάβετε οδηγίες πλοήγησης</p>
         </div>
 
         <div class="relative overflow-hidden rounded-[2.5rem] bg-white p-3 shadow-2xl ring-1 ring-slate-200">
@@ -39,6 +40,7 @@
         </div>
     </div>
 
+    {{-- Leaflet Assets --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -48,19 +50,28 @@
                 {
                     lat: 39.6343,
                     lng: 22.43025,
-
-                    name: '<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">ΒΟΛΟΥ 12, ΛΑΡΙΣΑ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.6343,22.43025" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; bg:#e21838; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
+                    name: '<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">ΒΟΛΟΥ 12, ΛΑΡΙΣΑ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.6343,22.43025" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
                 },
                 {
                     lat: 39.62728,
                     lng: 22.43262,
                     name: '<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.62728,22.43262" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
                 },
+                {
+                    lat: 39.642757,
+                    lng: 22.420073,
+                    name: '<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ A. ΔΡΑΜΗ</b><br><span style="color:#666;">ΓΕΩΡΓΙΑΔΟΥ 28, ΛΑΡΙΣΑ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.642757,22.420073" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
+                },
+                {
+                    lat: 39.384301,
+                    lng: 22.994214,
+                    name: '<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.384301,22.994214" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
+                },
             ]
 
             const map = L.map('map', {
                 scrollWheelZoom: false,
-            }).setView([39.631, 22.431], 14)
+            }).setView([39.639, 22.431], 13)
 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '© OpenStreetMap contributors',
@@ -87,6 +98,9 @@
         }
         .leaflet-container {
             font-family: inherit;
+        }
+        #map {
+            z-index: 1;
         }
     </style>
 </section>

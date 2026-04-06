@@ -19,4 +19,15 @@ class Appointment extends Model
         'wash_type',
         'comments'
     ];
+
+    public function comments()
+        {
+            // Χρησιμοποιούμε latest() για να έρχονται τα πιο πρόσφατα πρώτα (σαν chat)
+            return $this->hasMany(AppointmentComment::class)->latest();
+        }
 }
+// Hint 
+//ti petuxa
+// $appointment->comments -> Σου φέρνει όλα τα σχόλια του ραντεβού
+
+// $comment->appointment -> Σου φέρνει σε ποιο ραντεβού ανήκει το σχόλιο

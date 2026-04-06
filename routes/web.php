@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FuelPricesController;
+use App\Http\Controllers\FuelOrderController;
+use App\Http\Controllers\HeatingOilOrderController;
+use App\Http\Controllers\LpgOrderController;
 //NAV routes
 ////HomePage
 Route::get('/', function () {
@@ -25,6 +29,20 @@ Route::get('/privacy', function (){
   return view('pages.privacy');
 });
 
+// Fuel
+Route::get('/order-fuel', function () { return view('partials.fuel_order_form'); })->name('fuel-orders.create');
+Route::post('/order-fuel', [FuelOrderController::class, 'store'])->name('fuel-orders.store');
+
+// LPG
+Route::get('/lpg-orders', function () { return view('partials.lpg_order_form'); })->name('lpg-orders.create');
+Route::post('/lpg-orders', [LpgOrderController::class, 'store'])->name('lpg-orders.store');
+
+// Heating Oil
+Route::get('/heating-oil-orders', function () { return view('partials.heating_oil_order_form'); })->name('heating-oil-orders.create');
+Route::post('/heating-oil-orders', [HeatingOilOrderController::class, 'store'])->name('heating-oil-orders.store');
+
+Route::get('/fuel', [FuelPricesController::class, 'getVriskoPrices'])->name('fuel-prices');
+
 ////Gus station based id 
 Route::get('/station/{id}', [StationController::class, 'show'])->name('station.show');
 
@@ -33,10 +51,6 @@ Route::get('/booking', [BookingController::class, 'index'])->name('pages.booking
 Route::get('/check-availability', [BookingController::class, 'checkAvailability']);
 Route::get('/get-available-slots', [BookingController::class, 'getAvailableSlots']);
 Route::post('/book-wash', [BookingController::class, 'store'])->name('booking.store'); 
-
-// Admin Dashboard
-Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-Route::post('/admin/appointment/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
 
 
 //Auth 
@@ -47,6 +61,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 //Middlewere : if user is not connected not allow access  
 
 Route::middleware(['auth'])->group(function () {
+  // Admin Dashboard
+  Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+  Route::post('/admin/appointment/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
+
   Route::get('/admin/admin', [AdminController::class, 'index'])->name('admin.admin');
   Route::get('/admin/stats', [AdminController::class, 'stats'])->name('admin.stats');
   Route::post('/admin/dashboard/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
@@ -71,6 +89,9 @@ Route::middleware(['auth'])->group(function () {
     //  Wash hours
   Route::get('/admin/schedules', [AdminController::class, 'manageSchedules'])->name('admin.schedules.index');
   Route::post('/admin/schedules/store', [AdminController::class, 'storeSchedule'])->name('admin.schedules.store');
+  //  comments
+  Route::post('/admin/appointments/{id}/comments', [AdminController::class, 'storeComment'])->name('admin.comments.store');
+  Route::get('/admin/comments', [AdminController::class, 'allComments'])->name('admin.comments.index');
 });
 // Σελίδα Προϊόντων ανά Πρατήριο
 Route::get('/station/{id}/products', [StationController::class, 'showProducts'])->name('station.products');

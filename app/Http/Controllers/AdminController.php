@@ -5,43 +5,109 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Appointment;
 use App\Models\Station;
-use App\Http\Controllers\Controller;
+use App\Models\AppointmentComment;
 use App\Models\Schedule;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-  public function index(Request $request)
-  {
-    // Αν ο χρήστης διάλεξε ημερομηνία, την παίρνουμε. Αλλιώς, παίρνουμε το σήμερα.
-    $selectedDate = $request->query('date', date('Y-m-d'));
+    public function index(Request $request)
+    {
+        Log::info("Request , " . $request); // /admin/dashboard?date=2026-02-20&month=2&year=2026
+        $selectedDate = $request->query('date', date('Y-m-d'));//2026-02-20 
+        
+        $month = $request->query('month', date('m')); // 2
+        
+        $year = $request->query('year', date('Y')); // 2026
 
-    // Φέρνουμε τα ραντεβού για τη συγκεκριμένη ημερομηνία
-    $appointments = Appointment::where('appointment_date', $selectedDate)
-      ->orderBy('appointment_time', 'asc')
-      ->get();
+        $calendarDate = \Carbon\Carbon::createFromDate($year, $month, 1); // 2026-02-01 16:30:45 
 
-    //more stats for dashboard
-    $stats = [
-        'pending' => $appointments->where('status', 1)->count(),
-        'completed' => $appointments->where('status', 2)->count(),
-        'canceled' => $appointments->where('status', 3)->count(),
-
-    ];
+        $startOfMonth = $calendarDate->copy()->startOfMonth(); // 2026-02-01 00:00:00  
+        $endOfMonth = $calendarDate->copy()->endOfMonth(); // 2026-02-28 23:59:59  
+        
+        //SUNDAY = 7 , MONDAY = 1 
+        $firstDayOfWeek = $startOfMonth->dayOfWeekIso; // 7
+        $emptyDaysAtStart = $firstDayOfWeek - 1; // 7 - 1 = 6 ( 6 days which is from prev month we just show them to fill the calendar )
 
 
-    return view('admin.dashboard', compact('appointments', 'selectedDate', 'stats'));
-  }
+        //TESTING  toSql to see the actual sql query 
+        // $query = Appointment::whereBetween('appointment_date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])->toSql();
+        // Log::info($query);
+        // $queryRaw = Appointment::whereBetween('appointment_date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])->toRawSql();
+        // Log::info($queryRaw);
 
-  public function updateStatus(Request $request, $id)
-  {
+        //TESTING 
+        //pluck
+        //$products = Product::pluck('name', 'id');
+        // result:  [1 => "iPhone", 2 => "Samsung", 3 => "Xiaomi"]
+        //whereBetween
+        //  ->where('appointment_date', '>=', '2026-02-01')
+        // ->where('appointment_date', '<=', '2026-02-28')
+
+        // $monthlyCounts = Appointment::whereBetween('appointment_date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])
+        //     ->selectRaw('appointment_date, count(*) as total')
+        //     ->groupBy('appointment_date')
+        //     ->get(); 
+        // WITH ->get()  ---> [{"appointment_date":"2026-02-02","total":1},{"appointment_date":"2026-02-24","total":1},{"appointment_date":"2026-02-03","total":2},{"appointment_date":"2026-02-10","total":1},{"appointment_date":"2026-02-09","total":1},{"appointment_date":"2026-02-11","total":1},{"appointment_date":"2026-02-18","total":7},{"appointment_date":"2026-02-19","total":6},{"appointment_date":"2026-02-20","total":4},{"appointment_date":"2026-02-21","total":4},{"appointment_date":"2026-02-26","total":1},{"appointment_date":"2026-02-27","total":6},{"appointment_date":"2026-02-28","total":2},{"appointment_date":"2026-02-25","total":1}]  
+ 
+           
+        $monthlyCounts = Appointment::whereBetween('appointment_date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])
+            ->selectRaw('appointment_date, count(*) as total')
+            ->groupBy('appointment_date')
+            ->pluck('total', 'appointment_date');
+
+        Log::info("MONTHLYCOUNTS  , ". $monthlyCounts); // {"2026-02-02":1,"2026-02-24":1,"2026-02-03":2,"2026-02-10":1,"2026-02-09":1,"2026-02-11":1,"2026-02-18":7,"2026-02-19":6,"2026-02-20":4,"2026-02-21":4,"2026-02-26":1,"2026-02-27":6,"2026-02-28":2,"2026-02-25":1}  
+
+        $calendarDays = [];
+        for ($date = $startOfMonth->copy(); $date->lte($endOfMonth); $date->addDay()) {
+            $calendarDays[$date->format('Y-m-d')] = $monthlyCounts[$date->format('Y-m-d')] ?? 0;
+        }
+        Log::info("<CalendarDays  ARRAY:\n" . print_r($calendarDays, true));
+        Log::info("JSON STRING: " . json_encode($calendarDays, JSON_PRETTY_PRINT));
+
+        // Δεδομένα για τα βέλη "Επόμενο" - "Προηγούμενο"
+        $prevMonth = $calendarDate->copy()->subMonth(); 
+        $nextMonth = $calendarDate->copy()->addMonth();
+
+        $appointments = Appointment::where('appointment_date', $selectedDate)->orderBy('appointment_time', 'asc')->get();
+        $stats = [
+            'pending' => $appointments->where('status', 1)->count(),
+            'completed' => $appointments->where('status', 2)->count(),
+            'canceled' => $appointments->where('status', 3)->count(),
+        ];
+
+        return view('admin.dashboard', compact(
+            'appointments',
+            'selectedDate', 
+            'stats', 
+            'calendarDays', 
+            'calendarDate', 
+            'prevMonth', 
+            'nextMonth', 
+            'emptyDaysAtStart'
+        ));
+    }
+    public function updateStatus(Request $request, $id)
+{
+    // Βρίσκουμε το ραντεβού
     $appointment = Appointment::findOrFail($id);
-    $appointment->update(['status' => $request->status]);
+    
+    // Ενημερώνουμε το status
+    $appointment->status = $request->input('status');
+    $appointment->save();
 
-    return back()->with('success', 'Η κατάσταση ενημερώθηκε!');
-  }
+    // Παίρνουμε την ημερομηνία από το κρυφό input (αν υπάρχει) για να μη χάσουμε την πλοήγηση
+    $date = $request->input('selected_date', $appointment->appointment_date);
+
+    // Επιστροφή στο dashboard στην ίδια ημερομηνία
+    return redirect()->route('admin.dashboard', ['date' => $date])
+                     ->with('success', 'Η κατάσταση του ραντεβού ενημερώθηκε επιτυχώς.');
+}
   public function stats(Request $request){
     //Getting the year from Url , else the current year
     $selectedYear = $request->query('year', date('Y'));
@@ -210,5 +276,26 @@ class AdminController extends Controller
         );
 
         return back()->with('success', 'Το πρόγραμμα ενημερώθηκε επιτυχώς!');
+    }
+
+    public function storeComment(Request $request, $id)
+    {
+        $request->validate([
+            'body' => 'required|string|max:1000',
+        ]);
+
+        //save in DB table 
+        AppointmentComment::create([
+            'appointment_id' => $id, //to id apo to url tou ranteboy
+            'body' => $request->body,
+            'user_id'=> auth()->id() //keimeno poy egra4e sto adminProducts
+        ]);
+
+        return back()->with('success', 'Το σχόλιο προστέθηκε!');
+    }
+    public function allComments()
+    {
+        $comments = AppointmentComment::with(['appointment','user'])->latest()->paginate(20);
+        return view('admin.comments.index', compact('comments'));
     }
 }
