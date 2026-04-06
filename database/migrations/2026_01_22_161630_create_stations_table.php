@@ -22,6 +22,8 @@ return new class extends Migration
         DB::table('stations')->insert([
             ['name' => 'ΕΚΟ ΒΟΛΟΥ 12', 'address' => 'Βόλου 12', 'created_at' => now()],
             ['name' => 'ΕΚΟ Κ. ΚΑΡΑΜΑΝΛΗ', 'address' => 'Κ. Καραμανλή', 'created_at' => now()],
+            ['name' => 'ΕΚΟ ΓΕΩΡΓΙΑΔΟΥ 28','address'=>'Γεωργιάδου 28','created_at' => now()],
+            ['name' => 'ΕΚΟ 11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ','address'=>'11ο ΧΛΜ, ΕΟ Βόλου Πορταριάς','created_at' => now()],
         ]);
     }
 

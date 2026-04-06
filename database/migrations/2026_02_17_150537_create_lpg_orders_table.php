@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
 
             //Customer info 
-            $table->string('customer_lpg_name');
-            $table->string('customer_lpg_phone');
-            $table->string('customer_lpg_afm');
-            $table->string('customer_lpg_city');
+            $table->string('lpg_name');
+            $table->string('lpg_phone');
+            $table->string('lpg_afm');
+            $table->string('lpg_city');
             $table->string('lpg_type');
-            $table->string('customer_lpg_address');
-            $table->integer('customer_lpg_number_of_address');
+            $table->string('lpg_address');
+            $table->string('lpg_number_address')->nullable();
             
             //Ποσότητα Υγραερίου
             $table->integer('lpg_quantity');

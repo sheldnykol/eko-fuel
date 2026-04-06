@@ -35,7 +35,12 @@
                 {
                     lat:39.642757, 
                     lng:22.420073,
-                    name:'<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">ΓΕΩΡΓΙΑΔΟΥ 28, ΛΑΡΙΣΑ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.62728,22.43262" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
+                    name:'<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ A. ΔΡΑΜΗ</b><br><span style="color:#666;">ΓΕΩΡΓΙΑΔΟΥ 28, ΛΑΡΙΣΑ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.62728,22.43262" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>',
+                },
+                {
+                    lat:39.384301,
+                    lng:22.994214,
+                    name:'<div class="p-2"><b style="color:#e21838; font-size:16px;">ΕΚΟ ΑΦΟΙ Κ. ΔΡΑΜΗ</b><br><span style="color:#666;">11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ</span><br><a href="https://www.google.com/maps/dir/?api=1&destination=39.62728,22.43262" target="_blank" style="display:inline-block; margin-top:10px; color:#fff; background:#e21838; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">Οδηγίες Χάρτη</a></div>'
                 }
             ]
 

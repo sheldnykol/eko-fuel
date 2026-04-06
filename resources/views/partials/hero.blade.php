@@ -1,7 +1,7 @@
 <section class="relative min-h-[90vh] w-full overflow-hidden bg-slate-900">
     <div class="absolute inset-0 overflow-hidden">
         <img
-            src="{{ asset('images/hero1.jpg') }}"
+            src="{{ asset('images\logo-eko.png') }}"
             alt="Hero Background"
             class="h-full w-full object-cover transition-transform duration-[10000ms] ease-out group-hover:scale-110 motion-safe:animate-[zoom_20s_infinite_alternate]"
             loading="eager"

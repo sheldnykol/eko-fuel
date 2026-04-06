@@ -19,7 +19,7 @@
             <a href="{{ route('station.show', 1) }}" 
                class="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
                 <div class="relative h-64 overflow-hidden md:h-80">
-                    <img src="{{ asset('images/eko_station_1.jpg') }}" alt="ΕΚΟ ΒΟΛΟΥ 12, ΛΑΡΙΣΑ" 
+                    <img src="{{ asset('images/dramis-pitstop.jpg') }}" alt="ΕΚΟ ΒΟΛΟΥ 12, ΛΑΡΙΣΑ" 
                          class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
                     <div class="absolute top-6 right-6">
@@ -52,7 +52,7 @@
             <a href="{{ route('station.show', 2) }}" 
                class="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
                 <div class="relative h-64 overflow-hidden md:h-80">
-                    <img src="{{ asset('images/IMG_1940.jpeg') }}" alt="ΕΚΟ Κ. ΚΑΡΑΜΑΝΛΗ" 
+                    <img src="{{ asset('images/dramis-pitstop.jpg') }}" alt="ΕΚΟ Κ. ΚΑΡΑΜΑΝΛΗ" 
                          class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
                     <div class="absolute top-6 right-6">
@@ -85,7 +85,7 @@
             <a href="{{ route('station.show', 3) }}" 
                class="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
                 <div class="relative h-64 overflow-hidden md:h-80">
-                    <img src="{{ asset('images/IMG_2016.jpeg') }}" alt="ΕΚΟ ΦΑΡΣΑΛΩΝ" 
+                    <img src="{{ asset('images/dramis-pitstop.jpg') }}" alt="ΕΚΟ ΓΕΩΡΓΙΑΔΟΥ 28, ΛΑΡΙΣΑ" 
                          class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
                     <div class="absolute top-6 right-6">
@@ -102,7 +102,7 @@
                         ΓΕΩΡΓΙΑΔΟΥ 28, ΛΑΡΙΣΑ
                     </h3>
                     <p class="mb-8 leading-relaxed text-slate-500">
-                        Σύγχρονες εγκαταστάσεις εξοπλισμένες με τα τελευταίας τεχνολογίας συστήματα.
+                        Σε απόσταση αναπνοής από το κέντρο της Λάρισας, είμαστε καθημερινά ανοιχτά για την άμεση εξυπηρέτηση των κατοίκων.
                     </p>
                     <div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-6">
                         <span class="text-sm font-bold text-slate-900">Δες Τιμές Καυσίμων & Υπηρεσίες</span>
@@ -118,7 +118,7 @@
             <a href="{{ route('station.show', 4) }}" 
                class="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
                 <div class="relative h-64 overflow-hidden md:h-80">
-                    <img src="{{ asset('images/IMG_1947.JPG') }}" alt="ΕΚΟ ΗΠΕΙΡΟΥ" 
+                    <img src="{{ asset('images/dramis-pitstop.jpg') }}" alt="ΕΚΟ 11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ" 
                          class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
                     <div class="absolute top-6 right-6">

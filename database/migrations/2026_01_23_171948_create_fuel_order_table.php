@@ -16,12 +16,12 @@ return new class extends Migration
 
 
             //customer info
-            $table->string('customer_fuel_name');
-            $table->string('customer_fuel_phone');
-            $table->string('customer_fuel_afm');
-            $table->string('customer_fuel_city');
-            $table->string('customer_fuel_address');
-            $table->integer('customer_fuel_number_of_address');
+            $table->string('fuel_name');
+            $table->string('fuel_phone');
+            $table->string('fuel_afm');
+            $table->string('fuel_city');
+            $table->string('fuel_address');
+            $table->string('fuel_number_address')->nullable();
 
             //Τύποσ Καυσίμου
            $table->enum('fuel_type', [

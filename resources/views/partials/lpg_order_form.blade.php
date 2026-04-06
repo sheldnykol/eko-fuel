@@ -18,11 +18,11 @@
                 @endif
                 
                 <form action="{{ route('lpg-orders.store') }}" method="POST" class="p-8 space-y-5">
-                    @csrf
+                    @csrf 
                     
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Ονοματεπώνυμο / Επωνυμία</label>
-                            <input type="text" name="customer_lpg_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_lpg_name') }}" 
+                            <input type="text" name="lpg_name" oninput="this.value = this.value.toUpperCase()" value="{{ old('lpg_name') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" 
                                 placeholder="π.χ. ΙΩΑΝΝΗΣ ΠΑΠΑΔΟΠΟΥΛΟΣ" required>
                         </div>
@@ -45,7 +45,7 @@
 
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">ΑΦΜ</label>
-                                <input type="tel" name="customer_lpg_afm" value="{{ old('customer_lpg_afm') }}" 
+                                <input type="tel" name="lpg_afm" value="{{ old('lpg_afm') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" 
                                     placeholder="9 ψηφία" required>
                             </div>
@@ -54,19 +54,19 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Πόλη / Περιοχή</label>
-                                <input type="text" name="customer_lpg_city" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_lpg_city') }}" 
+                                <input type="text" name="lpg_city" oninput="this.value = this.value.toUpperCase()" value="{{ old('lpg_city') }}" 
                                     class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" 
                                     placeholder="π.χ. Λάρισα" required>
                             </div>
                             <div class="flex gap-2">
                                 <div class="grow">
                                     <label class="block text-sm font-bold text-slate-700 mb-2">Διεύθυνση</label>
-                                    <input type="text" name="customer_lpg_address" oninput="this.value = this.value.toUpperCase()" value="{{ old('customer_lpg_address') }}" 
+                                    <input type="text" name="lpg_address" oninput="this.value = this.value.toUpperCase()" value="{{ old('lpg_address') }}" 
                                         class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" required>
                                 </div>
                                 <div class="w-20">
                                     <label class="block text-sm font-bold text-slate-700 mb-2">Αρ.</label>
-                                    <input type="text" name="customer_lpg_number_of_address" value="{{ old('customer_lpg_number_of_address') }}" 
+                                    <input type="text" name="lpg_number_address" value="{{ old('lpg_number_address') }}" 
                                         class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" required>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
 
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Τηλέφωνο Επικοινωνίας</label>
-                            <input type="tel" name="customer_lpg_phone" value="{{ old('customer_lpg_phone') }}" 
+                            <input type="tel" name="lpg_phone" value="{{ old('lpg_phone') }}" 
                                 class="w-full border-slate-200 rounded-xl shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3" 
                                 placeholder="69XXXXXXXX" required>
                         </div>

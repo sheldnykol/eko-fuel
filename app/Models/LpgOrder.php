@@ -8,13 +8,13 @@ class LpgOrder extends Model
 {
 //Customer info from migration 
 protected $fillable =[    
-    'customer_lpg_name',
-    'customer_lpg_phone',
-    'customer_lpg_afm',
-    'customer_lpg_city',
+    'lpg_name',
+    'lpg_phone',
+    'lpg_afm',
+    'lpg_city',
     'lpg_type',
-    'customer_lpg_address',
-    'customer_lpg_number_of_address',
+    'lpg_address',
+    'lpg_number_address',
     'lpg_quantity',
     'status'
     ];

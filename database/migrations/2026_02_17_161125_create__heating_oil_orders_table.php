@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('heating_oil_orders', function (Blueprint $table) {
             $table->id();
             //Customer info 
-            $table->string('customer_heatingOil_name');
-            $table->string('customer_heatingOil_phone');
-            $table->string('customer_heatingOil_afm');
-            $table->string('customer_heatingOil_city');
-            $table->string('customer_heatingOil_address');
-            $table->integer('customer_heatingOil_number_of_address');
+            $table->string('heatOil_name');
+            $table->string('heatOil_phone');
+            $table->string('heatOil_afm');
+            $table->string('heatOil_city');
+            $table->string('heatOil_address');
+            $table->string('heatOil_number_address')->nullable();
 
              //Ποσότητα Πετρελαίου Θέρμανσης
-            $table->integer('heatingOil_quantity');
+            $table->integer('heatOil_quantity');
             
             $table->integer('status')->default(1);
             //creates created_at and updated_at

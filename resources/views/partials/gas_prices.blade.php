@@ -69,6 +69,26 @@
                         <span class="text-xs font-semibold text-slate-400">€/L</span>
                     </div>
                 </div>
+                <div
+                    class="group relative flex w-64 shrink-0 snap-center flex-col items-center overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl md:w-auto"
+                >
+                    <div class="absolute top-0 h-1.5 w-full bg-gradient-to-r from-gray-500 to-gray-600"></div>
+                    <div class="mb-4 flex h-24 w-full items-center justify-center">
+                        <img
+                            src="{{ asset('images/premium98.jpg') }}"
+                            alt="98"
+                            loading="lazy"
+                            class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        />
+                    </div>
+                    <h4 class="mb-1 text-sm font-bold tracking-wider text-slate-400 uppercase">Αμολυβδη 98</h4>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-3xl font-black text-slate-800 md:text-4xl">
+                            {{ $prices['amolyvdhi_98'] ?? '-' }}
+                        </span>
+                        <span class="text-xs font-semibold text-slate-400">€/L</span>
+                    </div>
+                </div>
 
                 <div
                     class="group relative flex w-64 shrink-0 snap-center flex-col items-center overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl md:w-auto"

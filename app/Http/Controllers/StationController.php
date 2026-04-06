@@ -25,7 +25,7 @@ class StationController extends Controller
             ],
             2 => [                
                 'name' =>'ΕΚΟ 1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
-                'image' => 'eko2.jpg',
+                'image' => 'IMG_1940.jpeg',
                 'address' => '1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
                 'prices' => [
                     'amolyvdhi_100' => '1.98 €',
@@ -34,6 +34,33 @@ class StationController extends Controller
                     'diesel_avio' => '1.98 €',
                     'auto_gas' => '1.23 €',
                     'petrelaio' => '1.56 €',
+                ],
+                'services' => ['Προϊόντα Καταστήματος'],
+            ],
+            3=> [
+                'name'=>'ΕΚΟ ΓΕΩΡΓΙΑΔΟΥ 28',
+                'image'=>'IMG_2016.jpeg',
+                'address'=>'ΓΕΩΡΓΙΑΔΟΥ 28',
+                'prices' => [
+                    'amolyvdhi_100' => '1.98 €',
+                    'amolyvdhi_95' => '1.78 €',
+                    'amolyvdhi_98' => '1.88 €',
+                    'diesel_economy' => '1.78 €',
+                    'diesel_avio' => '1.98 €',
+                    'auto_gas' => '1.23 €',                  
+                ],
+                'services' => ['Πλυντήριο Αυτοκινήτων', 'Προϊόντα Καταστήματος'],
+            ],
+            4=> [
+                'name'=>'ΕΚΟ 11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
+                'image'=>'IMG_1947.JPG',
+                'address'=>'11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
+                'prices'=>[
+                    'amolyvdhi_98' => '1.88 €',
+                    'amolyvdhi_95' => '1.78 €',
+                    'diesel_economy' => '1.78 €',
+                    'diesel_avio' => '1.98 €',
+
                 ],
                 'services' => ['Προϊόντα Καταστήματος'],
             ],

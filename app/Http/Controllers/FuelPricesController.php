@@ -59,6 +59,7 @@ class FuelPricesController extends Controller
         return match (true) {
             str_contains($name, 'αμόλυβδη 100') || str_contains($name, 'kinitron 100') => 'amolyvdhi_100',
             str_contains($name, 'αμόλυβδη 95') || str_contains($name, 'unleaded 95') => 'amolyvdhi_95',
+            str_contains($name, 'αμόλυβδη 98') || str_contains($name, 'unleaded 98') => 'amolyvdhi_98',
             str_contains($name, 'diesel economy') || str_contains($name, 'ekonomy') => 'diesel_economy',
             str_contains($name, 'diesel avio') => 'diesel_avio',
             str_contains($name, 'auto gas') || str_contains($name, 'υγραέριο') => 'auto_gas',
@@ -72,6 +73,7 @@ class FuelPricesController extends Controller
         return [
             'amolyvdhi_100'     => '1.58 €',
             'amolyvdhi_95'      => '1.48 €',
+            'amolyvdhi_98'      => '1.88 €',
             'diesel_economy'    => '1.78 €',
             'diesel_avio'       => '1.98 €',
             'auto_gas'          => '0.999 €',

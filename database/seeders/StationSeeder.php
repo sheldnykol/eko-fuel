@@ -23,5 +23,15 @@ class StationSeeder extends Seeder
             'address' => '1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
             'city' => 'Λάρισα'
             ]);
+            \App\Models\Station::creatw([
+                'name' => 'ΕΚΟ ΓΕΩΡΓΙΑΔΟΥ 28',
+                'address' =>'Γεωργιάδου, Λάρισα',
+                'city' => 'Λάρισα'
+            ]);
+            \App\Models\Station::create([
+                'name'=>'ΕΚΟ 11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
+                'address'=>'11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
+                'city'=>'Βόλος'
+            ]);
     }
 }
