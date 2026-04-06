@@ -24,9 +24,7 @@
                 <h4 class="mb-6 text-lg font-semibold tracking-wider uppercase">Γρήγοροι Σύνδεσμοι</h4>
                 <ul class="space-y-3 text-sm text-gray-400">
                     <li><a href="/" class="transition-colors hover:text-[#e21838]">Αρχική</a></li>
-                    <li>
-                        <a href="" class="transition-colors hover:text-[#e21838]">Τιμές Καυσίμων</a>
-                    </li>
+
                     <li>
                         <a href="/station/1/products" class="transition-colors hover:text-[#e21838]">Προϊόντα</a>
                     </li>

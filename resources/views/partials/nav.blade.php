@@ -14,9 +14,6 @@
                     <a href="/" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
                         Αρχική
                     </a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]">
-                        Καύσιμα
-                    </a>
                     <a
                         href="/services"
                         class="text-sm font-semibold text-slate-600 transition-colors hover:text-[#e21838]"

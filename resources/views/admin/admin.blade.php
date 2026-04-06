@@ -86,28 +86,31 @@
                             Σημειώσεις (Chat)
                         </a>
 
-                        <a 
-                            href="{{ route('admin.dashboard') }}" 
-                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
-                            ⛽ Παραγγελίες Πετρελαίου Κίνησης
-                        </a>    
                         <a
-                            href="{{ route('admin.stats') }}"
-                            class="{{ request()->routeIs('admin.stats') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
+                            href="{{ route('admin.fuel-orders') }}"
+                            class="{{ request()->routeIs('admin.fuel-orders*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
                         >
-                        <a 
-                            href="{{ route('admin.dashboard') }}" 
-                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
-                            🔥Παραγγελίες Υγραερίου
-                        </a> 
-                        <a 
-                            href="{{ route('admin.dashboard') }}" 
-                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
-                            🏠🔥 Παραγγελίες Πετρελαίου Θέρμανσης
-                        </a>      
-
-
-
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.75 5.25v13.5m-7.5-13.5v13.5M3 5.25h18M3 18.75h18M6.75 5.25v13.5m10.5-13.5v13.5"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25"
+                                />
+                            </svg>
+                            Παραγγελίες Καυσίμων
+                        </a>
                         <a
                             href="{{ route('admin.stats') }}"
                             class="{{ request()->routeIs('admin.stats') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"

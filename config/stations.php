@@ -37,6 +37,7 @@ return [
                 'image'=>'IMG_2016.jpeg',
                 'vrisko_slug' => 'larisa',
                 'address'=>'ΓΕΩΡΓΙΑΔΟΥ 28',
+                'phone' => '2410283954',
                 'prices' => [
                     'amolyvdhi_100' => '1.98 €',
                     'amolyvdhi_95' => '1.78 €',
@@ -52,6 +53,7 @@ return [
                 'image'=>'IMG_1947.JPG',
                 'vrisko_slug' => 'portaria',
                 'address'=>'11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
+                'phone' => '2410283954',
                 'prices'=>[
                     'amolyvdhi_98' => '1.88 €',
                     'amolyvdhi_95' => '1.78 €',

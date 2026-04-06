@@ -5,17 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FuelOrder;
 use App\Models\Station;
-use Illuminate\Support\Facades\Log; // Απαραίτητο για το Log
+use App\Models\HeatingOilOrder; 
+use App\Models\LpgOrder;    
+use Illuminate\Support\Facades\Log; 
 
 class FuelOrderController extends Controller
 {
     /**
      * Εμφάνιση της λίστας παραγγελιών (για τον Admin)
      */
-    public function index()
+    public function adminIndex($type = 'fuel') // Προεπιλογή το 'fuel'
     {
-        $fuel_orders = FuelOrder::latest()->get();
-        return view('admin.fuel_order', compact('fuel_orders'));
+        // Ανάλογα με το $type, τραβάμε τα δεδομένα από το σωστό Model
+        if ($type == 'lpg') {
+            $orders = LpgOrder::latest()->get();
+        } elseif ($type == 'heating') {
+            $orders = HeatingOilOrder::latest()->get();
+        } else {
+            $type = 'fuel'; // Fallback
+            $orders = FuelOrder::latest()->get();
+        }
+
+        // Στέλνουμε τις παραγγελίες και τον τύπο στο ίδιο View
+        return view('admin.fuel_orders', compact('orders', 'type'));
     }
 
     /**
@@ -52,7 +64,8 @@ class FuelOrderController extends Controller
         // 4. Αποθήκευση στην βάση
         try {
             FuelOrder::create($validated);
-            Log::info('Η παραγγελία αποθηκεύτηκε επιτυχώς στη βάση.');
+            
+            Log::info('Η παραγγελία αποθηκεύτηκε επιτυχώς .');
         } catch (\Exception $e) {
             Log::error('Σφάλμα κατά την αποθήκευση της παραγγελίας: ' . $e->getMessage());
             return redirect()->back()->withErrors('Υπήρξε πρόβλημα κατά την αποθήκευση. Δοκιμάστε ξανά.');

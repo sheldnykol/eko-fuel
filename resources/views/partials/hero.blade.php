@@ -1,7 +1,7 @@
 <section class="relative min-h-[90vh] w-full overflow-hidden bg-slate-900">
     <div class="absolute inset-0 overflow-hidden">
         <img
-            src="{{ asset('images/hero1.jpg') }}"
+            src="{{ asset('images/eko_station_1.jpg') }}"
             alt="Hero Background"
             class="h-full w-full object-cover transition-transform duration-[10000ms] ease-out group-hover:scale-110 motion-safe:animate-[zoom_20s_infinite_alternate]"
             loading="eager"
@@ -21,7 +21,7 @@
                     ></span>
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
                 </span>
-                EKO -AΦΟΙ Κ. ΔΡΑΜΗ ΟΕ 
+                EKO -AΦΟΙ Κ. ΔΡΑΜΗ ΟΕ
             </div>
 
             <h1 class="mb-6 text-5xl leading-[1.1] font-black text-white md:text-7xl lg:text-8xl">

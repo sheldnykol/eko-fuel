@@ -73,14 +73,9 @@ Route::middleware(['auth'])->group(function () {
 
 
   // Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Κινησης
-  Route::get('/admin/fuel-orders', [FuelOrderController::class, 'index'])->name('admin.fuel-orders');
-
-  // Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Υγραεριου
-  Route::get('/admin/lpg-orders', [FuelOrderController::class, 'index'])->name('admin.lpg-orders');
-
-  // Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Θερμανσης
-  Route::get('/admin/heatingOil-orders', [FuelOrderController::class, 'index'])->name('admin.heatingOil-orders');
-
+  // Μία σελίδα για όλες τις παραγγελίες καυσίμων (με χρήση παραμέτρου)
+  // Το route για όλες τις παραγγελίες (Κίνησης, Υγραέριο, Θέρμανσης)
+  Route::get('/admin/fuel-orders/{type?}', [App\Http\Controllers\FuelOrderController::class, 'adminIndex'])->name('admin.fuel-orders');
   Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
   Route::get('/admin/export-pdf', [AdminController::class, 'exportPDF'])->name('admin.exportPDF');
     // Products
