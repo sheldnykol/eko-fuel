@@ -86,6 +86,28 @@
                             Σημειώσεις (Chat)
                         </a>
 
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            ⛽ Παραγγελίες Πετρελαίου Κίνησης
+                        </a>    
+                        <a
+                            href="{{ route('admin.stats') }}"
+                            class="{{ request()->routeIs('admin.stats') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800"
+                        >
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            🔥Παραγγελίες Υγραερίου
+                        </a> 
+                        <a 
+                            href="{{ route('admin.dashboard') }}" 
+                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600' : '' }} block rounded-lg px-4 py-2 hover:bg-slate-800">
+                            🏠🔥 Παραγγελίες Πετρελαίου Θέρμανσης
+                        </a>      
+
+
+
                         <a
                             href="{{ route('admin.stats') }}"
                             class="{{ request()->routeIs('admin.stats') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"

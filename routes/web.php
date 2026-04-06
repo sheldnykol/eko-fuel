@@ -11,6 +11,7 @@ use App\Http\Controllers\HeatingOilOrderController;
 use App\Http\Controllers\LpgOrderController;
 //NAV routes
 ////HomePage
+
 Route::get('/', function () {
   return view('pages.home');
 });
@@ -68,6 +69,53 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/admin/admin', [AdminController::class, 'index'])->name('admin.admin');
   Route::get('/admin/stats', [AdminController::class, 'stats'])->name('admin.stats');
   Route::post('/admin/dashboard/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
+
+});
+// Η Σελίδα με τη Φόρμα Παραγγελίας Κινησης
+Route::get('/order-fuel', function () {
+    return view('partials.fuel_order_form');
+})->name('fuel-orders.create');
+
+// Η ενέργεια αποθήκευσης της παραγγελίας (POST) κινησησς
+Route::post('/order-fuel', [FuelOrderController::class, 'order'])->name('fuel-orders.index');
+
+// Η Σελίδα με τη Φόρμα Παραγγελίας Υγραεριου
+Route::get('/lpg_orders', function () {
+    return view('partials.lpg_order_form');
+})->name('lpg-orders.create');
+
+// Η ενέργεια αποθήκευσης της παραγγελίας (POST) Υγραεριου
+Route::post('/lpg-orders', [FuelOrderController::class, 'order'])->name('lpg-orders.index');
+
+// Η Σελίδα με τη Φόρμα Παραγγελίας Υγραεριου
+Route::get('/lpg_orders', function () {
+    return view('partials.lpg_order_form');
+})->name('lpg-orders.create');
+
+// Η ενέργεια αποθήκευσης της παραγγελίας (POST) Υγραεριου
+Route::post('/lpg-orders', [FuelOrderController::class, 'order'])->name('lpg-orders.index');
+
+// Η Σελίδα με τη Φόρμα Παραγγελίας Θέρμανσης
+Route::get('/heatingOil_orders', function () {
+    return view('partials.heatingOil_order_form');
+})->name('heatingOil-orders.create');
+
+// Η ενέργεια αποθήκευσης της παραγγελίας (POST) Θέρμανσης
+Route::post('/heatingOil-orders', [FuelOrderController::class, 'order'])->name('heatingOil-orders.index');
+
+
+
+// --- ROUTES ΓΙΑ ΤΟΝ ADMIN (Backend) ---
+
+// Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Κινησης
+Route::get('/admin/fuel-orders', [FuelOrderController::class, 'index'])->name('admin.fuel-orders');
+
+// Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Υγραεριου
+Route::get('/admin/lpg-orders', [FuelOrderController::class, 'index'])->name('admin.lpg-orders');
+
+// Η σελίδα όπου ο Admin βλέπει όλες τις παραγγελίες Θερμανσης
+Route::get('/admin/heatingOil-orders', [FuelOrderController::class, 'index'])->name('admin.heatingOil-orders');
+
   Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
   Route::get('/admin/export-pdf', [AdminController::class, 'exportPDF'])->name('admin.exportPDF');
     // Products

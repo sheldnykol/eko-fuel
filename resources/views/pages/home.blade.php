@@ -16,4 +16,5 @@
     @include('partials.fuel_order')
     @include('partials.gus_stations')
     @include('partials.map')
+    @include('partials.fuel_order')
 @endsection

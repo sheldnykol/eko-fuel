@@ -21,7 +21,7 @@
                     ></span>
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
                 </span>
-                EKO -AΦΟΙ Κ ΔΡΑΜΗ ΟΕ
+                EKO -AΦΟΙ Κ. ΔΡΑΜΗ ΟΕ 
             </div>
 
             <h1 class="mb-6 text-5xl leading-[1.1] font-black text-white md:text-7xl lg:text-8xl">
