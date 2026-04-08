@@ -78,11 +78,8 @@
                 @endif
 
                 {{-- ΚΥΡΙΑ ΦΟΡΜΑ --}}
-                {{-- Προσθέσαμε id="bookingForm" για να τη χειριστούμε με JS --}}
                 <form action="{{ route('booking.store') }}" method="POST" class="space-y-5" id="bookingForm">
                     @csrf
-
-                    {{-- Container για τα κρυφά inputs των extras που θα γεμίσουν από το JS --}}
                     <div id="hidden_extras_container"></div>
 
                     {{-- 1. Επιλογή Πρατηρίου --}}
@@ -123,14 +120,30 @@
                             required
                             class="w-full rounded-xl border-slate-200 bg-slate-50 p-4"
                         />
-                        <input
-                            type="text"
-                            name="license_plate"
-                            oninput="this.value = this.value.replace(/\s/g, '').toUpperCase()"
-                            placeholder="Πινακίδα"
-                            required
-                            class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 uppercase"
-                        />
+
+                        {{-- Πινακίδα και Τύπος Οχήματος στην ίδια σειρά --}}
+                        <div class="grid grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                name="license_plate"
+                                oninput="this.value = this.value.replace(/\s/g, '').toUpperCase()"
+                                placeholder="Πινακίδα"
+                                required
+                                class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm uppercase"
+                            />
+
+                            <select
+                                name="vehicle_type"
+                                id="vehicle_type_select"
+                                required
+                                class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-700"
+                            >
+                                <option value="ΙΧ" selected>ΙΧ (Επιβατικό)</option>
+                                <option value="ΤΖΙΠ">ΤΖΙΠ (SUV/4x4)</option>
+                                <option value="ΒΑΝ">ΒΑΝ (Επαγγελματικό)</option>
+                                <option value="ΜΟΤΟ">ΜΟΤΟ (Μοτοσυκλέτα)</option>
+                            </select>
+                        </div>
                     </div>
 
                     {{-- 3. Ημερομηνία και Ώρα --}}
@@ -182,9 +195,14 @@
                             class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm"
                         ></textarea>
                     </div>
-                    <div class="px-6 pb-2 text-center">
+
+                    <div class="space-y-1 px-6 text-center">
                         <p class="text-[10px] text-slate-400 italic">
-                            * Οι τιμές είναι ενδεικτικές και ενδέχεται να μεταβληθούν ανάλογα με το μέγεθος/κατάσταση του οχήματος.
+                            * Οι τιμές είναι ενδεικτικές και ενδέχεται να μεταβληθούν.
+                        </p>
+                        {{-- Το μήνυμα για το Fast Track --}}
+                        <p class="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                            * Η Υπηρεσια Fast Track πλυσιματος χρεωνεται 2€ επιπλεον.
                         </p>
                     </div>
 
@@ -201,14 +219,13 @@
         </div>
     </section>
 
-    {{-- ================= MODAL EXTRAS (POPUP) ================= --}}
+    {{-- ================= MODAL EXTRAS (POPUP) (Το κρατάμε ίδιο) ================= --}}
     <div
         id="extrasModal"
         class="fixed inset-0 z-50 hidden h-full w-full overflow-y-auto bg-slate-900/80 backdrop-blur-sm transition-opacity"
     >
         <div class="relative top-10 mx-auto w-full max-w-2xl p-4 md:top-20">
             <div class="relative rounded-[2rem] bg-white shadow-2xl">
-                {{-- Modal Header --}}
                 <div class="border-b border-slate-100 p-6 text-center">
                     <h3 class="text-2xl font-black text-slate-800">Θέλετε κάτι έξτρα; 🚗</h3>
                     <p class="text-sm text-slate-500">Επιλέξτε επιπλέον υπηρεσίες για το όχημά σας</p>
@@ -233,10 +250,8 @@
                     </button>
                 </div>
 
-                {{-- Modal Body - Grid Υπηρεσιών --}}
                 <div class="max-h-[60vh] overflow-y-auto p-6">
                     <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-                        {{-- 1. Ξεθάμπωμα Φαναριών (ΑΠΛΟ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Ξεθάμπωμα Φαναριών')"
@@ -248,13 +263,10 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Ξεθάμπωμα Φαναριών</h4>
                         </div>
-
-                        {{-- 2. Έλεγχος Ελαστικών (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Ελαστικών')"
                         >
-                            {{-- Το ταμπελάκι είναι σταθερό δεξιά --}}
                             <span
                                 class="pointer-events-none absolute top-2 right-2 rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700"
                             >
@@ -267,8 +279,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Ελαστικών</h4>
                         </div>
-
-                        {{-- 3. Αλλαγή Λαδιών (ΑΠΛΟ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Αλλαγή Λαδιών')"
@@ -280,8 +290,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Αλλαγή Λαδιών</h4>
                         </div>
-
-                        {{-- 4. Έλεγχος Λαδιών (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Λαδιών')"
@@ -298,8 +306,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Λαδιών</h4>
                         </div>
-
-                        {{-- 5. Απολύμανση Καμπίνας (ΑΠΛΟ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Απολύμανση Καμπίνας')"
@@ -311,8 +317,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Απολύμανση Καμπίνας</h4>
                         </div>
-
-                        {{-- 6. Έλεγχος Ψυγείου (ΔΩΡΕΑΝ - ΜΟΝΙΜΟ ΤΑΜΠΕΛΑΚΙ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-emerald-200 hover:bg-emerald-50"
                             onclick="toggleService(this, 'Έλεγχος Ψυγείου')"
@@ -329,8 +333,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Έλεγχος Ψυγείου</h4>
                         </div>
-
-                        {{-- 7. Αλλαγή Υαλοκαθαριστήρων (ΑΠΛΟ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Αλλαγή Υαλοκαθαριστήρων')"
@@ -342,8 +344,6 @@
                             </div>
                             <h4 class="text-sm leading-tight font-bold text-slate-700">Αλλαγή Υαλοκαθαριστήρων</h4>
                         </div>
-
-                        {{-- 8. Αντιψυκτικό / Παραφλού (ΑΠΛΟ) --}}
                         <div
                             class="group relative cursor-pointer rounded-xl border-2 border-slate-100 p-4 text-center transition-all hover:border-red-200 hover:bg-red-50"
                             onclick="toggleService(this, 'Προσθήκη Αντιψυκτικού')"
@@ -358,7 +358,6 @@
                     </div>
                 </div>
 
-                {{-- Modal Footer --}}
                 <div
                     class="flex flex-col gap-3 rounded-b-[2rem] bg-slate-50 p-6 md:flex-row md:items-center md:justify-between"
                 >
@@ -384,23 +383,21 @@
         const timeSelect = document.getElementById('time_select')
         const stationSelect = document.getElementById('station_select')
         const washSelect = document.getElementById('wash_type_select')
+        const vehicleSelect = document.getElementById('vehicle_type_select') // ΝΕΟ
         const bioGroup = document.getElementById('bio_group')
         const modal = document.getElementById('extrasModal')
         const bookingForm = document.getElementById('bookingForm')
         const openModalBtn = document.getElementById('openModalBtn')
         const hiddenExtrasContainer = document.getElementById('hidden_extras_container')
 
-        // Λίστα με τις επιλεγμένες extra υπηρεσίες
         let selectedServices = []
 
-        // Modal
         openModalBtn.addEventListener('click', function () {
-            // Έλεγχος εγκυρότητας της φόρμας πριν ανοίξει το modal
             if (bookingForm.checkValidity()) {
                 modal.classList.remove('hidden')
-                document.body.style.overflow = 'hidden' // Κλείδωμα scroll
+                document.body.style.overflow = 'hidden'
             } else {
-                bookingForm.reportValidity() // Εμφάνιση μηνυμάτων λάθους browser
+                bookingForm.reportValidity()
             }
         })
 
@@ -409,28 +406,17 @@
             document.body.style.overflow = 'auto'
         }
 
-        // --- Logic: Toggle Services ---
         function toggleService(element, serviceName) {
             if (selectedServices.includes(serviceName)) {
-                // --- ΑΦΑΙΡΕΣΗ ---
                 selectedServices = selectedServices.filter(s => s !== serviceName)
-
-                // Επαναφορά χρωμάτων
                 element.classList.remove('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-500')
                 element.classList.add('border-slate-100')
-
-                // Αφαίρεση του τικ
                 const check = element.querySelector('.check-mark')
                 if (check) check.remove()
             } else {
-                // --- ΠΡΟΣΘΗΚΗ ---
                 selectedServices.push(serviceName)
-
-                // Προσθήκη χρωμάτων (Κόκκινο πλαίσιο)
                 element.classList.remove('border-slate-100')
                 element.classList.add('border-red-500', 'bg-red-50', 'ring-2', 'ring-red-500')
-
-                // Προσθήκη Τικ (ΠΑΝΤΑ ΑΡΙΣΤΕΡΑ για να μην πέφτει πάνω στο "Δωρεάν")
                 const check = document.createElement('div')
                 check.className =
                     'check-mark absolute top-2 left-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-sm'
@@ -438,7 +424,6 @@
                 element.appendChild(check)
             }
 
-            // Update Counter Badge στο κουμπί
             const countBadge = document.getElementById('count_badge')
             if (selectedServices.length > 0) {
                 countBadge.innerText = selectedServices.length
@@ -448,26 +433,18 @@
             }
         }
 
-        // --- Logic: Final Submit ---
         function submitFinalForm() {
-            // Καθαρισμός προηγούμενων inputs
             hiddenExtrasContainer.innerHTML = ''
-
-            // Δημιουργία hidden inputs για κάθε επιλογή
             selectedServices.forEach(service => {
                 const input = document.createElement('input')
                 input.type = 'hidden'
-                input.name = 'extras[]' // Array στο Laravel
+                input.name = 'extras[]'
                 input.value = service
                 hiddenExtrasContainer.appendChild(input)
             })
-
-            // Υποβολή της φόρμας
             bookingForm.submit()
         }
 
-        // --- Existing Logic: Dates/Slots/Wash Type ---
-        // (Διατηρούμε τον κώδικα που είχες για τις ημερομηνίες και τα slots)
         const now = new Date()
         const offset = now.getTimezoneOffset() * 60000
         const todayStr = new Date(now - offset).toISOString().split('T')[0]
@@ -491,7 +468,6 @@
                 return
             }
 
-            // Εδώ υποθετικά καλείς το backend σου
             fetch(`/get-available-slots?date=${selectedDate}&station_id=${stationId}`)
                 .then(r => r.json())
                 .then(data => {
@@ -535,13 +511,34 @@
             washSelect.classList.remove('opacity-50', 'cursor-not-allowed')
 
             const d = new Date(dateInput.value)
-            const day = d.getDay() // 0=Κυρ, ... 2=Τρ, 3=Τε, 4=Πε
+            const day = d.getDay()
+            const isMoto = vehicleSelect.value === 'ΜΟΤΟ'
 
-            if (day === 2 || day === 3 || day === 4) {
-                bioGroup.style.display = 'block'
-            } else {
+            // Λογική για ΜΟΤΟ
+            Array.from(washSelect.options).forEach(opt => {
+                if (opt.tagName === 'OPTION') {
+                    if (isMoto) {
+                        if (opt.value !== 'ΕΞΩ' && opt.value !== '') {
+                            opt.style.display = 'none' // Κρύβουμε τα άλλα
+                        } else {
+                            opt.style.display = 'block'
+                        }
+                    } else {
+                        opt.style.display = 'block' // Δείχνουμε τα πάντα αν δεν είναι ΜΟΤΟ
+                    }
+                }
+            })
+
+            if (isMoto) {
                 bioGroup.style.display = 'none'
-                if (washSelect.value.includes('ΒΙΟΛΟΓΙΚΟΣ')) washSelect.value = ''
+                washSelect.value = 'ΕΞΩ' // Επιλέγεται αυτόματα
+            } else {
+                if (day === 2 || day === 3 || day === 4) {
+                    bioGroup.style.display = 'block'
+                } else {
+                    bioGroup.style.display = 'none'
+                    if (washSelect.value.includes('ΒΙΟΛΟΓΙΚΟΣ')) washSelect.value = ''
+                }
             }
         }
 
@@ -550,6 +547,7 @@
             fetchSlots()
         })
         stationSelect.addEventListener('change', fetchSlots)
+        vehicleSelect.addEventListener('change', updateWashOptions) // ΝΕΟ EVENT LISTENER
 
         if (dateInput.value) {
             updateWashOptions()

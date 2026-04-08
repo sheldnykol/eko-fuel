@@ -45,6 +45,7 @@
                             </form>
                         </div>
 
+                        {{-- ΠΑΝΤΑ ΟΡΑΤΑ (Για όλους τους χρήστες) --}}
                         <a
                             href="{{ route('admin.dashboard') }}"
                             class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
@@ -65,6 +66,7 @@
                             </svg>
                             Ραντεβού
                         </a>
+
                         <a
                             href="{{ route('admin.comments.index') }}"
                             class="{{ request()->routeIs('admin.comments.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
@@ -86,93 +88,97 @@
                             Σημειώσεις (Chat)
                         </a>
 
-                        <a
-                            href="{{ route('admin.fuel-orders') }}"
-                            class="{{ request()->routeIs('admin.fuel-orders*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
+                        {{-- ΠΕΡΙΟΡΙΣΜΟΣ ΕΜΦΑΝΙΣΗΣ: Κρύβουμε αυτά τα links αν το remember_token είναι '2' --}}
+                        @if (auth()->user()->remember_token !== '2')
+                            <a
+                                href="{{ route('admin.fuel-orders') }}"
+                                class="{{ request()->routeIs('admin.fuel-orders*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M15.75 5.25v13.5m-7.5-13.5v13.5M3 5.25h18M3 18.75h18M6.75 5.25v13.5m10.5-13.5v13.5"
-                                />
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25"
-                                />
-                            </svg>
-                            Παραγγελίες Καυσίμων
-                        </a>
-                        <a
-                            href="{{ route('admin.stats') }}"
-                            class="{{ request()->routeIs('admin.stats') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0h-10.5"
-                                />
-                            </svg>
-                            Στατιστικά
-                        </a>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M15.75 5.25v13.5m-7.5-13.5v13.5M3 5.25h18M3 18.75h18M6.75 5.25v13.5m10.5-13.5v13.5"
+                                    />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25"
+                                    />
+                                </svg>
+                                Παραγγελίες Καυσίμων
+                            </a>
 
-                        <a
-                            href="{{ route('admin.schedules.index') }}"
-                            class="{{ request()->routeIs('admin.schedules.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
+                            <a
+                                href="{{ route('admin.stats') }}"
+                                class="{{ request()->routeIs('admin.stats') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
-                                />
-                            </svg>
-                            Ώρες Πλυντηρίου
-                        </a>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0h-10.5"
+                                    />
+                                </svg>
+                                Στατιστικά
+                            </a>
 
-                        <a
-                            href="{{ route('admin.products.index') }}"
-                            class="{{ request()->routeIs('admin.products.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
+                            <a
+                                href="{{ route('admin.schedules.index') }}"
+                                class="{{ request()->routeIs('admin.schedules.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
-                                />
-                            </svg>
-                            Προϊόντα
-                        </a>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
+                                    />
+                                </svg>
+                                Ώρες Πλυντηρίου
+                            </a>
+
+                            <a
+                                href="{{ route('admin.products.index') }}"
+                                class="{{ request()->routeIs('admin.products.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
+                                    />
+                                </svg>
+                                Προϊόντα
+                            </a>
+                        @endif
 
                         <hr class="my-6 border-slate-800" />
 
