@@ -20,7 +20,7 @@
             >
                 <div class="relative h-64 overflow-hidden md:h-80">
                     <img
-                        src="{{ asset('images/eko_station_1.jpg') }}"
+                        src="{{ asset('images\bolou.png') }}"
                         alt="ΕΚΟ ΒΟΛΟΥ 12"
                         class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
@@ -79,7 +79,7 @@
             >
                 <div class="relative h-64 overflow-hidden md:h-80">
                     <img
-                        src="{{ asset('images/eko3.jpg') }}"
+                        src="{{ asset('images\ethniki.png') }}"
                         alt="ΕΚΟ Λ. ΚΑΡΑΜΑΝΛΗ"
                         class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
@@ -138,7 +138,7 @@
             >
                 <div class="relative h-64 overflow-hidden md:h-80">
                     <img
-                        src="{{ asset('images/IMG_2016.jpeg') }}"
+                        src="{{ asset('images\gevrgiadou.png') }}"
                         alt="ΕΚΟ ΓΕΩΡΓΙΑΔΟΥ"
                         class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />

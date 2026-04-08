@@ -21,7 +21,7 @@ return [
                 'image' => 'eko3.jpg',
                 'vrisko_slug' => 'larisa',
                 'address' => '1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
-                'phone' => '2410283954',
+                'phone' => '2410289099',
                 'prices' => [
                     'amolyvdhi_100' => '1.98 €',
                     'amolyvdhi_95' => '1.78 €',
@@ -37,7 +37,7 @@ return [
                 'image'=>'IMG_2016.jpeg',
                 'vrisko_slug' => 'larisa',
                 'address'=>'ΓΕΩΡΓΙΑΔΟΥ 28',
-                'phone' => '2410283954',
+                'phone' => '2410538447',
                 'prices' => [
                     'amolyvdhi_100' => '1.98 €',
                     'amolyvdhi_95' => '1.78 €',
@@ -46,14 +46,14 @@ return [
                     'diesel_avio' => '1.98 €',
                     'auto_gas' => '1.23 €',                  
                 ],
-                'services' => ['Πλυντήριο Αυτοκινήτων', 'Προϊόντα Καταστήματος'],
+                'services' => ['Προϊόντα Καταστήματος','Πλυντήριο Αυτοκινήτων'],
             ],
             4=> [
                 'name'=>'ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ (χ.θ 11+300 αριστερα)',
                 'image'=>'IMG_1947.JPG',
                 'vrisko_slug' => 'portaria',
                 'address'=>'11ο ΧΛΜ, ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ',
-                'phone' => '2410283954',
+                'phone' => '2428099305',
                 'prices'=>[
                     'amolyvdhi_98' => '1.88 €',
                     'amolyvdhi_95' => '1.78 €',
