@@ -32,10 +32,23 @@
             <div class="hidden items-center gap-4 md:flex">
                 @guest
                     <a
-                        href="tel:210xxxxxxx"
-                        class="hidden text-sm font-bold text-slate-500 hover:text-slate-800 lg:block"
+                        href="tel:2410283954"
+                        class="hidden items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-800 lg:flex"
                     >
-                        <span class="mr-1">📞</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="h-4 w-4"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.069-3.769-6.665-6.665l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                            />
+                        </svg>
                         2410283954
                     </a>
                     <a
@@ -110,7 +123,20 @@
                                 href="#"
                                 class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 py-3 text-lg font-bold text-[#e21838]"
                             >
-                                <span>👤</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                                    />
+                                </svg>
                                 Σύνδεση
                             </a>
                         @endguest

@@ -2,7 +2,7 @@
 return [
             1 => [
                 'name' =>'ΒΟΛΟΥ 12, ΛΑΡΙΣΑ',
-                'image' => 'eko_station_1.jpg',
+                'image' => 'bolou.png',
                 'vrisko_slug' => 'larisa',
                 'address' => 'ΒΟΛΟΥ 12, ΛΑΡΙΣΑ',
                 'phone' => '2410283954',
@@ -18,7 +18,7 @@ return [
             ],
             2 => [                
                 'name' =>'Λ. ΚΑΡΑΜΑΝΛΗ 102 - λΑΡΙΣΑ',
-                'image' => 'eko3.jpg',
+                'image' => 'ethniki.png',
                 'vrisko_slug' => 'larisa',
                 'address' => '1ο ΧΛΜ Π.Ε.Ο ΛΑΡΙΣΑΣ-ΑΘΗΝΩΝ Κ. ΚΑΡΑΜΑΝΛΗ 102',
                 'phone' => '2410289099',
@@ -34,7 +34,7 @@ return [
             ],
               3=> [
                 'name'=>'ΓΕΩΡΓΙΑΔΟΥ 28',
-                'image'=>'IMG_2016.jpeg',
+                'image'=>'gevrgiadou.png',
                 'vrisko_slug' => 'larisa',
                 'address'=>'ΓΕΩΡΓΙΑΔΟΥ 28',
                 'phone' => '2410538447',
@@ -46,7 +46,7 @@ return [
                     'diesel_avio' => '1.98 €',
                     'auto_gas' => '1.23 €',                  
                 ],
-                'services' => ['Προϊόντα Καταστήματος','Πλυντήριο Αυτοκινήτων'],
+                'services' => ['Προϊόντα Καταστήματος'],
             ],
             4=> [
                 'name'=>'ΕΟ ΒΟΛΟΥ ΠΟΡΤΑΡΙΑΣ (χ.θ 11+300 αριστερα)',
