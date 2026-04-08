@@ -48,17 +48,17 @@
                                     20'- 45' Λεπτά
                                 </span>
                                 <span class="rounded-xl bg-slate-900 px-4 py-1.5 text-lg font-black text-white">
-                                    15€
+                                    από 15€
                                 </span>
                             </div>
                         </div>
 
                         <div class="mb-1 flex items-center gap-1.5">
                             <span class="h-1.5 w-1.5 rounded-full bg-[#e21838]"></span>
-                            <p class="text-[10px] font-bold text-[#e21838] uppercase">Δευτέρα εώς Παρασκευή</p>
+                            <p class="text-[10px] font-bold text-[#e21838] uppercase">Δευτέρα εώς Σάββατο</p>
                         </div>
 
-                        <h4 class="mb-3 text-2xl font-black text-slate-900">Πλύσιμο Μέσα - Έξω</h4>
+                        <h4 class="mb-3 text-2xl font-black text-slate-900">Πλύσιμο Μέσα - Έξω (+2€ Έξτρα Χρέωση για fast track υπηρεσία)</h4>
                         <p class="mb-6 leading-relaxed text-slate-500">
                             Ολοκληρωμένος καθαρισμός με ενεργό αφρό, στέγνωμα στο χέρι και περιποίηση εσωτερικού με
                             ειδικά γαλακτώματα.
@@ -67,11 +67,11 @@
                         <div class="flex gap-4 border-t border-slate-50 pt-4">
                             <div class="text-sm">
                                 <span class="text-slate-400">Μέσα:</span>
-                                <span class="font-bold text-slate-700">8€</span>
+                                <span class="font-bold text-slate-700">από 8€</span>
                             </div>
                             <div class="text-sm">
                                 <span class="text-slate-400">Έξω:</span>
-                                <span class="font-bold text-slate-700">7€</span>
+                                <span class="font-bold text-slate-700">από 7€</span>
                             </div>
                         </div>
                     </div>

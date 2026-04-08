@@ -114,6 +114,128 @@
                         </div>
                     @endif
                 @endforeach
+@if(str_contains(mb_strtoupper($station['name'], 'UTF-8'), 'ΓΕΩΡΓΙΑΔΟΥ'))
+    <div class="group relative overflow-hidden rounded-3xl bg-white p-1 shadow-lg ring-1 ring-slate-200 transition-all hover:shadow-2xl md:col-span-2 lg:col-span-2">
+        
+        {{-- Μπλε Gradient Φόντο (όπως πριν) --}}
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 opacity-90 transition-opacity group-hover:opacity-100"></div>
+        
+        {{-- Διακοσμητικό εφέ στο φόντο --}}
+        <div class="absolute -right-16 -top-16 h-60 w-60 rounded-full bg-white/10 blur-3xl transition-transform group-hover:scale-110"></div>
+
+        <div class="relative flex flex-col h-full overflow-hidden rounded-[1.3rem] p-8 text-white md:flex-row md:items-start md:gap-8">
+            {{-- Εικονίδιο Αριστερά (με λευκό/μπλε στυλ) --}}
+            <div class="mb-6 flex shrink-0 items-center justify-center md:mb-0">
+                <div class="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm text-white ring-1 ring-white/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-12 w-12">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                    </svg>
+                </div>
+            </div>
+            
+            {{-- Περιεχόμενο Δεξιά --}}
+            <div class="flex-1 text-center md:text-left">
+                <div class="mb-4">
+                    <h3 class="text-2xl font-black text-white md:text-3xl uppercase italic tracking-tight">Οδηγίες Αυτόματου Πωλητή</h3>
+                    <p class="text-blue-100 text-sm">Ακολουθήστε τα βήματα για γρήγορη πληρωμή </p>
+                </div>
+                
+                {{-- Λίστα Οδηγιών (2 στήλες) --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-left border-t border-white/10 pt-4">
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">01.</span> Επιλογή «Κάρτα» στο μενού.
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">02.</span> Αρ. κυκλοφορίας & «Συνέχεια».
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">03.</span> Απόδειξη: πατήστε «Συνέχεια».
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">04.</span> Καύσιμο & Αντλία (7-10).
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">05.</span> Επιλέξτε το ποσό.
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">06.</span> Κάρτα στο POS & PIN.
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">07.</span> Ανεφοδιασμός (Πιέστε λαβή).
+                    </div>
+                    <div class="flex gap-2.5 text-sm text-blue-50">
+                        <span class="font-bold text-white opacity-60">08.</span> Επιστροφή & Αυτόματη Απόδειξη.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+
+{{-- SELF SERVICE ΠΛΥΝΤΗΡΙΟ ΓΙΑ ΚΑΡΑΜΑΝΛΗ - ΣΚΟΥΡΟ PREMIUM ΣΤΥΛ --}}
+@if(str_contains(mb_strtoupper($station['name'], 'UTF-8'), 'ΚΑΡΑΜΑΝΛΗ'))
+    <div class="group relative overflow-hidden rounded-3xl bg-white p-1 shadow-lg ring-1 ring-slate-200 transition-all hover:shadow-2xl md:col-span-2 lg:col-span-2">
+        
+        {{-- Σκούρο Gradient Φόντο --}}
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 opacity-95 transition-opacity group-hover:opacity-100"></div>
+        
+        {{-- Διακοσμητική λάμψη --}}
+        <div class="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl transition-transform group-hover:scale-125"></div>
+
+        <div class="relative flex flex-col h-full overflow-hidden rounded-[1.3rem] p-8 text-white md:flex-row md:items-start md:gap-8">
+            
+            {{-- Εικονίδιο Αριστερά --}}
+            <div class="mb-6 flex shrink-0 items-center justify-center md:mb-0">
+                <div class="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm text-blue-400 ring-1 ring-white/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-12 w-12">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75m0 3v.75m0 3v.75m0 3v.75m0 3v.75m3-15h13.5M5.25 15h13.5m-13.5-3h13.5m-13.5-3h13.5m-13.5-3h13.5M2.25 15.75c1.192.35 2.441.528 3.75.528 1.309 0 2.558-.178 3.75-.528M13.5 15.75c1.192.35 2.441.528 3.75.528 1.309 0 2.558-.178 3.75-.528" />
+                    </svg>
+                </div>
+            </div>
+            
+            {{-- Περιεχόμενο Δεξιά --}}
+            <div class="flex-1">
+                <div class="mb-6 text-center md:text-left">
+                    <h3 class="text-2xl font-black text-white md:text-3xl uppercase italic tracking-tight">Self Service Πλυντήριο</h3>
+                    <p class="text-slate-400 text-sm mt-1">Ακολουθήστε τις οδηγίες για τέλειο αποτέλεσμα καθαρισμού.</p>
+                </div>
+
+                {{-- Λίστα Οδηγιών - Μία κάτω από την άλλη (grid-cols-1) --}}
+                <div class="grid grid-cols-1 gap-y-5 text-left border-t border-white/10 pt-6">
+                    
+                    <div class="flex gap-4 text-sm text-blue-50 leading-relaxed">
+                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30">01</span>
+                        <p><strong class="text-white block mb-1 uppercase text-xs tracking-wider">Καθαρισμός με υψηλή πίεση</strong> Πρόπλυση και κύρια πλύση με ζεστό αποσκληρυμένο νερό και καθαριστικό για την αφαίρεση ρύπου και εντόμων!</p>
+                    </div>
+
+                    <div class="flex gap-4 text-sm text-blue-50 leading-relaxed">
+                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30">02</span>
+                        <p><strong class="text-white block mb-1 uppercase text-xs tracking-wider">Καθαρισμός με βούρτσες</strong> Χρησιμοποίησε την μαλακή βούρτσα πλύσης και ενεργό αφρό για την αφαίρεση επίμονου ρύπου. Ξεπλύνετε την βούρτσα με νερό πριν από την χρήση αυτής.</p>
+                    </div>
+
+                    <div class="flex gap-4 text-sm text-blue-50 leading-relaxed">
+                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30">03</span>
+                        <p><strong class="text-white block mb-1 uppercase text-xs tracking-wider">Ξέπλυμα με καθαρό νερό</strong> Ψεκασμός υψηλής πίεσης με κρύο καθαρό νερό ξεπλένει τον αφρό κι τον ρύπο από την επιφάνεια του αμαξώματος.</p>
+                    </div>
+
+                    <div class="flex gap-4 text-sm text-blue-50 leading-relaxed">
+                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30">04</span>
+                        <p><strong class="text-white block mb-1 uppercase text-xs tracking-wider">Περιποίηση χρώματος με ζεστό κερί</strong> Προστασία μεγάλης διάρκειας με ειδικό καρναούβικο κερί.</p>
+                    </div>
+
+                    <div class="flex gap-4 text-sm text-blue-50 leading-relaxed">
+                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30">05</span>
+                        <p><strong class="text-white block mb-1 uppercase text-xs tracking-wider">Στέγνωμα και γυάλισμα</strong> Τελικό ξέπλυμα με κρύο απιονισμένο νερό και γυαλιστικό, για στιλπνότητα και λάμψη στο χρώμα μετά το στέγνωμα.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+                </div>
             </div>
         </div>
     </section>
