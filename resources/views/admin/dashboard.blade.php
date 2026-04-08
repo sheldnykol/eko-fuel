@@ -1,7 +1,9 @@
 @extends('admin.admin')
+
 @section('admin_content')
     <div class="min-h-screen bg-slate-100 py-8">
         <div class="container mx-auto max-w-6xl px-4">
+            {{-- HEADER: Φίλτρα & PDF --}}
             <div
                 class="mb-6 flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center"
             >
@@ -26,9 +28,10 @@
                     Προβολή για:
                     <span class="font-black text-red-600">{{ date('d/m/Y', strtotime($selectedDate)) }}</span>
                 </div>
+
                 <a
                     href="{{ route('admin.exportPDF', ['date' => $selectedDate]) }}"
-                    class="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
+                    class="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -44,9 +47,11 @@
                             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
                         />
                     </svg>
-                    Κατέβασμα PDF (Ημέρας)
+                    Κατέβασμα PDF
                 </a>
             </div>
+
+            {{-- CALENDAR WIDGET --}}
             <div class="mb-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl">
                 <div class="mb-6 flex items-center justify-between">
                     <div>
@@ -75,14 +80,12 @@
                                 />
                             </svg>
                         </a>
-
                         <a
                             href="{{ route('admin.dashboard', ['date' => date('Y-m-d')]) }}"
                             class="px-3 text-xs font-bold text-slate-400 uppercase hover:text-red-600"
                         >
                             Σήμερα
                         </a>
-
                         <a
                             href="{{ route('admin.dashboard', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}"
                             class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50"
@@ -147,6 +150,8 @@
                     @endforeach
                 </div>
             </div>
+
+            {{-- STATS CARDS --}}
             <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
                 <div class="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm">
                     <div class="flex items-center gap-4">
@@ -219,190 +224,179 @@
                     </div>
                 </div>
             </div>
+
+            {{-- APPOINTMENTS HEADER --}}
             <div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div>
-                    <h1 class="text-3xl font-black text-slate-900">Admin Dashboard</h1>
-                    <p class="font-medium text-slate-600">Διαχείριση Ραντεβού - {{ date('d/m/Y') }}</p>
+                    <h1 class="text-3xl font-black text-slate-900">Λίστα Ραντεβού</h1>
+                    <p class="font-medium text-slate-600">
+                        Διαχείριση για {{ date('d/m/Y', strtotime($selectedDate)) }}
+                    </p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-white px-6 py-3 shadow-sm">
-                    <span class="block text-sm font-bold tracking-wider text-slate-500 uppercase">Σύνολο Σήμερα</span>
+                <div class="rounded-2xl border border-slate-200 bg-white px-6 py-3 text-center shadow-sm md:text-left">
+                    <span class="block text-sm font-bold tracking-wider text-slate-500 uppercase">Σύνολο Ημέρας</span>
                     <span class="text-2xl font-black text-red-600">{{ $appointments->count() }} Ραντεβού</span>
                 </div>
             </div>
 
             @if (session('success'))
                 <div
-                    class="mb-6 rounded-r-xl border-l-4 border-emerald-500 bg-emerald-100 p-4 text-emerald-700 shadow-sm"
+                    class="mb-6 rounded-xl border-l-4 border-emerald-500 bg-emerald-50 p-4 font-bold text-emerald-700 shadow-sm"
                 >
-                    {{ session('success') }}
+                    ✓ {{ session('success') }}
                 </div>
             @endif
 
-            <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left">
-                        <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50">
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Ώρα
-                                </th>
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Πελάτης / Τηλέφωνο
-                                </th>
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Πινακίδα
-                                </th>
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Πλύσιμο
-                                </th>
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Έξτρα
-                                </th>
-                                <th class="px-6 py-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-                                    Κατάσταση
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-400 uppercase"
+            {{-- RESPONSIVE APPOINTMENTS CARDS (Αντικαθιστά τον Πίνακα) --}}
+            <div class="space-y-4">
+                @forelse ($appointments as $app)
+                    <div
+                        class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md md:flex-row md:items-center md:justify-between"
+                    >
+                        {{-- 1. Ώρα & Πελάτης --}}
+                        <div class="flex items-center gap-4 md:w-1/4">
+                            <div
+                                class="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-center"
+                            >
+                                <span class="text-lg font-black text-slate-800">
+                                    {{ date('H:i', strtotime($app->appointment_time)) }}
+                                </span>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-slate-900">{{ $app->customer_name }}</div>
+                                <a
+                                    href="tel:{{ $app->customer_phone }}"
+                                    class="flex items-center gap-1 text-sm font-bold text-slate-500 hover:text-red-600"
                                 >
-                                    Ενέργειες
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-center text-xs font-bold tracking-widest text-slate-400 uppercase"
+                                    📞 {{ $app->customer_phone }}
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- 2. Όχημα & Πακέτο Πλύσης --}}
+                        <div class="flex flex-col gap-2 border-l-0 border-slate-100 md:w-1/4 md:border-l-2 md:pl-4">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    class="rounded-lg bg-slate-900 px-3 py-1 font-mono text-sm font-black tracking-widest text-white"
                                 >
-                                    Γρήγορη Σημείωση
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-300">
-                            @forelse ($appointments as $app)
-                                <tr class="transition-colors hover:bg-slate-50">
-                                    <td class="px-6 py-4">
-                                        <span class="text-lg font-black text-slate-700">
-                                            {{ date('H:i', strtotime($app->appointment_time)) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="font-bold text-slate-900">{{ $app->customer_name }}</div>
-                                        <div class="text-sm text-slate-500">{{ $app->customer_phone }}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="rounded-lg bg-slate-900 px-3 py-1 font-mono font-bold tracking-tighter text-white"
-                                        >
-                                            {{ $app->license_plate }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span
-                                            class="rounded border border-red-300 bg-red-50 px-2 py-1 font-mono font-black text-red-600 uppercase"
-                                        >
-                                            {{ $app->wash_type }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span
-                                            class="rounded border border-red-100 bg-red-50 px-2 py-1 font-mono font-black text-red-600 uppercase"
-                                        >
-                                            @if ($app->extras)
-                                                {{ $app->extras }}
-                                            @else
-                                                -
-                                            @endif
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        @if ($app->status == 1)
-                                            <span
-                                                class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-800 uppercase"
-                                            >
-                                                Εκκρεμεί
-                                            </span>
-                                        @elseif ($app->status == 2)
-                                            <span
-                                                class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800 uppercase"
-                                            >
-                                                Ολοκληρώθηκε
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500 uppercase"
-                                            >
-                                                Ακυρώθηκε
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <form
-                                            action="{{ route('admin.updateStatus', $app->id) }}"
-                                            method="POST"
-                                            class="flex justify-center gap-2"
-                                        >
-                                            @csrf
-                                            <select
-                                                name="status"
-                                                onchange="this.form.submit()"
-                                                class="rounded-lg border-slate-200 bg-slate-50 text-xs focus:border-red-500 focus:ring-red-500"
-                                            >
-                                                <option value="1" {{ $app->status == 1 ? 'selected' : '' }}>
-                                                    Εκκρεμεί
-                                                </option>
-                                                <option value="2" {{ $app->status == 2 ? 'selected' : '' }}>
-                                                    Ολοκληρώθηκε
-                                                </option>
-                                                <option value="3" {{ $app->status == 3 ? 'selected' : '' }}>
-                                                    Ακυρώθηκε
-                                                </option>
-                                            </select>
-                                        </form>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button
-                                            onclick="openCommentModal({{ $app->id }}, '{{ $app->license_plate }}')"
-                                            class="rounded-lg p-2 text-slate-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
-                                            title="Σημειώσεις & Διαχείριση"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke-width="2"
-                                                stroke="currentColor"
-                                                class="h-5 w-5"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="px-6 py-12 text-center font-medium text-slate-400">
-                                        Δεν υπάρχουν προγραμματισμένα ραντεβού για σήμερα.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                    {{ $app->license_plate }}
+                                </span>
+                                {{-- Εδώ εμφανίζεται το Vehicle Type --}}
+                                <span class="rounded-lg bg-slate-200 px-2 py-1 text-xs font-black text-slate-600">
+                                    {{ $app->vehicle_type ?? 'ΙΧ' }}
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <span
+                                    class="rounded border border-red-300 bg-red-50 px-2 py-1 font-black text-red-600 uppercase shadow-sm"
+                                >
+                                    {{ $app->wash_type }}
+                                </span>
+                                @if ($app->extras && $app->extras !== 'Χωρίς Extras')
+                                    <span
+                                        class="rounded border border-emerald-300 bg-emerald-50 px-2 py-1 font-black text-emerald-700 uppercase shadow-sm"
+                                    >
+                                        + {{ $app->extras }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- 3. Σχόλιο Πελάτη --}}
+                        <div class="flex flex-col md:w-1/4">
+                            @if ($app->comments)
+                                <div
+                                    class="relative rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+                                >
+                                    <span
+                                        class="absolute -top-2 left-3 bg-amber-50 px-1 text-[10px] font-black tracking-wider text-amber-600 uppercase"
+                                    >
+                                        Σχόλιο Πελάτη
+                                    </span>
+                                    <p class="leading-tight font-medium italic">{{ $app->comments }}</p>
+                                </div>
+                            @else
+                                <span class="text-xs font-medium text-slate-400 italic">Δεν άφησε σχόλιο.</span>
+                            @endif
+                        </div>
+
+                        {{-- 4. Status & Actions (Σημειώσεις Admin) --}}
+                        <div
+                            class="flex flex-col items-center gap-3 border-t border-slate-100 pt-4 sm:flex-row md:w-auto md:justify-end md:border-none md:pt-0"
+                        >
+                            <form
+                                action="{{ route('admin.updateStatus', $app->id) }}"
+                                method="POST"
+                                class="w-full sm:w-auto"
+                            >
+                                @csrf
+                                <select
+                                    name="status"
+                                    onchange="this.form.submit()"
+                                    class="{{ $app->status == 1 ? 'text-amber-600' : ($app->status == 2 ? 'text-emerald-600' : 'text-slate-500') }} w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 text-xs font-bold focus:border-red-500 focus:ring-red-500 sm:w-auto"
+                                >
+                                    <option value="1" {{ $app->status == 1 ? 'selected' : '' }}>⏳ Εκκρεμεί</option>
+                                    <option value="2" {{ $app->status == 2 ? 'selected' : '' }}>
+                                        ✅ Ολοκληρώθηκε
+                                    </option>
+                                    <option value="3" {{ $app->status == 3 ? 'selected' : '' }}>❌ Ακυρώθηκε</option>
+                                </select>
+                            </form>
+
+                            <button
+                                onclick="openCommentModal({{ $app->id }}, '{{ $app->license_plate }}')"
+                                class="flex w-full items-center justify-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-slate-700 sm:w-auto"
+                                title="Προσθήκη Σημείωσης Admin"
+                            >
+                                <span>📝</span>
+                                Σημείωση
+                            </button>
+                        </div>
+                    </div>
+                @empty
+                    <div
+                        class="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-slate-300 bg-white py-16 text-center"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mb-4 h-16 w-16 text-slate-200"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+                        <h3 class="text-lg font-black text-slate-700">Καμία Κράτηση</h3>
+                        <p class="text-slate-500">Δεν υπάρχουν προγραμματισμένα ραντεβού για αυτή την ημερομηνία.</p>
+                    </div>
+                @endforelse
             </div>
+
+            {{-- MODAL ΓΙΑ ΣΗΜΕΙΩΣΕΙΣ (Admin) --}}
             <div
                 id="commentModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm transition-opacity"
             >
-                <div class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
-                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
-                        <h3 class="font-bold text-slate-800">
-                            Σημειώσεις:
-                            <span id="modalPlate" class="text-red-600"></span>
+                <div
+                    class="w-full max-w-lg transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all"
+                >
+                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-6">
+                        <h3 class="text-lg font-black text-slate-800">
+                            Σημειώσεις Οχήματος:
+                            <span id="modalPlate" class="rounded bg-slate-900 px-2 py-1 font-mono text-white"></span>
                         </h3>
-                        <button onclick="closeCommentModal()" class="text-slate-400 hover:text-slate-600">
+                        <button
+                            onclick="closeCommentModal()"
+                            class="rounded-full bg-slate-200 p-2 text-slate-500 transition-colors hover:bg-red-100 hover:text-red-600"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
+                                class="h-5 w-5"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -420,12 +414,12 @@
                     <form id="commentForm" method="POST" class="p-6">
                         @csrf
                         <div class="mb-4">
-                            <label class="mb-2 block text-sm font-medium text-slate-700">Νέα Σημείωση</label>
+                            <label class="mb-2 block text-sm font-bold text-slate-700">Νέα Σημείωση (Admin Log)</label>
                             <textarea
                                 name="body"
                                 rows="4"
-                                class="w-full rounded-l border-slate-200 text-sm focus:border-red-500 focus:ring-red-500"
-                                placeholder=" Γράψτε κάτι για αυτό το ραντεβού..."
+                                class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm focus:border-red-500 focus:ring-red-500"
+                                placeholder="Γράψτε μια σημείωση για αυτό το ραντεβού (π.χ. καθυστέρησε, ζήτησε κάτι έξτρα)..."
                                 required
                             ></textarea>
                         </div>
@@ -434,15 +428,15 @@
                             <button
                                 type="button"
                                 onclick="closeCommentModal()"
-                                class="rounded-xl px-4 py-2 text-sm font-bold text-slate-500 transition-all hover:bg-slate-100"
+                                class="rounded-xl px-5 py-3 text-sm font-bold text-slate-500 transition-all hover:bg-slate-100"
                             >
                                 Ακύρωση
                             </button>
                             <button
                                 type="submit"
-                                class="rounded-xl bg-red-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-red-500/30 transition-all hover:bg-red-700"
+                                class="rounded-xl bg-red-600 px-6 py-3 text-sm font-black text-white shadow-lg shadow-red-500/30 transition-all hover:-translate-y-1 hover:bg-red-700"
                             >
-                                Αποθήκευση
+                                Αποθήκευση Σημείωσης
                             </button>
                         </div>
                     </form>
@@ -458,7 +452,6 @@
         const form = document.getElementById('commentForm')
         const plateSpan = document.getElementById('modalPlate')
 
-        // Ενημερώνουμε το Action του Form δυναμικά
         form.action = `/admin/appointments/${id}/comments`
         plateSpan.innerText = plate
 

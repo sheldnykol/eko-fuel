@@ -19,6 +19,7 @@ class BookingController extends Controller
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|digits:10', // Αποδέχεται ΜΟΝΟ αριθμούς και ακριβώς 10 ψηφία
             'license_plate' => 'required|string',
+            'vehicle_type' => 'required|string|in:ΙΧ,ΤΖΙΠ,ΒΑΝ,ΜΟΤΟ',
             'appointment_date' => 'required|date|after_or_equal:today',
             'appointment_time' => 'required',
             'wash_type' => 'required|string',
@@ -174,7 +175,7 @@ class BookingController extends Controller
         $formattedDate = date('d/m', strtotime($date));
 
         // 4. Το μήνυμα (Greeklish για σιγουριά και οικονομία χαρακτήρων)
-        $message = "EKO DRAMI (Odos Volou): To rantevou gia plysimo egkri8ike gia $formattedDate stis $formattedTime.";
+        $message = "EΚΟ ΔΡΑΜΗ  (ΟΔΟΣ ΒΟΛΟΥ): ΤΟ ΡΑΝΤΕΒΟΥ ΕΓΚΡΙΘΗΚΕ ΓΙΑ $formattedDate ΣΤΙΣ $formattedTime.";
 
         try {
             $response = Http::get("https://easysms.gr/api/sms/send", [

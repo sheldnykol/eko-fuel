@@ -11,6 +11,7 @@ class Appointment extends Model
         'customer_name',
         'customer_phone',
         'license_plate',
+        'vehicle_type',
         'appointment_date',
         'appointment_time',
         'status',
