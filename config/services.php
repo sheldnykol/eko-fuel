@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'scraperapi' => [
+        'key' => env('SCRAPERAPI_KEY'),
+    ],
+
+    'easysms' => [
+        'key' => env('EASYSMS_KEY', 'o93aee50b792818'),
+        'enabled' => env('EASYSMS_ENABLED', true),
+    ],
+
 ];

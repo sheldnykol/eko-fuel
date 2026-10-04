@@ -1,41 +1,48 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function create()
-{
-    // Εδώ κανονικά θα καλούσες το array από τον StationController 
-    // ή από ένα κοινό σημείο (π.χ. config/stations.php)
-    $stations = [
-        1 => ['name' => 'ΕΚΟ ΒΟΛΟΥ 12, ΛΑΡΙΣΑ'],
-        2 => ['name' => 'ΕΚΟ Κ. ΚΑΡΑΜΑΝΛΗ 102, ΛΑΡΙΣΑ']
-    ];
+    public function showProducts(Request $request, $station_id)
+    {
+        $allStations = config('stations');
 
-    return view('admin.products.create', compact('stations'));
-}
+        if (!isset($allStations[$station_id])) {
+            abort(404, 'Το πρατήριο δεν βρέθηκε.');
+        }
 
-public function store(Request $request)
-{
-    $data = $request->validate([
-        'name' => 'required',
-        'station_id' => 'required',
-        'price' => 'required|numeric',
-        'category' => 'nullable',
-        'product_type' => 'required',
-        'image' => 'nullable|image|max:2048'
-    ]);
+        $category = $request->query('category');
+        $query = Product::where('station_id', $station_id)->where('is_active', true);
 
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('products', 'public');
+        if ($category) {
+            $query->where('category', $category);
+        }
+
+        $products = $query->get();
+
+        return view('products.index', [
+            'products'        => $products,
+            'station'         => $allStations[$station_id],
+            'allStations'     => $allStations,
+            'id'              => $station_id,
+            'currentCategory' => $category
+        ]);
     }
 
-    \App\Models\Product::create($data);
+    public function create()
+    {
+        $stations = config('stations');
+        return view('admin.products.create', compact('stations'));
+    }
 
-    return redirect()->route('admin.products.index')->with('success', 'Το προϊόν δημιουργήθηκε!');
-}
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $stations = config('stations');
+
+        return view('admin.products.edit', compact('product', 'stations'));
+    }
 }

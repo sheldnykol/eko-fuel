@@ -1,71 +1,25 @@
 @extends('admin.admin')
 
-@section('admin_content')
-    <div class="mx-auto mt-10 max-w-2xl rounded-[2rem] border border-slate-100 bg-white p-8 shadow-xl">
-        <h2 class="mb-6 text-2xl font-black text-slate-900">Επεξεργασία: {{ $product->name }}</h2>
+@section('admin_title', 'Επεξεργασία προϊόντος')
 
-        <form
-            action="{{ route('admin.products.update', $product->id) }}"
-            method="POST"
-            enctype="multipart/form-data"
-            class="space-y-5"
-        >
+@section('admin_content')
+    <div class="mx-auto max-w-2xl">
+        <a href="{{ route('admin.products.index') }}" class="mb-3 inline-flex items-center gap-1 text-[13px] font-medium text-slate-500 hover:text-slate-900">
+            <x-admin.icon name="arrow-left" class="h-4 w-4" />
+            Προϊόντα
+        </a>
+        <x-admin.page-header title="Επεξεργασία προϊόντος" :subtitle="$product->name" />
+
+        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="rounded-xl border border-slate-200 bg-white">
             @csrf
             @method('PUT')
-
-            <div>
-                <label class="mb-2 block text-sm font-bold text-slate-700">Πρατήριο</label>
-                <select name="station_id" class="w-full rounded-xl border-slate-200">
-                    @foreach ($stations as $sid => $s)
-                        <option value="{{ $sid }}" {{ $product->station_id == $sid ? 'selected' : '' }}>
-                            {{ $s['name'] }}
-                        </option>
-                    @endforeach
-                </select>
+            <div class="p-4 sm:p-5">
+                @include('admin.products._form', ['product' => $product])
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="mb-2 block text-sm font-bold text-slate-700">Όνομα</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value="{{ $product->name }}"
-                        class="w-full rounded-xl border-slate-200"
-                        required
-                    />
-                </div>
-                <div>
-                    <label class="mb-2 block text-sm font-bold text-slate-700">Τιμή (€)</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="price"
-                        value="{{ $product->price }}"
-                        class="w-full rounded-xl border-slate-200"
-                        required
-                    />
-                </div>
+            <div class="flex justify-end gap-2 border-t border-slate-100 bg-slate-50/70 px-4 py-3 sm:px-5">
+                <a href="{{ route('admin.products.index') }}" class="rounded-lg px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-100">Άκυρο</a>
+                <button type="submit" class="rounded-lg bg-slate-900 px-4 py-2 text-[13px] font-medium text-white hover:bg-slate-800">Αποθήκευση αλλαγών</button>
             </div>
-
-            <div>
-                <label class="mb-2 block text-sm font-bold text-slate-700">Τρέχουσα Εικόνα</label>
-                @if ($product->image)
-                    <img
-                        src="{{ asset('storage/' . $product->image) }}"
-                        class="mb-2 h-20 w-20 rounded-lg object-cover"
-                    />
-                @endif
-
-                <input type="file" name="image" class="w-full text-sm text-slate-500" />
-            </div>
-
-            <button
-                type="submit"
-                class="w-full rounded-xl bg-slate-900 py-4 font-black text-white transition-all hover:bg-black"
-            >
-                ΕΝΗΜΕΡΩΣΗ ΠΡΟΪΟΝΤΟΣ
-            </button>
         </form>
     </div>
 @endsection

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class HeatingOilOrder extends Model
 {
-    //Customer info from migration 
     protected $fillable =[    
         'heatOil_name',
         'heatOil_phone',

@@ -9,7 +9,6 @@ class Product extends Model
 {
     use HasFactory;
 
-    // Ορίζουμε ποια πεδία επιτρέπεται να "γεμίσουμε" από τη φόρμα
     protected $fillable = [
         'station_id',
         'name',

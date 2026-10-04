@@ -1,15 +1,18 @@
 @extends('layouts.app')
 
+@section('title', 'Πολιτική Απορρήτου')
+@section('meta_description', 'Πολιτική απορρήτου και προστασίας προσωπικών δεδομένων του ιστότοπου της ΕΚΟ Δράμη.')
+
 @section('content')
-    <section class="bg-slate-50 py-16">
+    <section class="bg-slate-50 py-10 md:py-14">
         <div class="container mx-auto max-w-4xl px-4">
-            <nav class="mb-8 flex text-sm font-bold tracking-widest text-slate-400 uppercase">
+            <nav class="mb-4 flex text-[13px] text-slate-500">
                 <a href="/" class="hover:text-[#e21838]">Αρχική</a>
                 <span class="mx-2">/</span>
                 <span class="text-slate-900">Πολιτική Απορρήτου</span>
             </nav>
 
-            <div class="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-xl md:p-16">
+            <div class="rounded-xl border border-slate-200 bg-white p-6 md:p-10">
                 <div class="mb-10 flex items-center gap-4">
                     <div class="rounded-2xl bg-blue-50 p-3 text-blue-600">
                         <svg
@@ -27,10 +30,7 @@
                             />
                         </svg>
                     </div>
-                    <h1 class="text-4xl font-black tracking-tighter text-slate-900 uppercase">
-                        Πολιτική
-                        <span class="text-blue-600">Απορρήτου</span>
-                    </h1>
+                    <h1 class="text-2xl font-black tracking-tight text-slate-900 md:text-3xl">Πολιτική απορρήτου</h1>
                 </div>
 
                 <div class="prose prose-slate max-w-none space-y-8 leading-relaxed text-slate-600">
@@ -48,14 +48,14 @@
                             class="grid grid-cols-1 gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-6 md:grid-cols-2"
                         >
                             <div class="flex items-start gap-3">
-                                <span class="text-blue-600">✔</span>
+                                <span class="text-[#e21838]" aria-hidden="true">&#8226;</span>
                                 <div>
                                     <p class="font-bold text-slate-900">Στοιχεία Επικοινωνίας</p>
                                     <p class="text-sm">Όνομα και αριθμό τηλεφώνου για την επιβεβαίωση του ραντεβού.</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="text-blue-600">✔</span>
+                                <span class="text-[#e21838]" aria-hidden="true">&#8226;</span>
                                 <div>
                                     <p class="font-bold text-slate-900">Στοιχεία Οχήματος</p>
                                     <p class="text-sm">

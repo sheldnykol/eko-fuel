@@ -2,179 +2,196 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentConfirmation;
+use App\Mail\BookingSubmittedMail;
 use App\Models\Appointment;
-use Illuminate\Support\Facades\Http;
-use App\Http\Controllers\Controller;
+use App\Models\Station;
+use App\Support\BookingRules;
+use Carbon\Carbon;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\Schedule;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class BookingController extends Controller
 {
-    public function store(Request $request){
-        //Validation
+    public function store(Request $request)
+    {
+        $lastDate = BookingRules::lastBookableDate()->toDateString();
+
         $validated = $request->validate([
-            'station_id' => 'required',
+            'station_id' => 'required|exists:stations,id',
             'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|digits:10', // Αποδέχεται ΜΟΝΟ αριθμούς και ακριβώς 10 ψηφία
-            'license_plate' => 'required|string',
-            'vehicle_type' => 'required|string|in:ΙΧ,ΤΖΙΠ,ΒΑΝ,ΜΟΤΟ',
-            'appointment_date' => 'required|date|after_or_equal:today',
-            'appointment_time' => 'required',
-            'wash_type' => 'required|string',
+            'customer_phone' => ['required', 'regex:/^69[0-9]{8}$/'],
+            'customer_email' => 'required|email|max:255',
+            'license_plate' => 'required|string|max:20',
+            'vehicle_type' => ['required', Rule::in(BookingRules::VEHICLE_TYPES)],
+            'appointment_date' => "required|date_format:Y-m-d|after_or_equal:today|before_or_equal:$lastDate",
+            'appointment_time' => 'required|date_format:H:i',
+            'wash_type' => ['required', Rule::in(array_keys(BookingRules::PRICES['ΙΧ']))],
             'comments' => 'nullable|string|max:250',
             'extras' => 'nullable|array',
+            'extras.*' => ['string', Rule::in([BookingRules::FAST_TRACK, ...array_keys(BookingRules::EXTRAS)])],
         ], [
-            // Προαιρετικά: Μηνύματα στα ελληνικά
-            'customer_phone.digits' => 'Το τηλέφωνο πρέπει να είναι ακριβώς 10 ψηφία.',
+            'customer_phone.regex' => 'Το κινητό πρέπει να ξεκινάει από 69 και να έχει 10 ψηφία.',
             'appointment_date.after_or_equal' => 'Η ημερομηνία δεν μπορεί να είναι στο παρελθόν.',
+            'appointment_date.before_or_equal' => 'Μπορείτε να κλείσετε ραντεβού έως ' . BookingRules::BOOKING_WINDOW_DAYS . ' ημέρες μπροστά.',
+            'appointment_time.required' => 'Επιλέξτε ώρα ραντεβού.',
+            'wash_type.required' => 'Επιλέξτε πακέτο πλυσίματος.',
+            'extras.*.in' => 'Μη έγκυρη επιπλέον υπηρεσία.',
         ]);
-        // 2. Διαχείριση των Extras
-        // Μετατρέπουμε το array σε ένα κείμενο χωρισμένο με κόμματα για την βάση
-        $extrasString = null;
-        if ($request->has('extras')) {
-            // Ενώνουμε τα στοιχεία του array σε ένα string
-            $extrasString = implode(', ', $request->extras); 
-            $validated['extras'] = $extrasString; // Προσοχή στο ; στο τέλος
-        } else {
-            // Αν δεν επέλεξε τίποτα, βάζουμε '0' ή null
-            $validated['extras'] = 'Χωρίς Extras'; 
+
+        $date = Carbon::parse($validated['appointment_date']);
+        $time = $validated['appointment_time'];
+        $vehicle = $validated['vehicle_type'];
+        $wash = $validated['wash_type'];
+        $extras = array_values(array_unique($validated['extras'] ?? []));
+
+        if (! isset(BookingRules::PRICES[$vehicle][$wash])) {
+            return back()->withErrors(['wash_type' => 'Το πακέτο αυτό δεν είναι διαθέσιμο για ' . $vehicle . '.'])->withInput();
         }
-        if($request->filled('comments')) {
-            $validated['comments'] = mb_strtoupper($request->comments, 'UTF-8');
-        }
-        //Check Availabiliy for Double Booking
-        $isBooked = Appointment::where('station_id', $request->station_id)
-                ->where('appointment_date', $request->appointment_date)
-                ->where('appointment_time', $request->appointment_time)
-                ->exists();
-        if ($isBooked) {
-            return back()->withErrors(['appointment_time' => 'Δυστηχώς η ώρα αυτή έχει ήδη κλειστεί από άλλον χρήστη.'])->withInput();
+        $washDays = BookingRules::WASH_DAYS[$wash] ?? null;
+        if (! BookingRules::allowedOnDay($washDays, $date)) {
+            return back()->withErrors(['wash_type' => 'Το πακέτο αυτό γίνεται μόνο ' . BookingRules::daysLabel($washDays) . '.'])->withInput();
         }
 
-        //Pin creation 
-        //$pin = strtoupper(Str::random(6));
-        //CAPS
-        $validated['customer_name'] = mb_strtoupper($request->customer_name, 'UTF-8');
-        $validated['license_plate'] = mb_strtoupper(str_replace(' ', '', $request->license_plate), 'UTF-8');
-        
-        //Add pin to array
-        //$validated['booking_pin'] = $pin;
+        foreach ($extras as $extra) {
+            $days = BookingRules::EXTRAS[$extra]['days'] ?? null;
+            if (! BookingRules::allowedOnDay($days, $date)) {
+                return back()->withErrors(['extras' => "Η υπηρεσία \"$extra\" είναι διαθέσιμη μόνο " . BookingRules::daysLabel($days) . '.'])->withInput();
+            }
+        }
 
-        // Αν η ώρα έρχεται ως "10:00", την κάνουμε "10:00:00" για τη MySQL
-        if (strlen($validated['appointment_time']) == 5) {
-        $validated['appointment_time'] .= ':00';
-    }
-        //Save to DB 
-        $appointment = Appointment::create($validated);
-        Log::info("Date received: " . $appointment);
+        if (! in_array($time, BookingRules::slotsFor($validated['station_id'], $date->toDateString()), true)) {
+            return back()->withErrors(['appointment_time' => 'Η ώρα αυτή δεν είναι διαθέσιμη για την ημέρα που επιλέξατε.'])->withInput();
+        }
+        if ($date->isToday() && $time <= now()->format('H:i')) {
+            return back()->withErrors(['appointment_time' => 'Η ώρα που επιλέξατε έχει ήδη περάσει.'])->withInput();
+        }
+
+        $validated['customer_name'] = mb_strtoupper($validated['customer_name'], 'UTF-8');
+        $validated['license_plate'] = mb_strtoupper(preg_replace('/\s+/', '', $validated['license_plate']), 'UTF-8');
+        $validated['comments'] = filled($validated['comments'] ?? null) ? mb_strtoupper($validated['comments'], 'UTF-8') : null;
+        $validated['extras'] = $extras ? implode(', ', $extras) : 'Χωρίς Extras';
+        $validated['appointment_time'] = $time . ':00';
+
+        $lock = Cache::lock("booking:{$validated['station_id']}:{$date->toDateString()}", 10);
+
+        try {
+            $lock->block(5);
+
+            if (in_array($time, BookingRules::bookedTimes($validated['station_id'], $date->toDateString()), true)) {
+                return back()->withErrors(['appointment_time' => 'Δυστυχώς η ώρα αυτή μόλις κλείστηκε από άλλον πελάτη. Επιλέξτε άλλη ώρα.'])->withInput();
+            }
+
+            $appointment = Appointment::create($validated);
+        } catch (LockTimeoutException $e) {
+            return back()->withErrors(['appointment_time' => 'Υπάρχει αυξημένη κίνηση. Παρακαλώ δοκιμάστε ξανά.'])->withInput();
+        } finally {
+            $lock->release();
+        }
+
+        Log::info('Νέο ραντεβού πλυντηρίου #' . $appointment->id);
 
         $this->sendSms(
             $appointment->customer_phone,
             $appointment->appointment_date,
             $appointment->appointment_time
         );
-       
 
-        
-        //Νο ability to book prev hours-dates
-        $currentTime = date('H:i');
-        $today = date('Y-m-d');
-
-        if ($request->appointment_date == $today && $request->appointment_time < $currentTime) {
-            return back()->withErrors(['appointment_time' => 'Η ώρα που επιλέξατε έχει ήδη περάσει.'])->withInput();
+        try {
+            Mail::to($appointment->customer_email)->send(new AppointmentConfirmation($appointment));
+        } catch (\Exception $e) {
+            Log::error('Δεν στάλθηκε το email επιβεβαίωσης στον πελάτη: ' . $e->getMessage());
         }
 
-        //Success Alert
-        return back()->with('success', 'Η κράτησή σας ολοκληρώθηκε με επιτυχία!')
+        try {
+            Mail::to(config('mail.admin_address'))->send(
+                new BookingSubmittedMail($appointment, route('admin.dashboard', ['date' => $date->toDateString()]))
+            );
+        } catch (\Exception $e) {
+            Log::error('Δεν στάλθηκε η ειδοποίηση κράτησης στον διαχειριστή: ' . $e->getMessage());
+        }
+
+        return redirect()->route('pages.booking')
+            ->with('success', 'Η κράτησή σας ολοκληρώθηκε!')
             ->with('appointment_date', $appointment->appointment_date)
             ->with('appointment_time', $appointment->appointment_time)
-            ->with('customer_name', $appointment->customer_name);
-        }
+            ->with('customer_name', $appointment->customer_name)
+            ->with('cancel_url', $appointment->cancelUrl());
+    }
 
     public function checkAvailability(Request $request)
-        { 
-        // Παίρνουμε τις ώρες που είναι ήδη κρατημένες για το συγκεκριμένο πρατήριο και ημερομηνία
-        $bookedTimes = Appointment::where('station_id', $request->station_id)
-            ->where('appointment_date', $request->appointment_date)
-            ->pluck('appointment_time') // Παίρνει μόνο την κολόνα των ωρών
-            ->toArray();
-
-        return response()->json($bookedTimes);
+    {
+        if (! $request->filled(['station_id', 'appointment_date'])) {
+            return response()->json([]);
         }
+
+        return response()->json(BookingRules::bookedTimes($request->station_id, $request->appointment_date));
+    }
 
     public function index()
-        {
-            // Φέρνουμε μόνο το πρατήριο που μας ενδιαφέρει
-            $stations = \App\Models\Station::where('name', 'LIKE', '%ΒΟΛΟΥ%')->get();
-            
-            return view('pages.booking', compact('stations'));
+    {
+        $stations = Station::where('name', 'LIKE', '%ΒΟΛΟΥ%')->get();
+        $station = $stations->first();
+        $now = now()->format('H:i');
+
+        $days = collect(BookingRules::bookableDays())->map(function (Carbon $day) use ($station, $now) {
+            $free = 0;
+            if ($station) {
+                $booked = BookingRules::bookedTimes($station->id, $day->toDateString());
+                $free = collect(BookingRules::slotsFor($station->id, $day->toDateString()))
+                    ->reject(fn ($slot) => in_array($slot, $booked, true) || ($day->isToday() && $slot <= $now))
+                    ->count();
+            }
+
+            return [
+                'date' => $day->toDateString(),
+                'dow' => $day->dayOfWeek,
+                'label' => ($day->isToday() ? 'Σήμερα, ' : ($day->isTomorrow() ? 'Αύριο, ' : ''))
+                    . BookingRules::DAY_SHORT[$day->dayOfWeek] . ' ' . $day->format('d/m'),
+                'free' => $free,
+            ];
+        });
+
+        return view('pages.booking', compact('stations', 'days'));
+    }
+
+    public function getAvailableSlots(Request $request)
+    {
+        $date = $request->date;
+        $stationId = $request->station_id;
+
+        if (! $date || ! $stationId || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            return response()->json(['all_slots' => [], 'booked_slots' => []]);
         }
 
-    public function getAvailableSlots(Request $request) {
-            Log::info($request->all());
-            $date = $request->date;
-            $stationId = $request->station_id;
-
-
-            Log::info("--- New Slot Request ---");
-            Log::info("Date received: " . $date);
-            // Αν δεν έχουν σταλεί δεδομένα, γύρνα άδειο array για να μη σκάσει η JS
-            if (!$date || !$stationId) {
-                return response()->json(['all_slots' => [], 'booked_slots' => []]);
-            }
-            //echo($date);
-            // 1 Searching for custom dates
-            $customSchedule = Schedule::where('station_id', $stationId)
-                ->where('date', $date)
-                ->first();
-            
-            if ($customSchedule) {
-            Log::info("Custom schedule found for station $stationId", [
-                'slots' => $customSchedule->available_slots
-                ]);
-            Log::info('Schedule Data:', $customSchedule->toArray());
-            } else {
-                Log::warning("No custom schedule found for $date. Using defaults.");
-            }
-            
-            // 2 returing default hours if no shedule Hours 
-        
-            $allSlots = $customSchedule 
-                ? $customSchedule->available_slots 
-                : ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
-            Log::info('allSlots:', $allSlots);
-            // 3 appointments exist?
-            $bookedTimes = Appointment::where('station_id', $stationId)
-                ->where('appointment_date', $date)
-                ->pluck('appointment_time')
-                ->toArray();
-            Log::info('bookedTimes:', $bookedTimes);
-            //  return json
-            return response()->json([
-                'all_slots' => $allSlots,
-                'booked_slots' => $bookedTimes
-            ]);
-        }
+        return response()->json([
+            'all_slots' => BookingRules::slotsFor($stationId, $date),
+            'booked_slots' => BookingRules::bookedTimes($stationId, $date),
+        ]);
+    }
 
     private function sendSms($phone, $date, $time)
     {
-        // 1. Το κλειδί που μόλις πήρες
-        $apiKey = 'o93aee50b792818'; 
+        if (! config('services.easysms.enabled')) {
+            Log::info("SMS απενεργοποιημένο (EASYSMS_ENABLED=false). Δεν στάλθηκε SMS στο $phone.");
+            return;
+        }
 
-        // 2. Καθαρισμός τηλεφώνου
+        $apiKey = config('services.easysms.key');
+
         $phone = preg_replace('/[^0-9]/', '', $phone);
         if (strlen($phone) == 10) {
             $phone = '30' . $phone;
         }
 
-        // 3. Καθαρισμός ώρας (από 10:00:00 σε 10:00)
         $formattedTime = date('H:i', strtotime($time));
-        // Μετατροπή ημερομηνίας σε πιο φιλική μορφή (π.χ. 18/02)
         $formattedDate = date('d/m', strtotime($date));
 
-        // 4. Το μήνυμα (Greeklish για σιγουριά και οικονομία χαρακτήρων)
         $message = "EΚΟ ΔΡΑΜΗ  (ΟΔΟΣ ΒΟΛΟΥ): ΤΟ ΡΑΝΤΕΒΟΥ ΕΓΚΡΙΘΗΚΕ ΓΙΑ $formattedDate ΣΤΙΣ $formattedTime.";
 
         try {
@@ -182,13 +199,12 @@ class BookingController extends Controller
                 'key'    => $apiKey,
                 'to'     => $phone,
                 'text'   => $message,
-                'from'   => 'EKO ΛΑΡΙΣΑ | ΑΦΟΙ ΔΡΑΜΗ ', // Δοκίμασε "EKO" ή το κινητό σου αν δεν έχεις εγκεκριμένο όνομα
+                'from'   => 'EKO ΛΑΡΙΣΑ | ΑΦΟΙ ΔΡΑΜΗ ',
                 'type'   => 'json'
             ]);
 
             Log::info("EasySMS Response: " . $response->body());
 
-            // Αν το status είναι error και το error είναι 40 (Invalid Sender), ξαναπροσπαθεί με το κινητό σου
             $result = $response->json();
             if (isset($result['status']) && $result['status'] == 'error' && $result['error'] == '40') {
                 Log::warning("Sender ID rejected. Retrying with phone number as sender.");
@@ -196,7 +212,7 @@ class BookingController extends Controller
                     'key'  => $apiKey,
                     'to'   => $phone,
                     'text' => $message,
-                    'from' => '306948720413', // Βάζουμε το κινητό σου ως αποστολέα για να περάσει σίγουρα
+                    'from' => '306948720413',
                     'type' => 'json'
                 ]);
             }
@@ -206,5 +222,3 @@ class BookingController extends Controller
         }
     }
 }
-
-

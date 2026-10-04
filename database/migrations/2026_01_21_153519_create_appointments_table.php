@@ -6,37 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            //connect appointment with gus station (1 or 2)
             $table->integer('station_id');
 
-            //customer info
             $table->string('customer_name');
             $table->string('customer_phone');
             $table->string('license_plate');
 
-            //appointment info
             $table->date('appointment_date');
             $table->date('appointment_time');
 
-            // Προσθέτουμε το status (1=Εκκρεμεί, 2=Ολοκληρώθηκε, 3=Ακυρώθηκε)
             $table->integer('status')->default(1);
 
-            
-
-            $table->timestamps();//creates created_at and updated_at
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('appointments');

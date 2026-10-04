@@ -6,13 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('appointment_comments', function (Blueprint $table) {
-            // Προσθέτουμε το user_id μετά το id και το συνδέουμε με τον πίνακα users
             $table->foreignId('user_id')
                 ->after('id') 
                 ->constrained()

@@ -11,14 +11,10 @@ class Station extends Model
 
     protected $fillable = ['name', 'address', 'city'];
 
-    //Σύνδεση με τα Προϊόντα: Ένα πρατήριο έχει πολλά προϊόντα
-
     public function products()
     {
         return $this->hasMany(Product::class);
     }
-
-    // Σύνδεση με τα Ραντεβού: Ένα πρατήριο έχει πολλά ραντεβού
 
     public function appointments()
     {

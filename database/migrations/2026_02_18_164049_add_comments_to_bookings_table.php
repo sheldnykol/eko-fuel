@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('appointment_comments', function (Blueprint $table) {
@@ -16,7 +13,6 @@ return new class extends Migration
             $table->foreignId('appointment_id')->constrained('appointments')->onDelete('cascade');
             $table->text('body');
             $table->timestamps();
-            
         });
     }
 
