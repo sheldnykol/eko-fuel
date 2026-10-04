@@ -1,20 +1,19 @@
 @extends('layouts.app')
 
+@section('title', 'Όροι Χρήσης')
+@section('meta_description', 'Όροι χρήσης του ιστότοπου και των online υπηρεσιών της ΕΚΟ Δράμη (ραντεβού πλυντηρίου, παραγγελίες καυσίμων).')
+
 @section('content')
-    <section class="bg-slate-50 py-16">
+    <section class="bg-slate-50 py-10 md:py-14">
         <div class="container mx-auto max-w-4xl px-4">
-            <nav class="mb-8 flex text-sm font-bold tracking-widest text-slate-400 uppercase">
+            <nav class="mb-4 flex text-[13px] text-slate-500">
                 <a href="/" class="hover:text-[#e21838]">Αρχική</a>
                 <span class="mx-2">/</span>
                 <span class="text-slate-900">Όροι Χρήσης</span>
             </nav>
 
-            <div class="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-xl md:p-16">
-                <h1 class="mb-10 text-4xl font-black tracking-tighter text-slate-900 uppercase">
-                    Όροι
-                    <span class="text-[#e21838]">Χρήσης</span>
-                    & Προϋποθέσεις
-                </h1>
+            <div class="rounded-xl border border-slate-200 bg-white p-6 md:p-10">
+                <h1 class="mb-8 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">Όροι χρήσης & προϋποθέσεις</h1>
 
                 <div class="prose prose-slate max-w-none space-y-8 leading-relaxed text-slate-600">
                     <section>

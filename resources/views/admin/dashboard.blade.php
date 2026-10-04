@@ -1,464 +1,218 @@
 @extends('admin.admin')
 
+@section('admin_title', 'Ραντεβού')
+
+@php
+    use App\Support\BookingRules;
+    use Carbon\Carbon;
+
+    $selected = Carbon::parse($selectedDate)->locale('el');
+    $today = now()->toDateString();
+    $active = $appointments->where('status', '!=', BookingRules::STATUS_CANCELLED)->values();
+    $cancelled = $appointments->where('status', BookingRules::STATUS_CANCELLED)->values();
+    $kpis = [
+        ['Σύνολο', $stats['total'], 'text-slate-900'],
+        ['Αναμονή', $stats['pending'], 'text-amber-600'],
+        ['Έγιναν', $stats['completed'], 'text-emerald-600'],
+        ['Ακυρώσεις', $stats['canceled'], 'text-slate-500'],
+    ];
+@endphp
+
 @section('admin_content')
-    <div class="min-h-screen bg-slate-100 py-8">
-        <div class="container mx-auto max-w-6xl px-4">
-            {{-- HEADER: Φίλτρα & PDF --}}
-            <div
-                class="mb-6 flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center"
-            >
-                <form
-                    action="{{ route('admin.dashboard') }}"
-                    method="GET"
-                    id="dateFilterForm"
-                    class="flex items-center gap-3"
-                >
-                    <label for="date" class="font-bold text-slate-700">Επιλογή Ημερομηνίας:</label>
-                    <input
-                        type="date"
-                        name="date"
-                        id="admin_date_input"
-                        value="{{ $selectedDate }}"
-                        onchange="document.getElementById('dateFilterForm').submit()"
-                        class="rounded-xl border-slate-200 bg-slate-50 p-2 focus:border-red-500 focus:ring-red-500"
-                    />
-                </form>
+    <x-admin.page-header
+        title="Ραντεβού"
+        :subtitle="ucfirst($selected->translatedFormat('l j F Y')) . ($selectedDate === $today ? ' · Σήμερα' : '')"
+    >
+        @if ($selectedDate !== $today)
+            <a href="{{ route('admin.dashboard') }}" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[13px] font-medium text-slate-700 hover:bg-slate-50">Σήμερα</a>
+        @endif
+        <form action="{{ route('admin.dashboard') }}" method="GET">
+            <label class="sr-only" for="admin_date_input">Μετάβαση σε ημερομηνία</label>
+            <input
+                type="date"
+                name="date"
+                id="admin_date_input"
+                value="{{ $selectedDate }}"
+                onchange="this.form.submit()"
+                class="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[13px] text-slate-700 focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+            />
+        </form>
+        <a
+            href="{{ route('admin.exportPDF', ['date' => $selectedDate]) }}"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[13px] font-medium text-slate-700 hover:bg-slate-50"
+            title="PDF με τα ολοκληρωμένα ραντεβού της ημέρας"
+        >
+            <x-admin.icon name="download" class="h-4 w-4" />
+            PDF
+        </a>
+    </x-admin.page-header>
 
-                <div class="text-sm font-medium">
-                    Προβολή για:
-                    <span class="font-black text-red-600">{{ date('d/m/Y', strtotime($selectedDate)) }}</span>
-                </div>
-
-                <a
-                    href="{{ route('admin.exportPDF', ['date' => $selectedDate]) }}"
-                    class="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="h-5 w-5"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                        />
-                    </svg>
-                    Κατέβασμα PDF
-                </a>
-            </div>
-
-            {{-- CALENDAR WIDGET --}}
-            <div class="mb-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl">
-                <div class="mb-6 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-black tracking-tight text-slate-800 uppercase">
-                            {{ $calendarDate->translatedFormat('F Y') }}
-                        </h2>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <a
-                            href="{{ route('admin.dashboard', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}"
-                            class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 19l-7-7 7-7"
-                                />
-                            </svg>
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <aside class="space-y-4">
+            <section class="rounded-xl border border-slate-200 bg-white p-3.5" aria-label="Ημερολόγιο">
+                <div class="mb-2 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-slate-900">{{ ucfirst($calendarDate->copy()->locale('el')->translatedFormat('F Y')) }}</h2>
+                    <div class="flex items-center">
+                        <a href="{{ route('admin.dashboard', ['date' => $selectedDate, 'month' => $prevMonth->month, 'year' => $prevMonth->year]) }}" class="rounded-md p-1.5 text-slate-500 hover:bg-slate-100" aria-label="Προηγούμενος μήνας">
+                            <x-admin.icon name="chevron-left" class="h-4 w-4" />
                         </a>
-                        <a
-                            href="{{ route('admin.dashboard', ['date' => date('Y-m-d')]) }}"
-                            class="px-3 text-xs font-bold text-slate-400 uppercase hover:text-red-600"
-                        >
-                            Σήμερα
-                        </a>
-                        <a
-                            href="{{ route('admin.dashboard', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}"
-                            class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:bg-slate-50"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 5l7 7-7 7"
-                                />
-                            </svg>
+                        <a href="{{ route('admin.dashboard', ['date' => $selectedDate, 'month' => $nextMonth->month, 'year' => $nextMonth->year]) }}" class="rounded-md p-1.5 text-slate-500 hover:bg-slate-100" aria-label="Επόμενος μήνας">
+                            <x-admin.icon name="chevron-right" class="h-4 w-4" />
                         </a>
                     </div>
                 </div>
 
-                <div class="mb-2 grid grid-cols-7 gap-2">
-                    @foreach (['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ'] as $dayName)
-                        <div class="text-center text-xs font-bold text-slate-300 uppercase">{{ $dayName }}</div>
+                @php
+                    $dayKeys = array_keys($calendarDays);
+                    $focusIndex = array_search($selectedDate, $dayKeys, true);
+                    if ($focusIndex === false) {
+                        $focusIndex = array_search($today, $dayKeys, true);
+                    }
+                    $focusWeek = $focusIndex === false ? 0 : intdiv($emptyDaysAtStart + $focusIndex, 7);
+                @endphp
+                <div class="cal-collapsed grid grid-cols-7 gap-0.5 text-center" id="calendarGrid">
+                    @foreach (['Δε', 'Τρ', 'Τε', 'Πε', 'Πα', 'Σα', 'Κυ'] as $dayName)
+                        <div class="pb-1 text-[11px] font-medium text-slate-400">{{ $dayName }}</div>
                     @endforeach
-                </div>
 
-                <div class="grid grid-cols-7 gap-2">
                     @for ($i = 0; $i < $emptyDaysAtStart; $i++)
-                        <div class="h-20 rounded-xl border border-dashed border-slate-100 bg-slate-50/50"></div>
+                        <div class="{{ $focusWeek === 0 ? '' : 'cal-other-week' }}"></div>
                     @endfor
 
                     @foreach ($calendarDays as $date => $count)
                         @php
-                            $isToday = $date == date('Y-m-d');
-                            $isSelected = $date == $selectedDate;
+                            $isSelected = $date === $selectedDate;
+                            $isToday = $date === $today;
+                            $otherWeek = intdiv($emptyDaysAtStart + $loop->index, 7) !== $focusWeek;
                         @endphp
-
                         <a
-                            href="{{ route('admin.dashboard', ['date' => $date, 'month' => $calendarDate->month, 'year' => $calendarDate->year]) }}"
-                            class="{{ $isSelected ? 'border-red-500 bg-red-50 ring-2 ring-red-200' : 'border-slate-100 bg-slate-50 hover:bg-white hover:shadow-md' }} relative flex h-20 flex-col items-center justify-center rounded-xl border transition-all"
+                            href="{{ route('admin.dashboard', ['date' => $date]) }}"
+                            class="{{ $otherWeek ? 'cal-other-week' : '' }} {{ $isSelected ? 'bg-slate-900 text-white' : ($isToday ? 'font-semibold text-red-600 hover:bg-slate-100' : ($date < $today ? 'text-slate-400 hover:bg-slate-100' : 'text-slate-700 hover:bg-slate-100')) }} flex h-10 flex-col items-center justify-center rounded-md text-[13px] tabular-nums"
+                            title="{{ $count ? $count . ' ραντεβού' : 'Χωρίς ραντεβού' }}"
+                            @if ($isSelected) aria-current="date" @endif
                         >
-                            <span class="{{ $isSelected ? 'text-red-600' : 'text-slate-500' }} text-xs font-bold">
-                                {{ date('j', strtotime($date)) }}
-                            </span>
-
-                            @if ($count > 0)
-                                <span
-                                    class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-[10px] font-black text-white"
-                                >
-                                    {{ $count }}
-                                </span>
-                            @else
-                                <span class="mt-1 text-[10px] text-slate-300">-</span>
-                            @endif
-
-                            @if ($isToday)
-                                <div class="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-red-500"></div>
-                            @endif
+                            <span>{{ (int) substr($date, 8, 2) }}</span>
+                            <span class="{{ $count ? ($isSelected ? 'bg-white' : 'bg-red-500') : 'bg-transparent' }} mt-0.5 h-1 w-1 rounded-full"></span>
                         </a>
                     @endforeach
                 </div>
-            </div>
 
-            {{-- STATS CARDS --}}
-            <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                <div class="rounded-2xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm">
-                    <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-emerald-50 p-3 text-emerald-600">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-6 w-6"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Ολοκληρωμένα</p>
-                            <p class="text-2xl font-black text-slate-900">{{ $stats['completed'] }}</p>
-                        </div>
+                <button type="button" id="calendarToggle" class="mt-1 w-full rounded-md py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-50 lg:hidden" aria-expanded="false">
+                    Όλος ο μήνας
+                </button>
+            </section>
+
+            <p class="hidden px-1 text-[12px] text-slate-500 lg:block">
+                {{ $upcomingCount }} ραντεβού σε αναμονή τις επόμενες 7 ημέρες.
+            </p>
+        </aside>
+
+        <section class="min-w-0 space-y-4">
+            <dl class="grid grid-cols-4 divide-x divide-slate-100 rounded-xl border border-slate-200 bg-white">
+                @foreach ($kpis as [$label, $value, $tone])
+                    <div class="px-2 py-2.5 text-center sm:px-4 sm:text-left">
+                        <dt class="truncate text-[11px] text-slate-500 sm:text-xs">{{ $label }}</dt>
+                        <dd class="{{ $tone }} text-lg leading-tight font-semibold tabular-nums">{{ $value }}</dd>
                     </div>
-                </div>
+                @endforeach
+            </dl>
 
-                <div class="rounded-2xl border-l-4 border-yellow-500 bg-white p-6 shadow-sm">
-                    <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-yellow-50 p-3 text-yellow-600">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-6 w-6"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Σε Αναμονή</p>
-                            <p class="text-2xl font-black text-slate-900">{{ $stats['pending'] }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="rounded-2xl border-l-4 border-red-500 bg-white p-6 shadow-sm">
-                    <div class="flex items-center gap-4">
-                        <div class="rounded-xl bg-red-50 p-3 text-red-600">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-6 w-6"
-                            >
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium tracking-wider text-slate-500 uppercase">Ακυρωμένα</p>
-                            <p class="text-2xl font-black text-slate-900">{{ $stats['canceled'] }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- APPOINTMENTS HEADER --}}
-            <div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                <div>
-                    <h1 class="text-3xl font-black text-slate-900">Λίστα Ραντεβού</h1>
-                    <p class="font-medium text-slate-600">
-                        Διαχείριση για {{ date('d/m/Y', strtotime($selectedDate)) }}
-                    </p>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white px-6 py-3 text-center shadow-sm md:text-left">
-                    <span class="block text-sm font-bold tracking-wider text-slate-500 uppercase">Σύνολο Ημέρας</span>
-                    <span class="text-2xl font-black text-red-600">{{ $appointments->count() }} Ραντεβού</span>
-                </div>
-            </div>
-
-            @if (session('success'))
-                <div
-                    class="mb-6 rounded-xl border-l-4 border-emerald-500 bg-emerald-50 p-4 font-bold text-emerald-700 shadow-sm"
-                >
-                    ✓ {{ session('success') }}
-                </div>
-            @endif
-
-            {{-- RESPONSIVE APPOINTMENTS CARDS (Αντικαθιστά τον Πίνακα) --}}
-            <div class="space-y-4">
-                @forelse ($appointments as $app)
-                    <div
-                        class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md md:flex-row md:items-center md:justify-between"
-                    >
-                        {{-- 1. Ώρα & Πελάτης --}}
-                        <div class="flex items-center gap-4 md:w-1/4">
-                            <div
-                                class="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-center"
-                            >
-                                <span class="text-lg font-black text-slate-800">
-                                    {{ date('H:i', strtotime($app->appointment_time)) }}
-                                </span>
-                            </div>
-                            <div>
-                                <div class="text-lg font-bold text-slate-900">{{ $app->customer_name }}</div>
-                                <a
-                                    href="tel:{{ $app->customer_phone }}"
-                                    class="flex items-center gap-1 text-sm font-bold text-slate-500 hover:text-red-600"
-                                >
-                                    📞 {{ $app->customer_phone }}
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- 2. Όχημα & Πακέτο Πλύσης --}}
-                        <div class="flex flex-col gap-2 border-l-0 border-slate-100 md:w-1/4 md:border-l-2 md:pl-4">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span
-                                    class="rounded-lg bg-slate-900 px-3 py-1 font-mono text-sm font-black tracking-widest text-white"
-                                >
-                                    {{ $app->license_plate }}
-                                </span>
-                                {{-- Εδώ εμφανίζεται το Vehicle Type --}}
-                                <span class="rounded-lg bg-slate-200 px-2 py-1 text-xs font-black text-slate-600">
-                                    {{ $app->vehicle_type ?? 'ΙΧ' }}
-                                </span>
-                            </div>
-                            <div class="flex flex-wrap gap-2 text-xs">
-                                <span
-                                    class="rounded border border-red-300 bg-red-50 px-2 py-1 font-black text-red-600 uppercase shadow-sm"
-                                >
-                                    {{ $app->wash_type }}
-                                </span>
-                                @if ($app->extras && $app->extras !== 'Χωρίς Extras')
-                                    <span
-                                        class="rounded border border-emerald-300 bg-emerald-50 px-2 py-1 font-black text-emerald-700 uppercase shadow-sm"
-                                    >
-                                        + {{ $app->extras }}
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        {{-- 3. Σχόλιο Πελάτη --}}
-                        <div class="flex flex-col md:w-1/4">
-                            @if ($app->comments)
-                                <div
-                                    class="relative rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
-                                >
-                                    <span
-                                        class="absolute -top-2 left-3 bg-amber-50 px-1 text-[10px] font-black tracking-wider text-amber-600 uppercase"
-                                    >
-                                        Σχόλιο Πελάτη
-                                    </span>
-                                    <p class="leading-tight font-medium italic">{{ $app->comments }}</p>
-                                </div>
-                            @else
-                                <span class="text-xs font-medium text-slate-400 italic">Δεν άφησε σχόλιο.</span>
-                            @endif
-                        </div>
-
-                        {{-- 4. Status & Actions (Σημειώσεις Admin) --}}
-                        <div
-                            class="flex flex-col items-center gap-3 border-t border-slate-100 pt-4 sm:flex-row md:w-auto md:justify-end md:border-none md:pt-0"
-                        >
-                            <form
-                                action="{{ route('admin.updateStatus', $app->id) }}"
-                                method="POST"
-                                class="w-full sm:w-auto"
-                            >
-                                @csrf
-                                <select
-                                    name="status"
-                                    onchange="this.form.submit()"
-                                    class="{{ $app->status == 1 ? 'text-amber-600' : ($app->status == 2 ? 'text-emerald-600' : 'text-slate-500') }} w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 text-xs font-bold focus:border-red-500 focus:ring-red-500 sm:w-auto"
-                                >
-                                    <option value="1" {{ $app->status == 1 ? 'selected' : '' }}>⏳ Εκκρεμεί</option>
-                                    <option value="2" {{ $app->status == 2 ? 'selected' : '' }}>
-                                        ✅ Ολοκληρώθηκε
-                                    </option>
-                                    <option value="3" {{ $app->status == 3 ? 'selected' : '' }}>❌ Ακυρώθηκε</option>
-                                </select>
-                            </form>
-
-                            <button
-                                onclick="openCommentModal({{ $app->id }}, '{{ $app->license_plate }}')"
-                                class="flex w-full items-center justify-center gap-1 rounded-xl bg-slate-800 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-slate-700 sm:w-auto"
-                                title="Προσθήκη Σημείωσης Admin"
-                            >
-                                <span>📝</span>
-                                Σημείωση
-                            </button>
-                        </div>
-                    </div>
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                @forelse ($active as $app)
+                    @include('admin.partials.appointment-row', ['app' => $app])
                 @empty
-                    <div
-                        class="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-slate-300 bg-white py-16 text-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="mb-4 h-16 w-16 text-slate-200"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                        </svg>
-                        <h3 class="text-lg font-black text-slate-700">Καμία Κράτηση</h3>
-                        <p class="text-slate-500">Δεν υπάρχουν προγραμματισμένα ραντεβού για αυτή την ημερομηνία.</p>
+                    <div class="px-4 py-12 text-center">
+                        <p class="text-sm font-medium text-slate-700">Κανένα ραντεβού</p>
+                        <p class="mt-0.5 text-[13px] text-slate-500">Δεν υπάρχουν κρατήσεις για αυτή την ημέρα.</p>
                     </div>
                 @endforelse
             </div>
 
-            {{-- MODAL ΓΙΑ ΣΗΜΕΙΩΣΕΙΣ (Admin) --}}
-            <div
-                id="commentModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm transition-opacity"
-            >
-                <div
-                    class="w-full max-w-lg transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all"
-                >
-                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-6">
-                        <h3 class="text-lg font-black text-slate-800">
-                            Σημειώσεις Οχήματος:
-                            <span id="modalPlate" class="rounded bg-slate-900 px-2 py-1 font-mono text-white"></span>
-                        </h3>
-                        <button
-                            onclick="closeCommentModal()"
-                            class="rounded-full bg-slate-200 p-2 text-slate-500 transition-colors hover:bg-red-100 hover:text-red-600"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
+            @if ($cancelled->isNotEmpty())
+                <details class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                    <summary class="cursor-pointer list-none px-4 py-2.5 text-[13px] font-medium text-slate-600 hover:bg-slate-50">
+                        Ακυρωμένα ({{ $cancelled->count() }})
+                    </summary>
+                    <div class="border-t border-slate-100">
+                        @foreach ($cancelled as $app)
+                            @include('admin.partials.appointment-row', ['app' => $app])
+                        @endforeach
                     </div>
+                </details>
+            @endif
+        </section>
+    </div>
 
-                    <form id="commentForm" method="POST" class="p-6">
-                        @csrf
-                        <div class="mb-4">
-                            <label class="mb-2 block text-sm font-bold text-slate-700">Νέα Σημείωση (Admin Log)</label>
-                            <textarea
-                                name="body"
-                                rows="4"
-                                class="w-full rounded-xl border-slate-200 bg-slate-50 p-4 text-sm focus:border-red-500 focus:ring-red-500"
-                                placeholder="Γράψτε μια σημείωση για αυτό το ραντεβού (π.χ. καθυστέρησε, ζήτησε κάτι έξτρα)..."
-                                required
-                            ></textarea>
-                        </div>
-
-                        <div class="mt-6 flex justify-end gap-3">
-                            <button
-                                type="button"
-                                onclick="closeCommentModal()"
-                                class="rounded-xl px-5 py-3 text-sm font-bold text-slate-500 transition-all hover:bg-slate-100"
-                            >
-                                Ακύρωση
-                            </button>
-                            <button
-                                type="submit"
-                                class="rounded-xl bg-red-600 px-6 py-3 text-sm font-black text-white shadow-lg shadow-red-500/30 transition-all hover:-translate-y-1 hover:bg-red-700"
-                            >
-                                Αποθήκευση Σημείωσης
-                            </button>
-                        </div>
-                    </form>
+    <div id="commentModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-slate-900/50 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="commentTitle">
+        <div class="w-full max-w-md rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+                <div class="min-w-0">
+                    <h3 id="commentTitle" class="text-sm font-semibold text-slate-900">Νέα σημείωση</h3>
+                    <p id="modalSubtitle" class="truncate text-[12px] text-slate-500"></p>
                 </div>
+                <button type="button" onclick="closeCommentModal()" class="rounded-md p-1.5 text-slate-400 hover:bg-slate-100" aria-label="Κλείσιμο">
+                    <x-admin.icon name="close" class="h-4 w-4" />
+                </button>
             </div>
+            <form id="commentForm" method="POST" class="p-4">
+                @csrf
+                <label for="commentBody" class="sr-only">Σημείωση</label>
+                <textarea
+                    name="body"
+                    id="commentBody"
+                    rows="3"
+                    maxlength="1000"
+                    required
+                    placeholder="π.χ. καθυστέρησε 10 λεπτά"
+                    class="w-full rounded-lg border border-slate-200 bg-white p-3 text-[13px] focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+                ></textarea>
+                <div class="mt-3 flex justify-end gap-2">
+                    <button type="button" onclick="closeCommentModal()" class="rounded-lg px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-100">Άκυρο</button>
+                    <button type="submit" class="rounded-lg bg-slate-900 px-4 py-2 text-[13px] font-medium text-white hover:bg-slate-800">Αποθήκευση</button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
 
-<script>
-    function openCommentModal(id, plate) {
-        const modal = document.getElementById('commentModal')
-        const form = document.getElementById('commentForm')
-        const plateSpan = document.getElementById('modalPlate')
+@push('scripts')
+    <script>
+        document.getElementById('calendarToggle')?.addEventListener('click', function () {
+            const collapsed = document.getElementById('calendarGrid').classList.toggle('cal-collapsed')
+            this.setAttribute('aria-expanded', !collapsed)
+            this.textContent = collapsed ? 'Όλος ο μήνας' : 'Μόνο η εβδομάδα'
+        })
 
-        form.action = `/admin/appointments/${id}/comments`
-        plateSpan.innerText = plate
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', () => {
+                if (select.value === '3' && !confirm('Ακύρωση του ραντεβού του ' + select.dataset.name + ';')) {
+                    select.value = select.dataset.current
+                    return
+                }
+                select.form.submit()
+            })
+        })
 
-        modal.classList.remove('hidden')
-    }
+        function openCommentModal(btn) {
+            const modal = document.getElementById('commentModal')
+            document.getElementById('commentForm').action = btn.dataset.action
+            document.getElementById('modalSubtitle').textContent = btn.dataset.subtitle
+            modal.classList.remove('hidden')
+            modal.classList.add('flex')
+            setTimeout(() => document.getElementById('commentBody').focus(), 50)
+        }
 
-    function closeCommentModal() {
-        document.getElementById('commentModal').classList.add('hidden')
-    }
-</script>
+        function closeCommentModal() {
+            const modal = document.getElementById('commentModal')
+            modal.classList.add('hidden')
+            modal.classList.remove('flex')
+        }
+
+        document.getElementById('commentModal').addEventListener('click', e => {
+            if (e.target.id === 'commentModal') closeCommentModal()
+        })
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeCommentModal()
+        })
+    </script>
+@endpush

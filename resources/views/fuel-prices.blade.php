@@ -2,6 +2,7 @@
 <html lang="el">
     <head>
         <meta charset="UTF-8" />
+        <meta name="robots" content="noindex, nofollow" />
         <title>Τιμές Αμόλυβδης 95</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>

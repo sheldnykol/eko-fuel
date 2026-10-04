@@ -1,219 +1,164 @@
 <!DOCTYPE html>
 <html lang="el">
     <head>
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/eko-logo.png') }}" />
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Admin Panel - EKO</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/eko-logo.png') }}" />
+        <title>@yield('admin_title', 'Admin') · EKO Admin</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            .admin-shell {
+                font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            }
+            .no-scrollbar {
+                scrollbar-width: none;
+            }
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            @media (max-width: 1023px) {
+                .cal-collapsed .cal-other-week {
+                    display: none;
+                }
+            }
+        </style>
     </head>
-    <body class="bg-slate-100 antialiased">
+    <body class="admin-shell bg-slate-50 text-[13px] text-slate-700 antialiased sm:text-sm">
+        @php
+            $restricted = ! auth()->user()->isAdmin();
+            $navItems = [
+                ['route' => 'admin.dashboard', 'match' => 'admin.dashboard', 'label' => 'Ραντεβού', 'icon' => 'calendar', 'all' => true],
+                ['route' => 'admin.comments.index', 'match' => 'admin.comments.*', 'label' => 'Σημειώσεις', 'icon' => 'chat', 'all' => true],
+                ['route' => 'admin.schedules.index', 'match' => 'admin.schedules.*', 'label' => 'Ωράριο Πλυντηρίου', 'icon' => 'clock', 'all' => false],
+                ['route' => 'admin.fuel-orders', 'match' => 'admin.fuel-orders*', 'label' => 'Παραγγελίες Καυσίμων', 'icon' => 'fuel', 'all' => false],
+                ['route' => 'admin.stats', 'match' => 'admin.stats', 'label' => 'Στατιστικά', 'icon' => 'chart', 'all' => false],
+                ['route' => 'admin.products.index', 'match' => 'admin.products.*', 'label' => 'Προϊόντα', 'icon' => 'box', 'all' => false],
+            ];
+            $navItems = array_filter($navItems, fn ($item) => $item['all'] || ! $restricted);
+            $currentItem = collect($navItems)->first(fn ($item) => request()->routeIs($item['match']));
+        @endphp
+
         <div class="flex min-h-screen">
-            <aside class="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col bg-slate-900 text-white md:flex">
-                <div class="flex-1 p-6">
-                    <a href="/">
-                        <img src="{{ asset('images/eko-logo.png') }}" class="mb-8 h-10 object-contain" />
+            <div id="navOverlay" class="fixed inset-0 z-40 hidden bg-slate-900/50 lg:hidden" onclick="toggleNav(false)"></div>
+
+            <aside
+                id="sidebar"
+                class="fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col bg-slate-900 text-slate-300 transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:translate-x-0"
+            >
+                <div class="flex h-14 items-center justify-between px-4">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5">
+                        <img src="{{ asset('images/eko-logo.png') }}" class="h-7 w-7 rounded object-contain" alt="EKO" />
+                        <span class="text-sm font-semibold text-white">EKO Admin</span>
                     </a>
+                    <button type="button" class="rounded-md p-1.5 text-slate-400 hover:bg-slate-800 lg:hidden" onclick="toggleNav(false)" aria-label="Κλείσιμο μενού">
+                        <x-admin.icon name="close" />
+                    </button>
+                </div>
 
-                    <nav class="space-y-2">
-                        <div class="mb-6 px-2">
-                            <form action="{{ route('admin.search') }}" method="GET">
-                                <div class="relative">
-                                    <input
-                                        type="text"
-                                        name="query"
-                                        placeholder="Αναζήτηση..."
-                                        class="w-full rounded-xl border-none bg-slate-800 py-2.5 pr-4 pl-10 text-sm text-white placeholder-slate-500 transition-all focus:ring-2 focus:ring-red-500"
-                                    />
-                                    <span class="absolute top-3 left-3 text-slate-500">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="2"
-                                            stroke="currentColor"
-                                            class="h-4 w-4"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607Z"
-                                            />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </form>
+                <form action="{{ route('admin.search') }}" method="GET" class="px-3 pb-3">
+                    <label class="relative block">
+                        <span class="sr-only">Αναζήτηση</span>
+                        <x-admin.icon name="search" class="pointer-events-none absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                        <input
+                            type="search"
+                            name="query"
+                            value="{{ request('query') }}"
+                            placeholder="Πινακίδα, όνομα, τηλέφωνο"
+                            class="w-full rounded-lg border-0 bg-slate-800 py-2 pr-3 pl-8 text-[13px] text-white placeholder-slate-500 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                        />
+                    </label>
+                </form>
+
+                <nav class="flex-1 space-y-0.5 overflow-y-auto px-3">
+                    <p class="px-2.5 pt-2 pb-1.5 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Μενού</p>
+                    @foreach ($navItems as $item)
+                        @php
+                            $active = request()->routeIs($item['match']);
+                        @endphp
+                        <a
+                            href="{{ route($item['route']) }}"
+                            class="{{ $active ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/60 hover:text-white' }} relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors"
+                            @if ($active) aria-current="page" @endif
+                        >
+                            @if ($active)
+                                <span class="absolute top-1.5 bottom-1.5 left-0 w-0.5 rounded-full bg-red-500"></span>
+                            @endif
+                            <x-admin.icon :name="$item['icon']" class="h-[18px] w-[18px] shrink-0" />
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
+                </nav>
+
+                <div class="border-t border-slate-800 p-3">
+                    <div class="mb-2 flex items-center gap-2.5 px-2.5">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-700 text-xs font-semibold text-white">
+                            {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                        </span>
+                        <div class="min-w-0">
+                            <p class="truncate text-[13px] font-medium text-white">{{ auth()->user()->name }}</p>
+                            <p class="truncate text-[11px] text-slate-500">{{ auth()->user()->email }}</p>
                         </div>
-
-                        {{-- ΠΑΝΤΑ ΟΡΑΤΑ (Για όλους τους χρήστες) --}}
-                        <a
-                            href="{{ route('admin.dashboard') }}"
-                            class="{{ request()->routeIs('admin.dashboard') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                                />
-                            </svg>
-                            Ραντεβού
-                        </a>
-
-                        <a
-                            href="{{ route('admin.comments.index') }}"
-                            class="{{ request()->routeIs('admin.comments.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="h-5 w-5"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M7.5 8.25h9m-9 3h9m-9 3h3m-6.75 4.125l-.375 3.75 3.75-.375 1.5-1.5H21a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0021 4.5H3.375A2.25 2.25 0 001.125 6.75v10.5a2.25 2.25 0 002.25 2.25h1.5l1.5 1.5z"
-                                />
-                            </svg>
-                            Σημειώσεις (Chat)
-                        </a>
-
-                        {{-- ΠΕΡΙΟΡΙΣΜΟΣ ΕΜΦΑΝΙΣΗΣ: Κρύβουμε αυτά τα links αν το remember_token είναι '2' --}}
-                        @if (auth()->user()->remember_token !== '2')
-                            <a
-                                href="{{ route('admin.fuel-orders') }}"
-                                class="{{ request()->routeIs('admin.fuel-orders*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="h-5 w-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M15.75 5.25v13.5m-7.5-13.5v13.5M3 5.25h18M3 18.75h18M6.75 5.25v13.5m10.5-13.5v13.5"
-                                    />
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25"
-                                    />
-                                </svg>
-                                Παραγγελίες Καυσίμων
-                            </a>
-
-                            <a
-                                href="{{ route('admin.stats') }}"
-                                class="{{ request()->routeIs('admin.stats') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="h-5 w-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0h-10.5"
-                                    />
-                                </svg>
-                                Στατιστικά
-                            </a>
-
-                            <a
-                                href="{{ route('admin.schedules.index') }}"
-                                class="{{ request()->routeIs('admin.schedules.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="h-5 w-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
-                                    />
-                                </svg>
-                                Ώρες Πλυντηρίου
-                            </a>
-
-                            <a
-                                href="{{ route('admin.products.index') }}"
-                                class="{{ request()->routeIs('admin.products.*') ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="h-5 w-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
-                                    />
-                                </svg>
-                                Προϊόντα
-                            </a>
-                        @endif
-
-                        <hr class="my-6 border-slate-800" />
-
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button
-                                type="submit"
-                                class="group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="h-5 w-5 transition-transform group-hover:translate-x-1"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                                    />
-                                </svg>
-                                Αποσύνδεση
-                            </button>
-                        </form>
-                    </nav>
+                    </div>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400">
+                            <x-admin.icon name="logout" class="h-[18px] w-[18px]" />
+                            Αποσύνδεση
+                        </button>
+                    </form>
                 </div>
             </aside>
 
             <div class="flex min-w-0 flex-1 flex-col">
-                <main class="flex-1 p-8">
+                <header class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur lg:hidden">
+                    <button type="button" class="-ml-1.5 rounded-md p-1.5 text-slate-600 hover:bg-slate-100" onclick="toggleNav(true)" aria-label="Άνοιγμα μενού">
+                        <x-admin.icon name="menu" />
+                    </button>
+                    <span class="truncate text-sm font-semibold text-slate-900">{{ $currentItem['label'] ?? 'EKO Admin' }}</span>
+                    <img src="{{ asset('images/eko-logo.png') }}" class="ml-auto h-6 w-6 object-contain" alt="" />
+                </header>
+
+                <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+                    @if (session('success'))
+                        <div class="mb-4 flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-[13px] font-medium text-emerald-800" role="status">
+                            <x-admin.icon name="check-circle" class="mt-px h-4 w-4 shrink-0" />
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-[13px] font-medium text-red-800" role="alert">
+                            <x-admin.icon name="alert" class="mt-px h-4 w-4 shrink-0" />
+                            <div>
+                                @foreach ($errors->all() as $error)
+                                    <p>{{ $error }}</p>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     @yield('admin_content')
                 </main>
             </div>
         </div>
+
+        <script>
+            function toggleNav(open) {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full', !open)
+                document.getElementById('navOverlay').classList.toggle('hidden', !open)
+                document.body.style.overflow = open ? 'hidden' : ''
+            }
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') toggleNav(false)
+            })
+        </script>
+        @stack('scripts')
     </body>
 </html>

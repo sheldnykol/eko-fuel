@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FuelOrder extends Model
 {
-    //customer info from migration
     protected $fillable = [
         'fuel_name',
         'fuel_phone',
@@ -17,7 +16,6 @@ class FuelOrder extends Model
         'fuel_type',
         'fuel_quantity',
         'status'
-
 
     ];
 }

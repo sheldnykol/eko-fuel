@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LpgOrder extends Model
 {
-//Customer info from migration 
 protected $fillable =[    
     'lpg_name',
     'lpg_phone',

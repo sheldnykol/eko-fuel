@@ -1,426 +1,165 @@
 @extends('layouts.app')
 
+@section('title', 'Πλυντήριο Αυτοκινήτων Λάρισα: Υπηρεσίες & Τιμές')
+@section('meta_description', 'Τιμές πλυντηρίου αυτοκινήτων στη Λάρισα: πλύσιμο μέσα-έξω από 15€, εξωτερικό, βιολογικός καθαρισμός, Fast Track, self-service πλυντήριο και υγραέριο κίνησης.')
+
+@php
+    use App\Http\Controllers\CancellationController;
+    use App\Support\BookingRules;
+    use App\Support\Seo;
+
+    $stations = Seo::stations();
+    $prices = BookingRules::PRICES;
+    $washDays = BookingRules::WASH_DAYS;
+    $faq = [
+        'Πόσο κοστίζει το πλύσιμο αυτοκινήτου στο πλυντήριο ΕΚΟ στη Λάρισα;' =>
+            'Για επιβατικό αυτοκίνητο το πλύσιμο μέσα-έξω κοστίζει περίπου ' . BookingRules::PRICES['ΙΧ']['ΜΕΣΑ-ΕΞΩ'] . '€, μόνο έξω περίπου ' . BookingRules::PRICES['ΙΧ']['ΕΞΩ'] . '€ και μόνο μέσα περίπου ' . BookingRules::PRICES['ΙΧ']['ΜΕΣΑ'] . '€. Ο βιολογικός καθαρισμός κοστίζει περίπου ' . BookingRules::PRICES['ΙΧ']['ΒΙΟΛΟΓΙΚΟΣ'] . '€. Οι τιμές είναι ενδεικτικές.',
+        'Πώς κλείνω ραντεβού για πλύσιμο αυτοκινήτου;' =>
+            'Κλείνετε ραντεβού online από τη σελίδα κράτησης, χωρίς εγγραφή. Επιλέγετε ημέρα, ώρα και πακέτο και λαμβάνετε επιβεβαίωση με SMS και email.',
+        'Ποιες ημέρες γίνεται ο βιολογικός καθαρισμός;' =>
+            'Ο βιολογικός καθαρισμός γίνεται Τρίτη έως Πέμπτη και διαρκεί από 3-4 ώρες έως μία ημέρα, ανάλογα με το όχημα.',
+        'Μπορώ να ακυρώσω το ραντεβού μου;' =>
+            'Ναι, online έως ' . CancellationController::DEADLINE_HOURS . ' ώρες πριν, από τον σύνδεσμο στο email επιβεβαίωσης ή από τη σελίδα ακύρωσης με το κινητό και την πινακίδα σας.',
+        'Τι ώρες λειτουργούν τα πρατήρια ΕΚΟ Δράμη;' =>
+            collect($stations)->map(fn ($s) => $s['title'] . ': ' . $s['opens'] . '-' . $s['closes'])->implode(', ') . '.',
+        'Πού υπάρχει υγραέριο κίνησης (LPG) στη Λάρισα;' =>
+            'Υγραέριο κίνησης (Autogas) θα βρείτε στο πρατήριο ΕΚΟ Λ. Καραμανλή 102, στο 1ο χλμ της Π.Ε.Ο. Λάρισας-Αθηνών.',
+        'Κάνετε διανομή πετρελαίου και υγραερίου;' =>
+            'Ναι. Μπορείτε να παραγγείλετε online πετρέλαιο κίνησης και υγραέριο θέρμανσης ή προπανίου και θα επικοινωνήσουμε μαζί σας για προσφορά.',
+    ];
+@endphp
+
+@push('schema')
+    <script type="application/ld+json">{!! Seo::graph(Seo::faq($faq), Seo::breadcrumbs([['Αρχική', url('/')], ['Υπηρεσίες', url('/services')]])) !!}</script>
+@endpush
+
 @section('content')
-    <section class="min-h-screen bg-slate-50 py-12">
-        <div class="container mx-auto max-w-6xl px-4">
-            {{-- Κεντρικός Τίτλος --}}
-            <div class="mb-16 text-center">
-                <h2 class="mb-4 text-4xl font-black tracking-tight text-slate-900 uppercase">Υπηρεσίες & Προϊόντα</h2>
-                <p class="mx-auto max-w-2xl text-lg text-slate-500">
-                    Φροντίζουμε το όχημά σας με την ποιότητα και την αξιοπιστία της EKO.
-                </p>
+    <section class="border-b border-slate-200 bg-white">
+        <div class="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14">
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 md:text-4xl">Πλυντήριο αυτοκινήτων & υπηρεσίες στη Λάρισα</h1>
+            <p class="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">
+                Πλύσιμο αυτοκινήτου με ραντεβού, βιολογικός καθαρισμός, self-service πλυντήριο, υγραέριο κίνησης και
+                διανομή καυσίμων από τα πρατήρια ΕΚΟ Δράμη.
+            </p>
+            <a href="{{ route('pages.booking') }}" class="mt-5 inline-block rounded-lg bg-[#e21838] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#c4142f]">Κλείστε ραντεβού</a>
+        </div>
+    </section>
+
+    <section class="bg-slate-50 py-10 md:py-14">
+        <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 md:px-6 lg:grid-cols-3">
+            <div class="lg:col-span-2">
+                <h2 class="text-xl font-bold text-slate-900">Τιμές πλυντηρίου</h2>
+                <p class="mt-1 text-sm text-slate-600">ΕΚΟ Βόλου 12, Λάρισα · ενδεικτικές τιμές ανά τύπο οχήματος.</p>
+
+                <div class="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                    <table class="w-full text-left text-[13px] sm:text-sm">
+                        <thead class="border-b border-slate-200 bg-slate-50 text-[13px] text-slate-500">
+                            <tr>
+                                <th scope="col" class="px-3 py-2.5 font-medium sm:px-4">Πακέτο</th>
+                                @foreach (BookingRules::VEHICLE_TYPES as $vehicle)
+                                    <th scope="col" class="px-2 py-2.5 text-right font-medium sm:px-4">{{ $vehicle }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @foreach (BookingRules::WASH_LABELS as $wash => $label)
+                                <tr>
+                                    <th scope="row" class="px-3 py-2.5 font-medium text-slate-800 sm:px-4">
+                                        {{ $label }}
+                                        @if (isset($washDays[$wash]))
+                                            <span class="block text-xs font-normal text-slate-500">{{ BookingRules::daysLabel($washDays[$wash]) }}</span>
+                                        @endif
+                                    </th>
+                                    @foreach (BookingRules::VEHICLE_TYPES as $vehicle)
+                                        <td class="px-2 py-2.5 text-right tabular-nums sm:px-4">
+                                            @isset($prices[$vehicle][$wash])
+                                                ~{{ $prices[$vehicle][$wash] }}€
+                                            @else
+                                                <span class="text-slate-300">-</span>
+                                            @endisset
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Οι τιμές μπορεί να διαφέρουν ανάλογα με την κατάσταση του οχήματος.</p>
             </div>
 
-            {{-- 1. ΚΛΑΣΙΚΟ ΠΛΥΝΤΗΡΙΟ --}}
-            <div class="mb-16">
-                <div class="mb-8 flex items-center space-x-4">
-                    <div class="h-10 w-2 rounded-full bg-[#e21838]"></div>
-                    <h3 class="text-3xl font-black tracking-tighter text-slate-800 uppercase">Πλυντήριο Αυτοκινήτων</h3>
-                </div>
+            <div class="rounded-xl border border-slate-200 bg-white p-5">
+                <h2 class="text-base font-bold text-slate-900">Επιπλέον υπηρεσίες</h2>
+                <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
+                    <li class="flex justify-between gap-2"><span>Fast Track (χωρίς αναμονή)</span><span class="text-slate-500">+2€</span></li>
+                    @foreach (BookingRules::EXTRAS as $name => $extra)
+                        <li class="flex justify-between gap-2">
+                            <span>{{ $name }}</span>
+                            <span class="text-slate-500">
+                                @if ($extra['free'])
+                                    δωρεάν
+                                @elseif ($extra['days'])
+                                    {{ BookingRules::daysShortLabel($extra['days']) }}
+                                @endif
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </section>
 
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-                    {{-- Κάρτα: Πλύσιμο Μέσα - Έξω --}}
-                    <div
-                        class="group rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm transition-all hover:shadow-xl"
-                    >
-                        <div class="mb-6 flex items-start justify-between">
-                            <div
-                                class="rounded-2xl bg-red-50 p-4 text-[#e21838] transition-colors group-hover:bg-[#e21838] group-hover:text-white"
-                            >
-                                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <div class="flex flex-col items-end gap-2">
-                                <span
-                                    class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
-                                >
-                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        ></path>
-                                    </svg>
-                                    20'- 45' Λεπτά
-                                </span>
-                                <span class="rounded-xl bg-slate-900 px-4 py-1.5 text-lg font-black text-white">
-                                    από 15€
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mb-1 flex items-center gap-1.5">
-                            <span class="h-1.5 w-1.5 rounded-full bg-[#e21838]"></span>
-                            <p class="text-[10px] font-bold text-[#e21838] uppercase">Δευτέρα εώς Σάββατο</p>
-                        </div>
-
-                        <h4 class="mb-3 text-2xl font-black text-slate-900">
-                            Πλύσιμο Μέσα - Έξω (+2€ Έξτρα για fast track)
-                        </h4>
-                        <p class="mb-6 leading-relaxed text-slate-500">
-                            Ολοκληρωμένος καθαρισμός με ενεργό αφρό, στέγνωμα στο χέρι και περιποίηση εσωτερικού με
-                            ειδικά γαλακτώματα.
-                        </p>
-
-                        <div class="flex gap-4 border-t border-slate-50 pt-4">
-                            <div class="text-sm">
-                                <span class="text-slate-400">Μέσα:</span>
-                                <span class="font-bold text-slate-700">από 8€</span>
-                            </div>
-                            <div class="text-sm">
-                                <span class="text-slate-400">Έξω:</span>
-                                <span class="font-bold text-slate-700">από 7€</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Κάρτα: Βιολογικός Καθαρισμός --}}
-                    <div
-                        class="group rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm transition-all hover:shadow-xl"
-                    >
-                        <div class="mb-6 flex items-start justify-between">
-                            <div
-                                class="rounded-2xl bg-blue-50 p-4 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white"
-                            >
-                                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.642.321a6 6 0 01-3.86.517l-2.388-.477a2 2 0 00-1.022.547l-1.168 1.168a2 2 0 001.61 3.412h13.419a2 2 0 001.61-3.412l-1.168-1.168z"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <div class="flex flex-col items-end gap-2">
-                                <span
-                                    class="flex items-center rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
-                                >
-                                    <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        ></path>
-                                    </svg>
-                                    3-4 Ώρες - 1 Ημέρα
-                                </span>
-                                <span class="rounded-xl bg-slate-900 px-4 py-1.5 text-lg font-black text-white">
-                                    από 50€
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mb-1 flex items-center gap-1.5">
-                            <span class="h-1.5 w-1.5 rounded-full bg-[#e21838]"></span>
-                            <p class="text-[10px] font-bold text-[#e21838] uppercase">Τρίτη - Τετάρτη - Πέμπτη</p>
-                        </div>
-
-                        <h4 class="mb-3 text-2xl font-black text-slate-900">Βιολογικός Καθαρισμός</h4>
-                        <p class="mb-8 leading-relaxed text-slate-500">
-                            Βαθύς καθαρισμός με μηχανήματα extraction σε καθίσματα, μοκέτες και ουρανό. Απομάκρυνση
-                            οσμών και μικροβίων.
-                        </p>
-                    </div>
-                </div>
-
-                <a
-                    href="/booking"
-                    class="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 py-4 font-bold text-white transition-all hover:bg-[#e21838]"
-                >
-                    Κλείσε Ραντεβού
+    <section class="bg-white py-10 md:py-14">
+        <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <h2 class="text-xl font-bold text-slate-900">Υπηρεσίες ανά πρατήριο</h2>
+            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <a href="{{ route('station.show', 1) }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Πλυντήριο με ραντεβού</h3>
+                    <p class="mt-1 text-sm text-slate-600">Πλύσιμο μέσα-έξω, βιολογικός καθαρισμός και Fast Track.</p>
+                    <p class="mt-3 text-[13px] font-semibold text-[#e21838]">ΕΚΟ Βόλου 12</p>
+                </a>
+                <a href="{{ route('station.show', 2) }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Self service πλυντήριο & LPG</h3>
+                    <p class="mt-1 text-sm text-slate-600">Πλύσιμο αυτοεξυπηρέτησης και υγραέριο κίνησης (Autogas).</p>
+                    <p class="mt-3 text-[13px] font-semibold text-[#e21838]">ΕΚΟ Λ. Καραμανλή 102</p>
+                </a>
+                <a href="{{ route('station.show', 3) }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Φορτιστής 22kW & αυτόματος πωλητής</h3>
+                    <p class="mt-1 text-sm text-slate-600">Φόρτιση ηλεκτρικών οχημάτων και ανεφοδιασμός με κάρτα.</p>
+                    <p class="mt-3 text-[13px] font-semibold text-[#e21838]">ΕΚΟ Γεωργιάδου 28</p>
+                </a>
+                <a href="{{ route('station.show', 4) }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Στη διαδρομή για Πήλιο</h3>
+                    <p class="mt-1 text-sm text-slate-600">Καύσιμα και είδη καταστήματος στην Ε.Ο. Βόλου-Πορταριάς.</p>
+                    <p class="mt-3 text-[13px] font-semibold text-[#e21838]">ΕΚΟ Πορταριά</p>
                 </a>
             </div>
 
-            {{-- 2. ΕΙΔΙΚΕΣ ΥΠΗΡΕΣΙΕΣ ΠΡΑΤΗΡΙΩΝ (Αυτόματος & Self Service) --}}
-            <div class="mb-16">
-                <div class="mb-8 flex items-center space-x-4">
-                    <div class="h-10 w-2 rounded-full bg-blue-600"></div>
-                    <h3 class="text-3xl font-black tracking-tighter text-slate-800 uppercase">
-                        Αποκλειστικές Υπηρεσίες
-                    </h3>
-                </div>
-
-                <div class="grid grid-cols-1 gap-8">
-                    {{-- ΓΕΩΡΓΙΑΔΟΥ: Αυτόματος Πωλητής --}}
-                    <div
-                        class="group relative overflow-hidden rounded-3xl bg-white p-1 shadow-lg ring-1 ring-slate-200 transition-all hover:shadow-2xl"
-                    >
-                        <div
-                            class="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 opacity-95 transition-opacity group-hover:opacity-100"
-                        ></div>
-                        <div
-                            class="absolute -top-16 -right-16 h-60 w-60 rounded-full bg-white/10 blur-3xl transition-transform group-hover:scale-110"
-                        ></div>
-
-                        <div
-                            class="relative flex h-full flex-col overflow-hidden rounded-[1.3rem] p-8 text-white md:flex-row md:items-start md:gap-8"
-                        >
-                            <div class="mb-6 flex shrink-0 items-center justify-center md:mb-0">
-                                <div
-                                    class="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-white/15 text-white ring-1 ring-white/20 backdrop-blur-sm"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="h-12 w-12"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div class="flex-1 text-center md:text-left">
-                                <div class="mb-4">
-                                    <span
-                                        class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold tracking-wider text-white uppercase backdrop-blur-md"
-                                    >
-                                        📍 Πρατήριο Γεωργιάδου
-                                    </span>
-                                    <h3
-                                        class="text-2xl font-black tracking-tight text-white uppercase italic md:text-3xl"
-                                    >
-                                        Οδηγίες Αυτόματου Πωλητή
-                                    </h3>
-                                    <p class="mt-1 text-sm text-blue-100">Ακολουθήστε τα βήματα για γρήγορη πληρωμή</p>
-                                </div>
-
-                                <div
-                                    class="grid grid-cols-1 gap-x-6 gap-y-3 border-t border-white/10 pt-4 text-left md:grid-cols-2"
-                                >
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">01.</span>
-                                        Επιλογή «Κάρτα» στο μενού.
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">02.</span>
-                                        Αρ. κυκλοφορίας & «Συνέχεια».
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">03.</span>
-                                        Απόδειξη: πατήστε «Συνέχεια».
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">04.</span>
-                                        Καύσιμο & Αντλία (7-10).
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">05.</span>
-                                        Επιλέξτε το ποσό.
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">06.</span>
-                                        Κάρτα στο POS & PIN.
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">07.</span>
-                                        Ανεφοδιασμός (Πιέστε λαβή).
-                                    </div>
-                                    <div class="flex gap-2.5 text-sm text-blue-50">
-                                        <span class="font-bold text-white opacity-60">08.</span>
-                                        Επιστροφή & Αυτόματη Απόδειξη.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- ΚΑΡΑΜΑΝΛΗ: Self Service Πλυντήριο --}}
-                    <div
-                        class="group relative overflow-hidden rounded-3xl bg-white p-1 shadow-lg ring-1 ring-slate-200 transition-all hover:shadow-2xl"
-                    >
-                        <div
-                            class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 opacity-95 transition-opacity group-hover:opacity-100"
-                        ></div>
-                        <div
-                            class="absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl transition-transform group-hover:scale-125"
-                        ></div>
-
-                        <div
-                            class="relative flex h-full flex-col overflow-hidden rounded-[1.3rem] p-8 text-white md:flex-row md:items-start md:gap-8"
-                        >
-                            <div class="mb-6 flex shrink-0 items-center justify-center md:mb-0">
-                                <div
-                                    class="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-white/10 text-blue-400 ring-1 ring-white/20 backdrop-blur-sm"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="h-12 w-12"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75m0 3v.75m0 3v.75m0 3v.75m0 3v.75m3-15h13.5M5.25 15h13.5m-13.5-3h13.5m-13.5-3h13.5m-13.5-3h13.5M2.25 15.75c1.192.35 2.441.528 3.75.528 1.309 0 2.558-.178 3.75-.528M13.5 15.75c1.192.35 2.441.528 3.75.528 1.309 0 2.558-.178 3.75-.528"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div class="flex-1">
-                                <div class="mb-6 text-center md:text-left">
-                                    <span
-                                        class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e21838] px-3 py-1 text-xs font-bold tracking-wider text-white uppercase shadow-sm"
-                                    >
-                                        📍 Πρατήριο Καραμανλή
-                                    </span>
-                                    <h3
-                                        class="text-2xl font-black tracking-tight text-white uppercase italic md:text-3xl"
-                                    >
-                                        Self Service Πλυντήριο
-                                    </h3>
-                                    <p class="mt-1 text-sm text-slate-400">
-                                        Ακολουθήστε τις οδηγίες για τέλειο αποτέλεσμα καθαρισμού.
-                                    </p>
-                                </div>
-
-                                <div class="grid grid-cols-1 gap-y-5 border-t border-white/10 pt-6 text-left">
-                                    <div class="flex gap-4 text-sm leading-relaxed text-blue-50">
-                                        <span
-                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30"
-                                        >
-                                            01
-                                        </span>
-                                        <p>
-                                            <strong class="mb-1 block text-xs tracking-wider text-white uppercase">
-                                                Καθαρισμός με υψηλή πίεση
-                                            </strong>
-                                            Πρόπλυση και κύρια πλύση με ζεστό αποσκληρυμένο νερό και καθαριστικό για την
-                                            αφαίρεση ρύπου και εντόμων!
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-4 text-sm leading-relaxed text-blue-50">
-                                        <span
-                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30"
-                                        >
-                                            02
-                                        </span>
-                                        <p>
-                                            <strong class="mb-1 block text-xs tracking-wider text-white uppercase">
-                                                Καθαρισμός με βούρτσες
-                                            </strong>
-                                            Χρησιμοποίησε την μαλακή βούρτσα πλύσης και ενεργό αφρό για την αφαίρεση
-                                            επίμονου ρύπου. Ξεπλύνετε την βούρτσα με νερό πριν τη χρήση.
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-4 text-sm leading-relaxed text-blue-50">
-                                        <span
-                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30"
-                                        >
-                                            03
-                                        </span>
-                                        <p>
-                                            <strong class="mb-1 block text-xs tracking-wider text-white uppercase">
-                                                Ξέπλυμα με καθαρό νερό
-                                            </strong>
-                                            Ψεκασμός υψηλής πίεσης με κρύο καθαρό νερό ξεπλένει τον αφρό κι τον ρύπο από
-                                            την επιφάνεια του αμαξώματος.
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-4 text-sm leading-relaxed text-blue-50">
-                                        <span
-                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30"
-                                        >
-                                            04
-                                        </span>
-                                        <p>
-                                            <strong class="mb-1 block text-xs tracking-wider text-white uppercase">
-                                                Περιποίηση χρώματος με ζεστό κερί
-                                            </strong>
-                                            Προστασία μεγάλης διάρκειας με ειδικό καρναούβικο κερί.
-                                        </p>
-                                    </div>
-                                    <div class="flex gap-4 text-sm leading-relaxed text-blue-50">
-                                        <span
-                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[10px] font-bold text-blue-400 ring-1 ring-blue-500/30"
-                                        >
-                                            05
-                                        </span>
-                                        <p>
-                                            <strong class="mb-1 block text-xs tracking-wider text-white uppercase">
-                                                Στέγνωμα και γυάλισμα
-                                            </strong>
-                                            Τελικό ξέπλυμα με κρύο απιονισμένο νερό και γυαλιστικό, για στιλπνότητα και
-                                            λάμψη στο χρώμα.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <a href="{{ route('fuel-orders.create') }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Παραγγελία πετρελαίου κίνησης</h3>
+                    <p class="mt-1 text-sm text-slate-600">Diesel Economy και Diesel Avio με παράδοση στον χώρο σας.</p>
+                </a>
+                <a href="{{ route('lpg-orders.create') }}" class="rounded-xl border border-slate-200 p-5 hover:border-slate-300">
+                    <h3 class="font-bold text-slate-900">Παραγγελία υγραερίου</h3>
+                    <p class="mt-1 text-sm text-slate-600">Υγραέριο θέρμανσης για το σπίτι και προπάνιο για επιχειρήσεις.</p>
+                </a>
             </div>
+        </div>
+    </section>
 
-            {{-- 3. ΠΡΟΪΟΝΤΑ --}}
-            <div>
-                <div class="mb-8 flex items-center space-x-4">
-                    <div class="h-10 w-2 rounded-full bg-slate-800"></div>
-                    <h3 class="text-3xl font-black tracking-tighter text-slate-800 uppercase">Κορυφαία Προϊόντα</h3>
-                </div>
-
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    <div
-                        class="rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-lg"
-                    >
-                        <div class="mb-4 flex h-48 items-center justify-center rounded-3xl bg-slate-50">
-                            <span class="text-xs font-bold tracking-widest text-slate-300 uppercase">
-                                Image Placeholder
-                            </span>
-                        </div>
-                        <h5 class="mb-1 font-black text-slate-900">Λιπαντικά EKO Megatron</h5>
-                        <p class="mb-4 text-sm text-balance text-slate-500">
-                            Μέγιστη προστασία κινητήρα κάτω από οποιεσδήποτε συνθήκες.
-                        </p>
-                        <a href="#" class="text-sm font-bold text-[#e21838] hover:underline">Δείτε τα Προϊόντα →</a>
-                    </div>
-
-                    <div
-                        class="rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-lg"
-                    >
-                        <div class="mb-4 flex h-48 items-center justify-center rounded-3xl bg-slate-50">
-                            <span class="text-xs font-bold tracking-widest text-slate-300 uppercase">
-                                Image Placeholder
-                            </span>
-                        </div>
-                        <h5 class="mb-1 font-black text-slate-900">Αξεσουάρ Αυτοκινήτου</h5>
-                        <p class="mb-4 text-sm text-balance text-slate-500">
-                            Υαλοκαθαριστήρες, αρωματικά και είδη έκτακτης ανάγκης.
-                        </p>
-                        <a href="#" class="text-sm font-bold text-[#e21838] hover:underline">Περισσότερα →</a>
-                    </div>
-
-                    <div
-                        class="rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-lg"
-                    >
-                        <div class="mb-4 flex h-48 items-center justify-center rounded-3xl bg-slate-50">
-                            <span class="text-xs font-bold tracking-widest text-slate-300 uppercase">
-                                Image Placeholder
-                            </span>
-                        </div>
-                        <h5 class="mb-1 font-black text-slate-900">Χημικά & Καθαριστικά</h5>
-                        <p class="mb-4 text-sm text-balance text-slate-500">
-                            Εξειδικευμένα προϊόντα για τη λάμψη του οχήματός σας.
-                        </p>
-                        <a href="#" class="text-sm font-bold text-[#e21838] hover:underline">Αγορά τώρα →</a>
-                    </div>
-                </div>
+    <section class="border-t border-slate-200 bg-slate-50 py-10 md:py-14">
+        <div class="mx-auto max-w-3xl px-4 md:px-6">
+            <h2 class="text-xl font-bold text-slate-900">Συχνές ερωτήσεις</h2>
+            <div class="mt-4 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+                @foreach ($faq as $question => $answer)
+                    <details class="group px-5 py-4">
+                        <summary class="flex cursor-pointer list-none items-start justify-between gap-4 text-sm font-semibold text-slate-900">
+                            {{ $question }}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" /></svg>
+                        </summary>
+                        <p class="mt-2 text-sm text-slate-600">{{ $answer }}</p>
+                    </details>
+                @endforeach
             </div>
         </div>
     </section>

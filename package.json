@@ -9,17 +9,21 @@
         "format:check": "prettier --check \"resources/**/*.{js,ts,vue,css,scss,blade.php}\""
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
+        "@tailwindcss/postcss": "^4.3.1",
+        "@tailwindcss/vite": "^4.3.1",
+        "autoprefixer": "^10.5.0",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.0",
+        "postcss": "^8.5.15",
         "prettier": "^3.8.0",
         "prettier-plugin-blade": "^2.1.21",
         "prettier-plugin-tailwindcss": "^0.7.2",
-        "tailwindcss": "^4.0.0",
+        "tailwindcss": "^4.3.1",
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "bootstrap": "^5.3.3"
+        "bootstrap": "^5.3.3",
+        "vendor": "^1.7.0"
     }
 }
